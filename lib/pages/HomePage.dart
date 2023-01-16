@@ -18,8 +18,8 @@ class _MainPageState extends State<MainPage> {
           child: (ElevatedButton(
               child: const Text('Go to secondPage'),
               onPressed: () {
-                //Navigator.of(context).pushNamed(RouteManager.secondpage);
-                Navigator.of(context).pushNamed('/secondpage');
+                Navigator.of(context).pushNamed(RouteManager.secondpage);
+                //Navigator.of(context).pushNamed('/secondpage');
               }))),
     );
   }

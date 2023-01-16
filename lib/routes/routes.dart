@@ -4,7 +4,7 @@ import '../pages/HomePage.dart';
 import '../pages/SecondPage.dart';
 
 class RouteManager {
-  static const String mainpage = '';
+  static const String mainpage = '/';
   static const String secondpage = '/secondpage';
 
   static Route<dynamic> generateRoute(RouteSettings settings) {
