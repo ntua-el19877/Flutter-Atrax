@@ -10,7 +10,7 @@ class _MainPageState extends State<MainPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.red,
+      backgroundColor: Colors.green,
       appBar: AppBar(
         title: const Text('Atrax Main Page'),
       ),
