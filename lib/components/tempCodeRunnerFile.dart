@@ -1,12 +1,12 @@
-import 'package:flutter/material.dart';
+import 'dart:html';
 
-import '../routes/routes.dart';
+import 'package:flutter/material.dart';
 
 class plus_Button extends StatefulWidget {
   //height of the homedownbar
   final double preferredSize;
   //if you give screenHeight it moves it to the bottom of the screen
-  late double circle_back_Radius;
+  final double circle_back_Radius;
   late double circle_front_Radius;
   final Color color_Secondary;
   final Color color_Primary;
@@ -15,8 +15,8 @@ class plus_Button extends StatefulWidget {
 
   plus_Button({
     required this.preferredSize,
-    required this.circle_back_Radius,
-    required this.circle_front_Radius,
+    this.circle_back_Radius = 30,
+    this.circle_front_Radius = 25,
     this.color_Secondary = const Color(0xff929ae7),
     this.color_Primary = const Color(0xffe6f4f1),
     this.color_Blacks = const Color(0xff252525),
@@ -46,15 +46,13 @@ class _plus_ButtonState extends State<plus_Button> {
             left: constraints.maxWidth / 2 - widget.circle_front_Radius,
             bottom: widget.preferredSize - widget.circle_front_Radius,
             child: InkWell(
-              onLongPress: () {
+              onHover: (isHovering) {
                 setState(() {
-                  widget.circle_front_Radius += 10;
-                  widget.circle_back_Radius += 10;
-                });
-              },
-              onTap: () {
-                setState(() {
-                  Navigator.of(context).pushNamed(RouteManager.secondpage);
+                  if (isHovering) {
+                    widget.circle_front_Radius = 30;
+                  } else {
+                    widget.circle_front_Radius = 25;
+                  }
                 });
               },
               child: CircleAvatar(
