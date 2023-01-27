@@ -14,13 +14,26 @@ class _SecondPageState extends State<SecondPage> {
       appBar: AppBar(
         title: const Text('Atrax Second Page'),
       ),
-      // body: Center(
-      //     child: (ElevatedButton(
-      //         child: const Text('Go to secondPage'),
-      //         onPressed: () {
-      //           Navigator.of(context).pushNamed(RouteManager.mainpage);
-      //           //Navigator.of(context).pushNamed('/secondpage');
-      //         }))),
+      body: Center(
+           child : Column (
+            children: [
+            ElevatedButton(
+               child: const Text('Go to Calendar Page'),
+               onPressed: () {
+                 Navigator.of(context).pushNamed(RouteManager.calendarpage);
+                 //Navigator.of(context).pushNamed('/secondpage');
+               }
+              ),
+            ElevatedButton(
+               child: const Text('Go to Add Task Page'),
+               onPressed: () {
+                 Navigator.of(context).pushNamed(RouteManager.addtaskpage);
+                 //Navigator.of(context).pushNamed('/secondpage');
+               }
+            )
+            ]
+           )
+          ),
     );
   }
 }

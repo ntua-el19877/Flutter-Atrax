@@ -20,7 +20,10 @@ class _MainPageState extends State<MainPage> {
               onPressed: () {
                 Navigator.of(context).pushNamed(RouteManager.secondpage);
                 //Navigator.of(context).pushNamed('/secondpage');
-              }))),
+              }
+            )
+          )
+        ),
     );
   }
 }
