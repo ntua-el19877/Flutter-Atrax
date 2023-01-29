@@ -46,15 +46,15 @@ class _plus_ButtonState extends State<plus_Button> {
             left: constraints.maxWidth / 2 - widget.circle_front_Radius,
             bottom: widget.preferredSize - widget.circle_front_Radius,
             child: InkWell(
-              onLongPress: () {
-                setState(() {
-                  widget.circle_front_Radius += 10;
-                  widget.circle_back_Radius += 10;
-                });
-              },
+              // onLongPress: () {
+              //   setState(() {
+              //     widget.circle_front_Radius += 10;
+              //     widget.circle_back_Radius += 10;
+              //   });
+              // },
               onTap: () {
                 setState(() {
-                  Navigator.of(context).pushNamed(RouteManager.secondpage);
+                  Navigator.of(context).pushNamed(RouteManager.addtaskpage);
                 });
               },
               child: CircleAvatar(

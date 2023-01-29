@@ -57,22 +57,35 @@ class _AddTaskPageState extends State<AddTaskPage> {
                   ),
                   TextField(
                       controller: _TaskController,
-                      decoration: InputDecoration(
+                      decoration: const InputDecoration(
                         border: OutlineInputBorder(),
                         filled: true,
                         fillColor: Colors.white,
                       )),
-                  Text(
+                  const Text(
                     'Description : ',
                     style: TextStyle(fontSize: 25),
                   ),
-                  TextField(
-                      controller: _DescriptionController,
-                      decoration: InputDecoration(
-                        border: OutlineInputBorder(),
-                        filled: true,
-                        fillColor: Colors.white,
-                      )),
+                  SizedBox(
+                      width: double.infinity,
+                      height: 50,
+                      child: Align(
+                          alignment: Alignment.center,
+                          child: TextField(
+                              controller: _DescriptionController,
+                              decoration: const InputDecoration(
+                                border: OutlineInputBorder(
+                                    borderRadius:
+                                        BorderRadius.all(Radius.circular(5)),
+                                    borderSide: BorderSide(width: 2)),
+                                filled: true,
+                                fillColor: Colors.white,
+                                contentPadding: EdgeInsets.all(20),
+                                isDense: true,
+                                hintText: 'Enter a description',
+                                hintStyle: TextStyle(fontSize: 18),
+                                alignLabelWithHint: true,
+                              )))),
                 ],
               ),
             ),
@@ -127,6 +140,12 @@ class _AddTaskPageState extends State<AddTaskPage> {
                     child: Text('Invite a friend'),
                     onPressed: _SaveTask,
                   ),
+                  ElevatedButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    child: Text("Close Second Page"),
+                  )
                 ],
               ),
             ),
