@@ -1,20 +1,19 @@
 {
     "tasks": [
       {
-        "name": "hello ",
+        "name": "214",
         "description": "This describes",
         "date": "2022-01-01",
-        "time": "10:00",
-        "halfOfDay": "AM",
+        "time": "10:00 AM",
         "repetitiveness": "Does not repeat",
         "notifications": [
           {
             "date": "2022-01-01",
-            "time": "09:00"
+            "time": "09:00 AM"
           },
           {
             "date": "2022-01-01",
-            "time": "09:30"
+            "time": "09:30 PM"
           }
         ],
         "importance": "High",
@@ -34,7 +33,6 @@
         "description": "Y#6$Gt2N",
         "date": "Y#6$Gt2N",
         "time": "Y#6$Gt2N",
-        "halfOfDay": "",
         "repetitiveness": "Every week",
         "notifications": [
           {

@@ -1,17 +1,14 @@
 import 'package:atrax/components/HomeDownBar.dart';
 import 'package:atrax/components/TaskMessage.dart';
 import 'package:flutter/material.dart';
-import 'package:atrax/routes/routes.dart';
-import 'dart:io';
 import 'dart:convert';
-import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-List<String> taskNames = [];
+// final _contr = TextEditingController();
+List<dynamic> taskNames = [];
 List<String> taskDescriptions = [];
 List<String> taskDates = [];
 List<String> taskTimes = [];
-List<String> taskHalfOfDays = [];
 List<String> taskRepetitiveness = [];
 List<List<String>> taskNotificatios_Date = [];
 List<List<String>> taskNotificatios_Time = [];
@@ -21,71 +18,6 @@ List<String> taskLocationLongtitude = [];
 List<String> taskRecording = [];
 List<String> taskPhoto = [];
 List<List<String>> taskFriends = [];
-// Future<void> parseJSON() async {
-//    WidgetsFlutterBinding.ensureInitialized();
-//   String file = "";
-//   switch (type) {
-//     case TYPE_STRING:
-//       file = 'assets/xml/strings.xml';
-//       break;
-//   }
-//   String jsonString = await File('lib/tasks.json').readAsString();
-//   Map<String, dynamic> jsonData = json.decode(jsonString);
-//   List<dynamic> tasks = jsonData['tasks'];
-//   for (var task in tasks) {
-//     taskNames.add(task['name']);
-//   }
-// }
-// // Future<dynamic> readFileAsync(String filePath) async {
-// //   String xmlString =  await rootBundle.loadString(filePath);
-// //   print(xmlString);
-// //   return parseXml(xmlString);
-// // }
-
-Future<void> readJson() async {
-  final String jsonString = await rootBundle.loadString('assets/tasks.json');
-  final data = await json.decode(jsonString);
-  // print(data);
-  Map<String, dynamic> jsonData = json.decode(jsonString);
-  List<dynamic> tasks = jsonData['tasks'];
-
-  taskNames.clear();
-  taskDescriptions.clear();
-  taskDates.clear();
-  // int i = 0;
-  for (var task in tasks) {
-    List<String> taskNotificationsD = [];
-    List<String> taskNotificationsT = [];
-    for (var notification in task['notifications']) {
-      taskNotificationsD.add(notification['date']);
-      taskNotificationsT.add(notification['time']);
-    }
-    taskNotificatios_Date.add(taskNotificationsD);
-    taskNotificatios_Time.add(taskNotificationsT);
-  }
-  for (var task in tasks) {
-    List<String> taskFr = [];
-    for (var friend in task['friend_name']) {
-      taskFr.add(friend);
-    }
-    taskFriends.add(taskFr);
-  }
-
-  for (var task in tasks) {
-    taskNames.add(task['name']);
-    taskDescriptions.add(task['description']);
-    taskDates.add(task['date']);
-    taskTimes.add(task['time']);
-    taskHalfOfDays.add(task['halfOfDay']);
-    taskRepetitiveness.add(task['repetitiveness']);
-    taskRepetitiveness.add(task['repetitiveness']);
-    taskImportance.add(task['importance']);
-    taskLocationLatitude.add(task['location']['latitude']);
-    taskLocationLongtitude.add(task['location']['longitude']);
-    taskRecording.add(task['recording_file_path']);
-    taskPhoto.add(task['photo_file_path']);
-  }
-}
 
 class MainPage extends StatefulWidget {
   @override
@@ -93,18 +25,73 @@ class MainPage extends StatefulWidget {
 }
 
 class _MainPageState extends State<MainPage> {
+  Future<void> readJson() async {
+    List _items = [];
+    final String jsonString = await rootBundle.loadString('assets/tasks.json');
+    final data = await json.decode(jsonString);
+    // print(data);
+    Map<String, dynamic> jsonData = json.decode(jsonString);
+    List<dynamic> tasks = jsonData['tasks'];
+
+    // setState(() {
+    //   _items = data["tasks"];
+    // });
+    // taskNames.clear();
+    // taskDescriptions.clear();
+    // taskDates.clear();
+    // int i = 0;
+    for (var task in tasks) {
+      List<String> taskNotificationsD = [];
+      List<String> taskNotificationsT = [];
+      for (var notification in task['notifications']) {
+        taskNotificationsD.add(notification['date']);
+        taskNotificationsT.add(notification['time']);
+      }
+      taskNotificatios_Date.add(taskNotificationsD);
+      taskNotificatios_Time.add(taskNotificationsT);
+    }
+    for (var task in tasks) {
+      List<String> taskFr = [];
+      for (var friend in task['friend_name']) {
+        taskFr.add(friend);
+      }
+      taskFriends.add(taskFr);
+    }
+
+    for (var task in tasks) {
+      taskNames.add(task['name']);
+      taskDescriptions.add(task['description']);
+      taskDates.add(task['date']);
+      taskTimes.add(task['time']);
+      taskRepetitiveness.add(task['repetitiveness']);
+      taskRepetitiveness.add(task['repetitiveness']);
+      taskImportance.add(task['importance']);
+      taskLocationLatitude.add(task['location']['latitude']);
+      taskLocationLongtitude.add(task['location']['longitude']);
+      taskRecording.add(task['recording_file_path']);
+      taskPhoto.add(task['photo_file_path']);
+    }
+    // hhh = taskNames.elementAt(0);
+    print('----------------------');
+    for (int i = 0; i < taskNames.length; i++) {
+      print(taskNames.elementAt(i));
+    }
+    print("-----------------");
+  }
+
   int currentIndex = 0;
   double TaskLeftPadding = 10;
   @override
   void initState() {
     super.initState();
-    readJson();
+    // readJson();
   }
 
+  bool isPlaying = false;
   @override
   Widget build(BuildContext context) {
     final screenHeight = MediaQuery.of(context).size.height;
-    readJson();
+    double screenWidth = MediaQuery.of(context).size.width;
     final bottomNavBarHeight = (screenHeight / 12);
     return FutureBuilder(
         future: readJson(),
@@ -122,32 +109,52 @@ class _MainPageState extends State<MainPage> {
                       preferredSize: bottomNavBarHeight,
                       onTap: (int index) {
                         setState(() {
+                          readJson();
                           currentIndex = index;
                         });
                       },
                     ),
                     Positioned(
+                        child: ElevatedButton(
+                      onPressed: () {
+                        setState(() {
+                          if (isPlaying) {
+                            isPlaying = false;
+                            print("yess");
+                          } else
+                            isPlaying = true;
+                        });
+                      },
+                      child: Icon(
+                        isPlaying ? Icons.pause : Icons.play_arrow,
+                      ),
+                    )),
+                    Positioned(
                         left: TaskLeftPadding,
                         top: 40,
                         child: TaskMessage(
+                          screen_width: screenWidth,
                           name: taskNames.elementAt(0),
                           description: taskDescriptions.elementAt(0),
                           date: taskDates.elementAt(0),
-                          time: "10:30",
-                          halfOfDay: "AM",
+                          time: "10:30 AM",
                           repetitiveness: "Every Day",
                           notifications_date: ["1-1-1", "2-2-2"],
                           notifications_time: ["11:11", "12:00"],
                           notifications_halfOfDay: ["AM", "PM"],
                           importance: "High",
-                          latitude: "latitude",
-                          longtitude: "longtitude",
-                          recording_file_path: "recording_file_path",
+                          latitude: taskLocationLatitude.elementAt(0),
+                          longtitude: taskLocationLongtitude.elementAt(0),
+                          recording_file_path:
+                              'assets/recordings/Scoobydoo.mp3',
                           photo_file_path: "photo_file_path",
                           friend_name: ["Friend1", "Friend2"],
                           RemoveWidth: 2 * TaskLeftPadding,
+                          indexListDate: taskNotificatios_Date.elementAt(0),
+                          indexListTime: taskNotificatios_Time.elementAt(0),
                           onTap: (int index) {
                             setState(() {
+                              readJson();
                               currentIndex = index;
                             });
                           },
@@ -155,7 +162,9 @@ class _MainPageState extends State<MainPage> {
                   ],
                 ));
           } else {
-            return Container();
+            return Center(
+              child: CircularProgressIndicator(),
+            );
           }
         });
   }
