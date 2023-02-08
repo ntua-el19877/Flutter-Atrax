@@ -1,7 +1,28 @@
-import 'package:flutter/material.dart';
+import 'dart:convert';
 
+import 'package:atrax/entities/AddTaskJSON.dart';
+import 'package:atrax/file_manager.dart';
 import '../routes/routes.dart';
-import '../TableCalendar.dart';
+import '../GoogleMap.dart';
+
+import 'package:flutter/material.dart';
+//import 'package:atrax/entities/TaskJSON.dart';
+
+import 'package:geolocator/geolocator.dart';
+
+//<uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />;
+
+class Notification {
+  String date;
+  String time;
+
+  Notification(this.date, this.time);
+
+  Map toJson() => {
+        'date': date,
+        'time': time,
+      };
+}
 
 class AddTaskPage extends StatefulWidget {
   @override
@@ -9,9 +30,8 @@ class AddTaskPage extends StatefulWidget {
 }
 
 class _AddTaskPageState extends State<AddTaskPage> {
-  final _TaskController = TextEditingController(); /*  task controller  */
-  final _DescriptionController =
-      TextEditingController(); /*  description controller  */
+  var  _TaskController = TextEditingController(); /*  task controller  */
+  final _DescriptionController = TextEditingController(); /*  description controller  */
 
   /*DateTime due_date = DateTime.now();   */
   DateTime due_date = DateUtils.dateOnly(DateTime.now());
@@ -20,10 +40,23 @@ class _AddTaskPageState extends State<AddTaskPage> {
   TimeOfDay due_time = TimeOfDay(hour: 8, minute: 00);
   var DueTime = ''; /*  user due time  */
 
+  var repetitiveness = '';
+
+  var importance = '';
+
+  var lat = '';              /*  GPS variables  */
+  var long = '';
+
   TimeOfDay notification_time = TimeOfDay(hour: 8, minute: 00);
   DateTime notification_date = DateUtils.dateOnly(DateTime.now());
   var NotDate = '';
   var NotTime = '';
+  final List<String> Notifications_Day_and_Time = ['',''];
+  int list_counter=0;                  /* number of notifications */
+  var Notifications_List = List.generate(10, (i) => ['',''] , growable: true);
+  var new_Notifications_List = List.generate(10, (i) => Notification('','') , growable: true);
+  var jsonNotifications;
+  
 
   String task = ''; /*  user task   */
   String description = ''; /*  user description   */
@@ -53,9 +86,9 @@ class _AddTaskPageState extends State<AddTaskPage> {
                 children: <Widget>[
                   const Text(
                     'Task name : ',
-                    style: TextStyle(fontSize: 25),
+                    style: TextStyle(fontSize: 21),
                   ),
-                  TextField(
+                      TextField(
                       controller: _TaskController,
                       decoration: InputDecoration(
                         border: OutlineInputBorder(),
@@ -64,7 +97,7 @@ class _AddTaskPageState extends State<AddTaskPage> {
                       )),
                   Text(
                     'Description : ',
-                    style: TextStyle(fontSize: 25),
+                    style: TextStyle(fontSize: 21),
                   ),
                   TextField(
                       controller: _DescriptionController,
@@ -83,21 +116,37 @@ class _AddTaskPageState extends State<AddTaskPage> {
               color: Color(0xffff929AE7),
               child: Row(
                 children: [
-                  ElevatedButton(
-                    child: Text("Calendar"),
+                  TextButton(
+                    //child: Text("Calendar"),
+                    child: const Icon(Icons.date_range_rounded,color:Color(0xff252525)),
                     onPressed: openDatePicker,
                   ),
-                  ElevatedButton(
-                    child: Text("Clock"),
+                  TextButton(
+                    //child: Text("Clock"),
+                    child:const Icon(Icons.access_time,color:Color(0xff252525)),
                     onPressed: openTimePicker,
                   ),
-                  ElevatedButton(
-                    child: Text("Repeat"),
-                    onPressed: _SaveTask, /* needs to be changed */
+                  TextButton(
+                    //child: Text("Repeat"),
+                    child:const Icon(Icons.replay,color:Color(0xff252525)),
+                    onPressed: openRepetitiveness, 
                   ),
-                  ElevatedButton(
-                    child: Text("Notification"),
+                  TextButton(
+                    child: const Icon(Icons.notifications_none_outlined, color:Color(0xff252525)),
                     onPressed: openNotificationWindow,
+                  ),
+                  TextButton(
+                    child: const Icon(Icons.outlined_flag,color:Color(0xff252525)),
+                    onPressed: openImportanceWindow,
+                  ),
+                  TextButton(
+                    child: const Icon(Icons.location_on_outlined,color:Color(0xff252525)),
+                    onPressed: () { openLocationWindow().then((value){
+                        lat='${value.latitude}';
+                        long = '${value.longitude}';
+                        MapUtils.openMap(lat,long);
+                    });
+                    }
                   ),
                 ],
               ),
@@ -143,18 +192,39 @@ class _AddTaskPageState extends State<AddTaskPage> {
                 Text("Due date"),
                 Text(DueDate),
                 Text("Due time"),
-                Text(DueTime)
+                Text(DueTime),
+                Text("Your Location :"),
+                Text(long + " " '$lat')
               ]),
             ),
           ],
         ));
   }
 
-  void _SaveTask() {
+  void _SaveTask() async {
     setState(() {
       task = _TaskController.text;
       description = _DescriptionController.text;
+      jsonNotifications = jsonEncode(new_Notifications_List); //TYPE JSON MAP //
+      debugPrint(jsonNotifications);                       
     });
+     final rawData = <String, dynamic> {
+      'name': task, 
+      'description': description, 
+      'date': DueDate,
+      'time':DueTime,
+      'repetitiveness': repetitiveness,
+      'notifications': new_Notifications_List,
+      'importance' : importance,
+      //'location': Location(latitude:1, longitude: 7),
+      //'recordingFilePath' : 'path1',
+      //'photoFilePath' : 'path2',
+      //'friendName': ["julie","jess"]
+      }; 
+    await AddTaskData.saveJsonData(rawData);
+    AddTaskData.getJsonData();
+    AddTaskData.parseJson(rawData);
+    //FileManager().writeJsonFile(rawData);
   }
 
   void openDatePicker() {
@@ -181,6 +251,89 @@ class _AddTaskPageState extends State<AddTaskPage> {
     });
   }
 
+  Future openRepetitiveness() => showDialog(
+        context:context,
+        builder: (context) => AlertDialog(
+          title: Text("Select task's repetitiveness"),
+          content: Column(children: [
+              Column(
+                children: [
+                  SizedBox(
+                    width: 200, 
+                    height: 50, 
+                    child: ElevatedButton(
+                      child: Text("Does Not Repeat"),
+                      onPressed: ()=> setState(() {
+                        repetitiveness = 'does not repeat';
+                        Navigator.of(context).pop();
+                      })
+                      ),
+                  ),
+                  SizedBox(
+                    height:50
+                  ),
+                  SizedBox(
+                    width: 200, 
+                    height: 50,
+                    child:ElevatedButton(
+                      child: Text("Every Day"),
+                      onPressed: ()=> setState(() {
+                        repetitiveness = 'every day';
+                        Navigator.of(context).pop();
+                      })
+                      ),
+                  ),
+                  SizedBox(
+                    height:50
+                  ),
+                  SizedBox(
+                  width: 200, 
+                  height: 50,
+                  child: ElevatedButton(
+                      child: Text("Every Week"),
+                      onPressed: ()=> setState(() {
+                        repetitiveness = 'every week';
+                        Navigator.of(context).pop();
+                      })
+                      ),
+                  ),
+                  SizedBox(
+                    height:50
+                  ),
+                  SizedBox(
+                    width: 200, 
+                    height: 50,
+                    child: ElevatedButton(
+                      child: Text("Every Month"),
+                      onPressed: ()=> setState(() {
+                        repetitiveness = 'every month';
+                        Navigator.of(context).pop();
+                      })
+                      ),
+                      ),
+                   SizedBox(
+                    height:50
+                  ),
+                  SizedBox(
+                    width: 200, 
+                    height: 50,
+                    child: ElevatedButton(
+                      child: Text("Cancel"),
+                      style: ElevatedButton.styleFrom(
+                        primary: Colors.deepOrangeAccent,),
+                      onPressed: ()=> setState(() {
+                        Navigator.of(context).pop();
+                      })
+                      ),
+                      ),
+                ],
+              ),
+            ]
+        )
+  
+  )
+  );
+
   Future openNotificationWindow() => showDialog(
         context: context,
         builder: (context) => AlertDialog(
@@ -199,14 +352,106 @@ class _AddTaskPageState extends State<AddTaskPage> {
               ),
               Row(children: [
                 const Text('Your notification date and time : '),
-                Text(NotDate),
+                /*Text(NotDate),
                 const Text(" "),
-                Text(NotTime)
-              ]),
-            ]),
+                Text(NotTime), */
+                ],
+              ),
+              for (var i=0 ; i < list_counter; i++) getCardWidgets(Notifications_List[i]),
+              AddNotificationsButtons()
+            ]
+            ),
           ),
         ),
       );
+
+  Widget getCardWidgets(List<String> strings)
+  {
+    List<Widget> list = [];
+    for(var i = 0; i < 1; i++){
+        list.add(
+          Container(
+          width:250,
+          //color: Color(0xff929AE7),
+          child: Card(
+                color: Color(0xff929AE7),
+                child: Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Row(children: [
+                    Text(strings[0]),
+                    Text(" "),
+                    Text(strings[1]),
+                  ],
+                  )
+                )
+              ),
+        )
+        );
+    }
+    return new Row(children: list);
+  }
+  
+  Widget AddNotificationsButtons(){
+    List<Widget> list = [];
+    if(list_counter==0){
+      list.add(
+        Container(
+          child: ElevatedButton(
+            child:Text("Cancel"),
+             style: ElevatedButton.styleFrom(
+                    primary: Colors.deepOrangeAccent,
+                    //onPrimary: Colors.black,
+            ),
+            onPressed:() {
+              Navigator.of(context).pop();
+              setState((){
+                list_counter = 0;
+                Notifications_List=List.generate(10, (i) => ['',''] , growable: true);
+                new_Notifications_List = List.generate(10, (i) => Notification('','') , growable: true);
+                debugPrint('${(Notifications_List.toString())}');
+              });
+            },
+          )
+        )
+      );
+    }
+    if(list_counter!=0){
+      list.add(
+        Container(
+          child: Column(children: [
+            ElevatedButton(
+              child:Text(" Save Notifications "),
+              style: ElevatedButton.styleFrom(
+                    primary: Color(0xff06661B),
+                    //onPrimary: Colors.black,
+            ),
+            onPressed:() {
+              Navigator.pop(context);
+            },
+          ),
+           ElevatedButton(
+              child:Text("Delete Notifications"),
+              style: ElevatedButton.styleFrom(
+                    primary: Colors.deepOrangeAccent,
+                    //onPrimary: Colors.black,
+            ),
+            onPressed:() {
+              Navigator.pop(context);
+              setState((){
+                list_counter = 0;
+                Notifications_List=List.generate(10, (i) => ['',''] , growable: true);
+                new_Notifications_List = List.generate(10, (i) => Notification('','') , growable: true);
+                debugPrint('${(Notifications_List.toString())}');
+              });
+            },
+           )
+          ]
+        )
+        )
+      );
+    }
+    return Row(children: list);
+  }
 
   void openNotificationDay() {
     showDatePicker(
@@ -219,6 +464,14 @@ class _AddTaskPageState extends State<AddTaskPage> {
         notification_date = value!;
         NotDate =
             "${notification_date.day}-${notification_date.month}-${notification_date.year}";
+        Notifications_Day_and_Time[0] = NotDate;
+        Notifications_List[list_counter][0] = NotDate;
+        new_Notifications_List[list_counter] = Notification(NotDate,NotTime);
+        if (Notifications_List[list_counter][1] !=''){
+          list_counter = list_counter +1;
+        }
+        debugPrint('${(Notifications_List.toString())}');
+        Navigator.pop(context);
         openNotificationWindow();
       });
     });
@@ -230,8 +483,83 @@ class _AddTaskPageState extends State<AddTaskPage> {
       setState(() {
         notification_time = value!;
         NotTime = notification_time.format(context).toString();
+        Notifications_Day_and_Time[1] = NotTime;
+        Notifications_List[list_counter][1] = NotTime;
+        new_Notifications_List[list_counter] = Notification(NotDate,NotTime);
+        if (Notifications_List[list_counter][0] !=''){
+          list_counter = list_counter +1;
+          }
+        debugPrint('${(Notifications_List.toString())}');
+        Navigator.pop(context);
         openNotificationWindow();
       });
     });
   }
+
+  void openImportanceWindow() => showDialog(
+    context: context,
+        builder: (context) => AlertDialog(
+          title: Text("Select task's importance"),
+          content: Container(
+            child: Row(
+              children: [
+                ElevatedButton(
+                  child:Text("Low") ,
+                  style: ElevatedButton.styleFrom(
+                  backgroundColor: Color(0xff9787D7)),
+                  onPressed:() {setState(() {
+                    importance = 'Low';
+                    Navigator.of(context).pop();
+                  }); 
+                  },
+                  ),
+                  SizedBox(
+                    width:20
+                  ),
+                  ElevatedButton(
+                  child:Text("Mid") ,
+                  style: ElevatedButton.styleFrom(
+                  backgroundColor: Color(0xffA15EAF)),
+                  onPressed:() {setState(() {
+                    importance = 'Mid';
+                    Navigator.of(context).pop();
+                  }); 
+                  },
+                  ),
+                  SizedBox(
+                    width:20
+                  ),
+                  ElevatedButton(
+                  child:Text("High") ,
+                   style: ElevatedButton.styleFrom(
+                  backgroundColor: Color(0xffA32F7D)),
+                  onPressed:() {setState(() {
+                    importance = 'High';
+                    Navigator.of(context).pop();
+                  }); 
+                  },
+                  ),
+            ],)
+          )
+  )
+  );
+
+  Future <Position> openLocationWindow() async {
+    bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    if(!serviceEnabled){
+      return Future.error('Location services disabled');
+    }
+    LocationPermission permission = await Geolocator.checkPermission();
+    if(permission == LocationPermission.denied){
+      permission = await Geolocator.requestPermission();
+      if(permission == LocationPermission.denied){
+        return Future.error('Location permissions denied ');
+      }
+    }
+    if(permission == LocationPermission.deniedForever){
+      return Future.error('Location permissions permanently denied');
+    }
+    return await Geolocator.getCurrentPosition();
+  }
 }
+
