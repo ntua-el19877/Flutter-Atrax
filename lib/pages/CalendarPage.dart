@@ -17,18 +17,18 @@ class _CalendarPageState extends State<CalendarPage> {
         title: const Text('Calendar Page'),
       ),
       */
-      body : CalendarTable(),
+      body: CalendarTable(),
       backgroundColor: const Color(0xffE6F4F1),
       bottomNavigationBar: BottomNavbar(
         currentIndex: 0,
         onTap: (int index) {
-          switch(index){
-              case 0:
-                Navigator.of(context).pushNamed(RouteManager.mainpage);
-                break;
-              case 1:
-                Navigator.of(context).pushNamed(RouteManager.secondpage);
-                break;
+          switch (index) {
+            case 0:
+              Navigator.of(context).pushNamed(RouteManager.mainpage);
+              break;
+            case 1:
+              Navigator.of(context).pushNamed(RouteManager.secondpage);
+              break;
           }
         },
       ),
