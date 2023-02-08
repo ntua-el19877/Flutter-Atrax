@@ -26,57 +26,73 @@ class MainPage extends StatefulWidget {
 
 class _MainPageState extends State<MainPage> {
   Future<void> readJson() async {
-    List _items = [];
-    final String jsonString = await rootBundle.loadString('assets/tasks.json');
-    final data = await json.decode(jsonString);
-    // print(data);
-    Map<String, dynamic> jsonData = json.decode(jsonString);
-    List<dynamic> tasks = jsonData['tasks'];
+    try {
+      // your existing code here
 
-    // setState(() {
-    //   _items = data["tasks"];
-    // });
-    // taskNames.clear();
-    // taskDescriptions.clear();
-    // taskDates.clear();
-    // int i = 0;
-    for (var task in tasks) {
-      List<String> taskNotificationsD = [];
-      List<String> taskNotificationsT = [];
-      for (var notification in task['notifications']) {
-        taskNotificationsD.add(notification['date']);
-        taskNotificationsT.add(notification['time']);
-      }
-      taskNotificatios_Date.add(taskNotificationsD);
-      taskNotificatios_Time.add(taskNotificationsT);
-    }
-    for (var task in tasks) {
-      List<String> taskFr = [];
-      for (var friend in task['friend_name']) {
-        taskFr.add(friend);
-      }
-      taskFriends.add(taskFr);
-    }
+      List _items = [];
+      final String jsonString =
+          await rootBundle.loadString('assets/tasks.json');
+      final data = await json.decode(jsonString);
+      // print(data);
+      Map<String, dynamic> jsonData = json.decode(jsonString);
+      List<dynamic> tasks = jsonData['tasks'];
 
-    for (var task in tasks) {
-      taskNames.add(task['name']);
-      taskDescriptions.add(task['description']);
-      taskDates.add(task['date']);
-      taskTimes.add(task['time']);
-      taskRepetitiveness.add(task['repetitiveness']);
-      taskRepetitiveness.add(task['repetitiveness']);
-      taskImportance.add(task['importance']);
-      taskLocationLatitude.add(task['location']['latitude']);
-      taskLocationLongtitude.add(task['location']['longitude']);
-      taskRecording.add(task['recording_file_path']);
-      taskPhoto.add(task['photo_file_path']);
+      // setState(() {
+      //   _items = data["tasks"];
+      // });
+      taskNames.clear();
+      taskDescriptions.clear();
+      taskDates.clear();
+      taskNotificatios_Date.clear();
+      taskNotificatios_Time.clear();
+      taskTimes.clear();
+      taskRepetitiveness.clear();
+      taskImportance.clear();
+      taskLocationLatitude.clear();
+      taskLocationLongtitude.clear();
+      taskRecording.clear();
+      taskPhoto.clear();
+      // int i = 0;
+      for (var task in tasks) {
+        List<String> taskNotificationsD = [];
+        List<String> taskNotificationsT = [];
+        for (var notification in task['notifications']) {
+          taskNotificationsD.add(notification['date']);
+          taskNotificationsT.add(notification['time']);
+        }
+        taskNotificatios_Date.add(taskNotificationsD);
+        taskNotificatios_Time.add(taskNotificationsT);
+      }
+      for (var task in tasks) {
+        List<String> taskFr = [];
+        for (var friend in task['friend_name']) {
+          taskFr.add(friend);
+        }
+        taskFriends.add(taskFr);
+      }
+
+      for (var task in tasks) {
+        taskNames.add(task['name']);
+        taskDescriptions.add(task['description']);
+        taskDates.add(task['date']);
+        taskTimes.add(task['time']);
+        taskRepetitiveness.add(task['repetitiveness']);
+        //taskRepetitiveness.add(task['repetitiveness']);
+        taskImportance.add(task['importance']);
+        taskLocationLatitude.add(task['location']['latitude']);
+        taskLocationLongtitude.add(task['location']['longitude']);
+        taskRecording.add(task['recording_file_path']);
+        taskPhoto.add(task['photo_file_path']);
+      }
+      // hhh = taskNames.elementAt(0);
+      print('----------------------');
+      for (int i = 0; i < taskNames.length; i++) {
+        print(taskNames.elementAt(i));
+      }
+      print("-----------------");
+    } catch (e) {
+      print('An error occurred while reading the JSON file: $e');
     }
-    // hhh = taskNames.elementAt(0);
-    print('----------------------');
-    for (int i = 0; i < taskNames.length; i++) {
-      print(taskNames.elementAt(i));
-    }
-    print("-----------------");
   }
 
   int currentIndex = 0;
@@ -152,10 +168,10 @@ class _MainPageState extends State<MainPage> {
                           RemoveWidth: 2 * TaskLeftPadding,
                           indexListDate: taskNotificatios_Date.elementAt(0),
                           indexListTime: taskNotificatios_Time.elementAt(0),
-                          onTap: (int index) {
+                          onTap: (int index1) {
                             setState(() {
                               readJson();
-                              currentIndex = index;
+                              currentIndex = index1;
                             });
                           },
                         ))
