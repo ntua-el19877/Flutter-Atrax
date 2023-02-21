@@ -66,7 +66,7 @@ class _HomeDownBarState extends State<HomeDownBar> {
                     currentIndex = index;
                   });
                   if (index == 0) {
-                    Navigator.of(context).pushNamed(RouteManager.secondpage);
+                    Navigator.of(context).pushNamed(RouteManager.friendspage);
                   } else if (index == 1) {
                     Navigator.of(context).pushNamed(RouteManager.thirdpage);
                   }

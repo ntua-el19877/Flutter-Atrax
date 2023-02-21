@@ -1,0 +1,14 @@
+{
+    "friends": [
+        {
+            "fname": "Spyros",
+            "lname": "Giannopoulos",
+            "icon_symbol": "SG"
+        },
+        {
+            "fname": "Aggelos",
+            "lname": "Loukas",
+            "icon_symbol": "AL"
+        }
+    ]
+}
