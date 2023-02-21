@@ -3,6 +3,7 @@ import 'package:atrax/components/TaskMessage.dart';
 import 'package:flutter/material.dart';
 import 'dart:convert';
 import 'package:flutter/services.dart';
+import 'package:hive/hive.dart';
 
 // final _contr = TextEditingController();
 List<dynamic> taskNames = [];
@@ -95,7 +96,10 @@ class _MainPageState extends State<MainPage> {
   //     print('An error occurred while reading the JSON file: $e');
   //   }
   // }
-
+  //reference my box
+  final _mybox=Hive.box('mybox');
+  void writeData() {_my}
+  void readData(){}
   int currentIndex = 0;
   double TaskLeftPadding = 10;
   @override
@@ -134,13 +138,7 @@ class _MainPageState extends State<MainPage> {
             Positioned(
                 child: ElevatedButton(
               onPressed: () {
-                setState(() {
-                  if (isPlaying) {
-                    isPlaying = false;
-                    print("yess");
-                  } else
-                    isPlaying = true;
-                });
+                setState(() {});
               },
               child: Icon(
                 isPlaying ? Icons.pause : Icons.play_arrow,

@@ -1,14 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:atrax/routes/routes.dart';
+import 'package:hive_flutter/adapters.dart';
 
-void main() {
+void main() async {
+  await Hive.initFlutter();
+
+  //open box(database)
+  var box = await Hive.openBox('mybox');
   runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  // This widget is the root of your application.
+  // This widget is the root of your application..
   @override
   Widget build(BuildContext context) {
     return const MaterialApp(
