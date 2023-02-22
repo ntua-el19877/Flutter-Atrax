@@ -68,7 +68,7 @@ class _HomeDownBarState extends State<HomeDownBar> {
                   if (index == 0) {
                     Navigator.of(context).pushNamed(RouteManager.friendspage);
                   } else if (index == 1) {
-                    Navigator.of(context).pushNamed(RouteManager.thirdpage);
+                    Navigator.of(context).pushNamed(RouteManager.calendarpage);
                   }
                 },
                 showSelectedLabels: false,
@@ -87,11 +87,11 @@ class _HomeDownBarState extends State<HomeDownBar> {
                         ),
                       )),
                   BottomNavigationBarItem(
-                      label: 'Home',
+                      label: 'Calendar',
                       icon: Container(
                         padding: widget.itemPadding_Right,
                         child: Icon(
-                          Icons.home,
+                          Icons.calendar_month_rounded,
                           size: 35,
                           color: widget.color_Blacks,
                         ),

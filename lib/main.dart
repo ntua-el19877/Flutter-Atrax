@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:atrax/routes/routes.dart';
+import 'package:flutter/services.dart';
 import 'package:hive_flutter/adapters.dart';
 
 void main() async {
@@ -8,6 +9,8 @@ void main() async {
 
   //open box(database)
   var box = await Hive.openBox('mybox');
+  SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual,
+      overlays: [SystemUiOverlay.top]);
   runApp(const MyApp());
 }
 
