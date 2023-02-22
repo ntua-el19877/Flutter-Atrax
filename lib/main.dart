@@ -10,27 +10,31 @@ void main() async {
   // Initialize hive
   await Hive.initFlutter();
 
-  //open box(database)
-  var box = await Hive.openBox('mybox');
-
   //showing hive how to read/write Task
   Hive.registerAdapter(TaskAdapter());
 
+  //open box(database)
+  var box = await Hive.openBox('mybox');
+  box.clear();
+
   SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual,
       overlays: [SystemUiOverlay.top]);
-  runApp(const MyApp());
+  runApp(MyApp(box: box));
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  final Box box;
 
-  // This widget is the root of your application..
+  const MyApp({Key? key, required this.box}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
-      debugShowCheckedModeBanner: false,
+    return MaterialApp(
+      title: 'My App',
       initialRoute: RouteManager.mainpage,
-      onGenerateRoute: RouteManager.generateRoute,
+      onGenerateRoute: (settings) {
+        return RouteManager.generateRoute(settings, box: box);
+      },
     );
   }
 }

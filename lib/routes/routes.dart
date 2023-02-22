@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hive/hive.dart';
 
 import '../pages/HomePage.dart';
 import '../pages/SecondPage.dart';
@@ -15,10 +16,11 @@ class RouteManager {
   static const String addtaskpage = '/addtaskpage';
   static const String friendspage = '/friendspage';
 
-  static Route<dynamic> generateRoute(RouteSettings settings) {
+  static Route<dynamic> generateRoute(RouteSettings settings,
+      {required Box box}) {
     switch (settings.name) {
       case mainpage:
-        return MaterialPageRoute(builder: (context) => MainPage());
+        return MaterialPageRoute(builder: (context) => MainPage(box: box));
 
       case secondpage:
         return MaterialPageRoute(builder: (context) => SecondPage());
@@ -32,7 +34,7 @@ class RouteManager {
         return MaterialPageRoute(builder: (context) => AddTaskPage());
 
       case friendspage:
-        return MaterialPageRoute(builder: (context)=> FriendsPage());
+        return MaterialPageRoute(builder: (context) => FriendsPage());
 
       default:
         throw const FormatException('Route not found');

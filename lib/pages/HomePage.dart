@@ -24,6 +24,10 @@ List<String> taskPhoto = [];
 List<List<String>> taskFriends = [];
 
 class MainPage extends StatefulWidget {
+  final Box box;
+
+  const MainPage({Key? key, required this.box}) : super(key: key);
+
   @override
   _MainPageState createState() => _MainPageState();
 }
@@ -113,6 +117,7 @@ class _MainPageState extends State<MainPage> {
   @override
   void initState() {
     super.initState();
+    // Hive.registerAdapter(TaskAdapter());
 
     // readJson();
   }
@@ -120,6 +125,7 @@ class _MainPageState extends State<MainPage> {
   bool isPlaying = false;
   @override
   Widget build(BuildContext context) {
+    final _mybox = widget.box;
     final screenHeight = MediaQuery.of(context).size.height;
     double screenWidth = MediaQuery.of(context).size.width;
     final bottomNavBarHeight = (screenHeight / 12);
@@ -149,9 +155,17 @@ class _MainPageState extends State<MainPage> {
               children: [
                 ElevatedButton(
                     onPressed: () {
-                      setState(() {});
+                      setState(() {
+                        final _mytask = _mybox.get('mytask');
+                        if (_mytask != null) {
+                          print(
+                              _mytask.name); // will print the name of the task
+                        } else {
+                          print('No task found!');
+                        }
+                      });
                     },
-                    child: Text("add Task")),
+                    child: Text("read task")),
                 ElevatedButton(
                     onPressed: () {
                       setState(() {
@@ -176,10 +190,19 @@ class _MainPageState extends State<MainPage> {
                           photoFilePath: '/path/to/photo',
                           friendName: ['John', 'Jane'],
                         );
-                        // box.put('mytask', task);
+                        final _mytask = _mybox.get('mytask');
+                        int itemCount;
+                        if (_mytask != null) {
+                          itemCount = _mybox.length;
+                        } else {
+                          itemCount = 0;
+                        }
+                        _mybox.put("mytask$itemCount", task);
+
+                        print('Number of items in my box: $itemCount');
                       });
                     },
-                    child: Text("read")),
+                    child: Text("add task")),
               ],
             )),
             Center(
