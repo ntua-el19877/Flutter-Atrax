@@ -3,12 +3,16 @@ import 'package:atrax/routes/routes.dart';
 import 'package:flutter/services.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:hive/hive.dart';
+import 'package:path_provider/path_provider.dart';
 
 import 'components/HiveInit.dart';
 
 void main() async {
   // Initialize hive
   await Hive.initFlutter();
+  final document = await getApplicationDocumentsDirectory();
+  Hive.init(document.path);
+  Hive.registerAdapter<Task>(TaskAdapter());
 
   //showing hive how to read/write Task
   Hive.registerAdapter(TaskAdapter());
