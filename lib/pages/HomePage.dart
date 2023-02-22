@@ -26,6 +26,13 @@ class MainPage extends StatefulWidget {
   _MainPageState createState() => _MainPageState();
 }
 
+Color _color_TaskMessage = color_Secondary;
+const Color color_Secondary = Color(0xff929ae7);
+const Color color_Primary = Color(0xffe6f4f1);
+const Color color_Blacks = Color(0xff252525);
+const Color color_Red = Color(0xffa54e54);
+const Color color_Green = Color(0xff1f8a87);
+
 class _MainPageState extends State<MainPage> {
   // Future<void> readJson() async {
   //   try {
@@ -97,9 +104,15 @@ class _MainPageState extends State<MainPage> {
   //   }
   // }
   //reference my box
-  final _mybox=Hive.box('mybox');
-  void writeData() {_my}
-  void readData(){}
+  final _mybox = Hive.box('mybox');
+  void writeData() {
+    _mybox.put('k', 'firstcomm');
+  }
+
+  void readData() {
+    print(_mybox.get('k'));
+  }
+
   int currentIndex = 0;
   double TaskLeftPadding = 10;
   @override
@@ -136,43 +149,78 @@ class _MainPageState extends State<MainPage> {
               },
             ),
             Positioned(
-                child: ElevatedButton(
-              onPressed: () {
-                setState(() {});
-              },
-              child: Icon(
-                isPlaying ? Icons.pause : Icons.play_arrow,
-              ),
+                child: Row(
+              children: [
+                ElevatedButton(
+                    onPressed: () {
+                      setState(() {
+                        writeData();
+                      });
+                    },
+                    child: Text("write")),
+                ElevatedButton(
+                    onPressed: () {
+                      setState(() {
+                        readData();
+                      });
+                    },
+                    child: Text("read")),
+              ],
             )),
-            Positioned(
-                left: TaskLeftPadding,
-                top: 40,
-                child: TaskMessage(
-                  screen_width: screenWidth,
-                  name: "taskNames.elementAt(0)",
-                  description: "taskDescriptions.elementAt(0)",
-                  date: "taskDates.elementAt(0)",
-                  time: "10:30 AM",
-                  repetitiveness: "Every Day",
-                  notifications_date: ["1-1-1", "2-2-2"],
-                  notifications_time: ["11:11", "12:00"],
-                  notifications_halfOfDay: ["AM", "PM"],
-                  importance: "High",
-                  latitude: "taskLocationLatitude.elementAt(0)",
-                  longtitude: "taskLocationLongtitude.elementAt(0)",
-                  recording_file_path: 'assets/recordings/Scoobydoo.mp3',
-                  photo_file_path: "photo_file_path",
-                  friend_name: ["Friend1", "Friend2"],
-                  RemoveWidth: 2 * TaskLeftPadding,
-                  indexListDate: ["taskNotificatios_Date.elementAt(0)", "1"],
-                  indexListTime: ["taskNotificatios_Time.elementAt(0)", "1"],
-                  onTap: (int index1) {
+            GestureDetector(
+                onPanUpdate: (details) {
+                  int sensitivity = 20;
+                  // Swiping in right direction.
+                  if (details.delta.dx > sensitivity) {
                     setState(() {
-                      // readJson();
-                      currentIndex = index1;
+                      _color_TaskMessage = color_Green;
                     });
-                  },
-                ))
+                  }
+
+                  // Swiping in left direction.
+                  if (details.delta.dx < -sensitivity) {
+                    setState(() {
+                      _color_TaskMessage = color_Secondary;
+                    });
+                  }
+                },
+                child: Positioned(
+                    left: TaskLeftPadding,
+                    top: 40,
+                    child: TaskMessage(
+                      color_Secondary: _color_TaskMessage,
+                      screen_width: screenWidth,
+                      name: "taskNames.elementAt(0)",
+                      description:
+                          "taskDescriptions.elementAt(0) ith this code, the Column widget will expand vertically if the widget.text is too big to fit in the available space. The Flexible widget is wrapped around the Column widget to allow it to grow vertically. The fit property of the Flexible widget is set to FlexFit.loose to indicate that the Column widget should grow only as much as necessary to fit its children.",
+                      date: "taskDates.elementAt(0)",
+                      time: "10:30 AM",
+                      repetitiveness: "Every Day",
+                      notifications_date: ["1-1-1", "2-2-2"],
+                      notifications_time: ["11:11", "12:00"],
+                      notifications_halfOfDay: ["AM", "PM"],
+                      importance: "High",
+                      latitude: "taskLocationLatitude.elementAt(0)",
+                      longtitude: "taskLocationLongtitude.elementAt(0)",
+                      recording_file_path: 'assets/recordings/Scoobydoo.mp3',
+                      photo_file_path: "photo_file_path",
+                      friend_name: ["Friend1", "Friend2"],
+                      RemoveWidth: 2 * TaskLeftPadding,
+                      indexListDate: [
+                        "taskNotificatios_Date.elementAt(0)",
+                        "gres  erw re 1"
+                      ],
+                      indexListTime: [
+                        "taskNotificatios_Time.elementAt(0)",
+                        " yrew e 1"
+                      ],
+                      onTap: (int index1) {
+                        setState(() {
+                          // readJson();
+                          currentIndex = index1;
+                        });
+                      },
+                    )))
           ],
         ));
     // } else {

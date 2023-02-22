@@ -1,5 +1,3 @@
-import 'dart:html';
-
 import 'package:flutter/material.dart';
 
 class CustomRectangle extends StatefulWidget {
@@ -19,7 +17,7 @@ class CustomRectangle extends StatefulWidget {
   final double textSize;
   final Color color_Blacks;
   final Color color_Title;
-
+  final bool expandable;
   CustomRectangle({
     this.myIconSize = 20,
     this.myIconColor = Colors.red,
@@ -37,6 +35,7 @@ class CustomRectangle extends StatefulWidget {
     this.rect_padding = 5,
     this.textAlign = TextAlign.center,
     this.titleAlign = TextAlign.left,
+    this.expandable = false,
   });
 
   @override
@@ -47,61 +46,80 @@ class _CustomRectangleState extends State<CustomRectangle> {
   @override
   Widget build(BuildContext context) {
     return ClipRRect(
-      borderRadius: BorderRadius.only(
-          topLeft: Radius.circular(widget.Rad),
-          topRight: Radius.circular(widget.Rad),
-          bottomLeft: Radius.circular(widget.Rad),
-          bottomRight: Radius.circular(widget.Rad)),
-      child: Container(
-        width: widget.width,
-        color: widget.color_Back,
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            if (widget.myIconEnabled)
-              SizedBox(
-                width: widget.width / 8,
-                child: Icon(
-                  widget.myIcon,
-                  color: widget.myIconColor,
-                  size: widget.myIconSize,
-                ),
-              ),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Container(
-                  padding: EdgeInsets.all(0),
-                  child: Text(
-                    widget.title,
-                    style: TextStyle(
-                      fontSize: widget.titleSize,
-                      fontWeight: FontWeight.bold,
-                      color: widget.color_Title,
-                    ),
+        borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(widget.Rad),
+            topRight: Radius.circular(widget.Rad),
+            bottomLeft: Radius.circular(widget.Rad),
+            bottomRight: Radius.circular(widget.Rad)),
+        child: Container(
+          width: widget.width,
+          color: widget.color_Back,
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              if (widget.myIconEnabled)
+                SizedBox(
+                  width: widget.width / 8,
+                  child: Icon(
+                    widget.myIcon,
+                    color: widget.myIconColor,
+                    size: widget.myIconSize,
                   ),
                 ),
-                Container(
-                  padding: EdgeInsets.only(bottom: widget.rect_padding),
-                  child: Text(
-                    widget.text,
-                    style: TextStyle(
-                      fontSize: widget.textSize,
-                      fontWeight: FontWeight.bold,
-                      color: widget.color_Blacks,
+              Flexible(
+                fit: FlexFit.loose,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Container(
+                      child: Text(
+                        widget.title,
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyle(
+                          fontSize: widget.titleSize,
+                          fontWeight: FontWeight.bold,
+                          color: widget.color_Title,
+                        ),
+                      ),
                     ),
-                  ),
-                )
-              ],
-            ),
-            if (widget.myIconEnabled)
-              Container(
-                width: widget.width / 8,
+                    if (widget.expandable == false)
+                      Container(
+                        padding: EdgeInsets.only(
+                            left: 10, right: 10, bottom: widget.rect_padding),
+                        child: Text(
+                          widget.text,
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyle(
+                            fontSize: widget.textSize,
+                            fontWeight: FontWeight.bold,
+                            color: widget.color_Blacks,
+                          ),
+                        ),
+                      ),
+                    if (widget.expandable != false)
+                      Container(
+                        padding: EdgeInsets.only(
+                            left: 10, right: 10, bottom: widget.rect_padding),
+                        child: Text(
+                          widget.text,
+                          style: TextStyle(
+                            fontSize: widget.textSize,
+                            fontWeight: FontWeight.bold,
+                            color: widget.color_Blacks,
+                          ),
+                        ),
+                      )
+                  ],
+                ),
               ),
-          ],
-        ),
-      ),
-    );
+              if (widget.myIconEnabled)
+                Container(
+                  width: widget.width / 8,
+                ),
+            ],
+          ),
+        ));
   }
 }

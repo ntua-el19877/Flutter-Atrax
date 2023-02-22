@@ -3,6 +3,7 @@ import 'package:atrax/routes/routes.dart';
 import 'package:hive_flutter/adapters.dart';
 
 void main() async {
+  // Initialize hive
   await Hive.initFlutter();
 
   //open box(database)

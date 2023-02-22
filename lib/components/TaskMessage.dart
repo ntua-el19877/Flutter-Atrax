@@ -263,170 +263,212 @@ class _TaskMessageState extends State<TaskMessage> {
   }
 
   Future openTaskWindow() => showDialog(
-        context: context,
-        builder: (context) => AlertDialog(
-          title: Text(
-            widget.name,
-            style: TextStyle(
-              color: widget.color_Blacks,
-              fontSize: 20,
-              fontWeight: FontWeight.bold,
+      context: context,
+      builder: (context) => AlertDialog(
+            title: Text(
+              widget.name,
+              style: TextStyle(
+                color: widget.color_Blacks,
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+              ),
             ),
-          ),
-          content: SizedBox(
-            width: widget.screen_width * 3 / 4,
-            child: Column(children: [
-              if (emptyFields[0])
-                Container(
-                  padding: const EdgeInsets.all(10),
-                  child: CustomRectangle(
-                    width: widget.screen_width * 3 / 4 - 20,
-                    text: widget.description,
-                    title: "Description",
-                  ),
-                ),
-              Row(
-                children: [
-                  if (emptyFields[6])
-                    Container(
-                      padding: const EdgeInsets.all(10),
-                      child: CustomRectangle(
-                          width: widget.screen_width * 3 / 8 - 20,
-                          text: widget.date,
-                          title: "Date"),
-                    ),
-                  if (emptyFields[7])
-                    Container(
-                        padding: const EdgeInsets.all(10),
-                        child: CustomRectangle(
-                            width: widget.screen_width * 3 / 8 - 20,
-                            text: widget.time,
-                            title: "Time"))
-                ],
-              ),
-              Row(
-                children: [
-                  if (emptyFields[1])
-                    Container(
-                      padding: const EdgeInsets.all(10),
-                      child: CustomRectangle(
-                          width: widget.screen_width * 3 / 8 - 20,
-                          text: widget.repetitiveness,
-                          title: "Repeat"),
-                    ),
-                  if (emptyFields[8])
-                    Container(
-                        padding: const EdgeInsets.all(10),
-                        child: CustomRectangle(
-                            width: widget.screen_width * 3 / 8 - 20,
-                            text: widget.importance,
-                            title: "Importance"))
-                ],
-              ),
-              for (int i = 0; i < widget.indexListDate.length; i++)
-                Container(
-                  padding: const EdgeInsets.only(
-                      top: 10, right: 10, left: 10, bottom: 10),
-                  child: CustomRectangle(
-                      width: widget.screen_width * 3 / 4 - 20,
-                      text: widget.indexListTime.elementAt(i) +
-                          "    " +
-                          widget.indexListDate.elementAt(i),
-                      title: "Notifications"),
-                ),
-              if (emptyFields[3])
-                GestureDetector(
-                  onTap: () {
-                    // MapUtils.openMap(double.parse(widget.latitude),
-                    //     double.parse(widget.longtitude));
-                    MapsLauncher.launchCoordinates(
-                        double.parse(widget.latitude),
-                        double.parse(widget.longtitude));
-                  },
-                  child: Container(
-                    padding: const EdgeInsets.all(10),
-                    child: CustomRectangle(
-                        // myIconEnabled: true,
-                        // myIconSize: 30,
-                        // myIcon: Icons.location_on_outlined,
-                        // myIconColor: Colors.red,
-                        Rad: 30,
-                        width: (widget.screen_width * 3 / 4),
-                        text: widget.latitude + "  ,  " + widget.longtitude,
-                        title: "Location"),
-                  ),
-                ),
-              if (emptyFields[4])
-                // GestureDetector(
-                //   onTap: () {
-                //     // MapUtils.openMap(double.parse(widget.latitude),
-                //     //     double.parse(widget.longtitude));
-                //     // MapsLauncher.launchCoordinates(
-                //     //     double.parse(widget.latitude),
-                //     //     double.parse(widget.longtitude));
-                //   },
-                // child:
-                Container(
-                    padding: const EdgeInsets.all(10),
-                    child: Column(
-                      children: [
-                        Slider(
-                          min: 0,
-                          max: duration.inSeconds.toDouble(),
-                          thumbColor: widget.color_Blacks,
-                          inactiveColor: widget.color_Blacks,
-                          onChanged: (value) async {
-                            final position = Duration(seconds: value.toInt());
-                            await audioPlayer.seek(position);
-                            await audioPlayer.resume();
-                          },
-                          value: position.inSeconds.toDouble(),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 16),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(formatTime(position)),
-                              Text(formatTime(duration - position))
-                            ],
+            content: SingleChildScrollView(
+              physics: const AlwaysScrollableScrollPhysics(),
+              child: SizedBox(
+                // height: 500,
+                width: widget.screen_width * 3 / 4,
+                child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      if (emptyFields[0])
+                        Container(
+                          padding: const EdgeInsets.only(
+                              left: 0, bottom: 10, top: 10, right: 0),
+                          child: CustomRectangle(
+                            expandable: true,
+                            width: widget.screen_width * 3 / 4 - 20,
+                            text: widget.description,
+                            title: "Description",
                           ),
                         ),
-                        CircleAvatar(
-                            radius: 35,
-                            child: IconButton(
-                              icon: Icon(
-                                isPlaying ? Icons.pause : Icons.play_arrow,
+                      Container(
+                        padding: const EdgeInsets.only(bottom: 10, top: 10),
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment
+                              .center, // Set to CrossAxisAlignment.start
+                          children: [
+                            if (emptyFields[6])
+                              Flexible(
+                                // Wrap the child widget with a Flexible widget
+                                child: Container(
+                                  padding: const EdgeInsets.only(right: 5),
+                                  child: CustomRectangle(
+                                      width: widget.screen_width * 3 / 10 - 15,
+                                      text: widget.date,
+                                      title: "Date"),
+                                ),
                               ),
-                              iconSize: 50,
-                              onPressed: () async {
-                                if (isPlaying) {
-                                  // await audioPlayer.pause();
-                                  pauseAudio();
-                                } else {
-                                  // String url =
-                                  // 'https://www.youtube.com/results?search_query=e+scooby+dooby+doo+where+are+you';
-                                  // 'assets/recordings/Scoobydoo.mp3';
-                                  // await audioPlayer.play(url);
-                                  playAudio();
-                                }
-                              },
+                            if (emptyFields[7])
+                              Flexible(
+                                // Wrap the child widget with a Flexible widget
+                                child: Container(
+                                  padding: const EdgeInsets.only(left: 5),
+                                  child: CustomRectangle(
+                                      width: widget.screen_width * 3 / 10 - 15,
+                                      text: widget.time,
+                                      title: "Time"),
+                                ),
+                              ),
+                          ],
+                        ),
+                      ),
+                      Container(
+                        padding: const EdgeInsets.only(bottom: 10, top: 10),
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment
+                              .center, // Set to CrossAxisAlignment.start
+                          children: [
+                            if (emptyFields[6])
+                              Flexible(
+                                // Wrap the child widget with a Flexible widget
+                                child: Container(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 5, vertical: 10),
+                                  child: CustomRectangle(
+                                      width: widget.screen_width * 3 / 10 - 15,
+                                      text: widget.repetitiveness,
+                                      title: "Repeat"),
+                                ),
+                              ),
+                            if (emptyFields[7])
+                              Flexible(
+                                  // Wrap the child widget with a Flexible widget
+                                  child: Container(
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 5, vertical: 10),
+                                      child: CustomRectangle(
+                                          width:
+                                              widget.screen_width * 3 / 10 - 15,
+                                          text: widget.importance,
+                                          title: "Importance"))),
+                          ],
+                        ),
+                      ),
+                      for (int i = 0; i < widget.indexListDate.length; i++)
+                        Container(
+                          padding: const EdgeInsets.only(
+                              top: 10, right: 0, left: 0, bottom: 10),
+                          child: CustomRectangle(
+                              width: widget.screen_width * 3 / 4 - 20,
+                              text: widget.indexListTime.elementAt(i) +
+                                  "    " +
+                                  widget.indexListDate.elementAt(i),
+                              title: "Notifications"),
+                        ),
+                      if (emptyFields[3])
+                        GestureDetector(
+                          onTap: () {
+                            // MapUtils.openMap(double.parse(widget.latitude),
+                            //     double.parse(widget.longtitude));
+                            MapsLauncher.launchCoordinates(
+                                double.parse(widget.latitude),
+                                double.parse(widget.longtitude));
+                          },
+                          child: Container(
+                            padding: const EdgeInsets.only(
+                                left: 0, bottom: 10, top: 10, right: 0),
+                            child: CustomRectangle(
+                                // myIconEnabled: true,
+                                // myIconSize: 30,
+                                // myIcon: Icons.location_on_outlined,
+                                // myIconColor: Colors.red,
+                                Rad: 30,
+                                width: (widget.screen_width * 3 / 4 - 20),
+                                text: widget.latitude +
+                                    "  ,  " +
+                                    widget.longtitude,
+                                title: "Location"),
+                          ),
+                        ),
+                      if (emptyFields[4])
+                        // GestureDetector(
+                        //   onTap: () {
+                        //     // MapUtils.openMap(double.parse(widget.latitude),
+                        //     //     double.parse(widget.longtitude));
+                        //     // MapsLauncher.launchCoordinates(
+                        //     //     double.parse(widget.latitude),
+                        //     //     double.parse(widget.longtitude));
+                        //   },
+                        // child:
+                        Container(
+                            padding: const EdgeInsets.all(10),
+                            child: Column(
+                              children: [
+                                Slider(
+                                  min: 0,
+                                  max: duration.inSeconds.toDouble(),
+                                  thumbColor: widget.color_Blacks,
+                                  inactiveColor: widget.color_Blacks,
+                                  onChanged: (value) async {
+                                    final position =
+                                        Duration(seconds: value.toInt());
+                                    await audioPlayer.seek(position);
+                                    await audioPlayer.resume();
+                                  },
+                                  value: position.inSeconds.toDouble(),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 16),
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Text(formatTime(position)),
+                                      Text(formatTime(duration - position))
+                                    ],
+                                  ),
+                                ),
+                                CircleAvatar(
+                                    radius: 35,
+                                    child: IconButton(
+                                      icon: Icon(
+                                        isPlaying
+                                            ? Icons.pause
+                                            : Icons.play_arrow,
+                                      ),
+                                      iconSize: 50,
+                                      onPressed: () async {
+                                        if (isPlaying) {
+                                          // await audioPlayer.pause();
+                                          pauseAudio();
+                                        } else {
+                                          // String url =
+                                          // 'https://www.youtube.com/results?search_query=e+scooby+dooby+doo+where+are+you';
+                                          // 'assets/recordings/Scoobydoo.mp3';
+                                          // await audioPlayer.play(url);
+                                          playAudio();
+                                        }
+                                      },
+                                    )),
+                                // CustomRectangle(
+                                //     // myIconEnabled: true,
+                                //     myIconSize: 30,
+                                //     myIcon: Icons.location_on_outlined,
+                                //     myIconColor: Colors.red,
+                                //     //Rad: 30,
+                                //     width: (widget.screen_width * 3 / 4),
+                                //     text:
+                                //         widget.latitude + "  ,  " + widget.longtitude,
+                                //     title: "Recording"),
+                              ],
                             )),
-                        // CustomRectangle(
-                        //     // myIconEnabled: true,
-                        //     myIconSize: 30,
-                        //     myIcon: Icons.location_on_outlined,
-                        //     myIconColor: Colors.red,
-                        //     //Rad: 30,
-                        //     width: (widget.screen_width * 3 / 4),
-                        //     text:
-                        //         widget.latitude + "  ,  " + widget.longtitude,
-                        //     title: "Recording"),
-                      ],
-                    )),
-              // )
-            ]),
-          ),
-        ),
-      );
+                    ]),
+              ),
+            ),
+          ));
 }
