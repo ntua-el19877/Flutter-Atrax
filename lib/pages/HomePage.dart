@@ -5,6 +5,8 @@ import 'dart:convert';
 import 'package:flutter/services.dart';
 import 'package:hive/hive.dart';
 
+import '../components/HiveInit.dart';
+
 // final _contr = TextEditingController();
 List<dynamic> taskNames = [];
 List<String> taskDescriptions = [];
@@ -105,19 +107,13 @@ class _MainPageState extends State<MainPage> {
   // }
   //reference my box
   final _mybox = Hive.box('mybox');
-  void writeData() {
-    _mybox.put('k', 'firstcomm');
-  }
-
-  void readData() {
-    print(_mybox.get('k'));
-  }
 
   int currentIndex = 0;
   double TaskLeftPadding = 10;
   @override
   void initState() {
     super.initState();
+
     // readJson();
   }
 
@@ -153,15 +149,34 @@ class _MainPageState extends State<MainPage> {
               children: [
                 ElevatedButton(
                     onPressed: () {
-                      setState(() {
-                        writeData();
-                      });
+                      setState(() {});
                     },
-                    child: Text("write")),
+                    child: Text("add Task")),
                 ElevatedButton(
                     onPressed: () {
                       setState(() {
-                        readData();
+                        Task task = Task(
+                          name: 'My Task',
+                          description: 'This is my task',
+                          date: '2023-02-22',
+                          time: '10:00 AM',
+                          repetitiveness: 'Daily',
+                          notifications: [
+                            {
+                              'time': '9:30 AM',
+                              'message': 'Reminder: My Task at 10:00 AM'
+                            }
+                          ],
+                          importance: 'High',
+                          location: {
+                            'latitude': '37.7749',
+                            'longitude': '-122.4194'
+                          },
+                          recordingFilePath: '/path/to/recording',
+                          photoFilePath: '/path/to/photo',
+                          friendName: ['John', 'Jane'],
+                        );
+                        // box.put('mytask', task);
                       });
                     },
                     child: Text("read")),
