@@ -98,7 +98,7 @@ class _MainPageState extends State<MainPage> {
   // }
   //reference my box
   final _mybox=Hive.box('mybox');
-  void writeData() {_my}
+  //void writeData() {_my}
   void readData(){}
   int currentIndex = 0;
   double TaskLeftPadding = 10;
