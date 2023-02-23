@@ -83,7 +83,7 @@ class TaskMessage extends StatefulWidget {
 
 class _TaskMessageState extends State<TaskMessage> {
   late List<bool> emptyFields;
-  final audioPlayer = AudioPlayer();
+  // final audioPlayer = AudioPlayer();
   bool isPlaying = false;
   Duration duration = Duration.zero;
   Duration position = Duration.zero;
@@ -103,25 +103,25 @@ class _TaskMessageState extends State<TaskMessage> {
     if (widget.friend_name.isEmpty) emptyFields[9] = false;
   }
 
-  @override
-  void dispose() {
-    audioPlayer.dispose();
-    super.dispose();
-  }
+  // @override
+  // void dispose() {
+  //   audioPlayer.dispose();
+  //   super.dispose();
+  // }
 
   @override
   void initState() {
     super.initState();
-    audioPlayer.onPlayerStateChanged.listen((state) {
-      setState(() {
-        isPlaying = state == PlayerState.PLAYING;
-      });
-    });
-    audioPlayer.onDurationChanged.listen((newDuration) {
-      setState(() {
-        duration = newDuration;
-      });
-    });
+    // audioPlayer.onPlayerStateChanged.listen((state) {
+    //   setState(() {
+    //     isPlaying = state == PlayerState.PLAYING;
+    //   });
+    // });
+    // audioPlayer.onDurationChanged.listen((newDuration) {
+    //   setState(() {
+    //     duration = newDuration;
+    //   });
+    // });
     // audioPlayer.onAudioPositionChanged.listen((newPosition) {
     //   setState(() {
     //     position = newPosition;
@@ -137,7 +137,7 @@ class _TaskMessageState extends State<TaskMessage> {
     return GestureDetector(
       onTap: () {
         openTaskWindow();
-        pauseAudio();
+        // pauseAudio();
       },
       child: Container(
         width: MediaQuery.of(context).size.width - widget.RemoveWidth,
@@ -248,19 +248,19 @@ class _TaskMessageState extends State<TaskMessage> {
     ].join(':');
   }
 
-  void playAudio() async {
-    await audioPlayer.play(widget.recording_file_path);
-    setState(() {
-      isPlaying = true;
-    });
-  }
+  // void playAudio() async {
+  //   await audioPlayer.play(widget.recording_file_path);
+  //   setState(() {
+  //     isPlaying = true;
+  //   });
+  // }
 
-  void pauseAudio() async {
-    await audioPlayer.pause();
-    setState(() {
-      isPlaying = false;
-    });
-  }
+  // void pauseAudio() async {
+  //   await audioPlayer.pause();
+  //   setState(() {
+  //     isPlaying = false;
+  //   });
+  // }
 
   Future openTaskWindow() => showDialog(
       context: context,
@@ -394,79 +394,79 @@ class _TaskMessageState extends State<TaskMessage> {
                                 title: "Location"),
                           ),
                         ),
-                      if (emptyFields[4])
-                        // GestureDetector(
-                        //   onTap: () {
-                        //     // MapUtils.openMap(double.parse(widget.latitude),
-                        //     //     double.parse(widget.longtitude));
-                        //     // MapsLauncher.launchCoordinates(
-                        //     //     double.parse(widget.latitude),
-                        //     //     double.parse(widget.longtitude));
-                        //   },
-                        // child:
-                        Container(
-                            padding: const EdgeInsets.all(10),
-                            child: Column(
-                              children: [
-                                Slider(
-                                  min: 0,
-                                  max: duration.inSeconds.toDouble(),
-                                  thumbColor: widget.color_Blacks,
-                                  inactiveColor: widget.color_Blacks,
-                                  onChanged: (value) async {
-                                    final position =
-                                        Duration(seconds: value.toInt());
-                                    await audioPlayer.seek(position);
-                                    await audioPlayer.resume();
-                                  },
-                                  value: position.inSeconds.toDouble(),
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 16),
-                                  child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Text(formatTime(position)),
-                                      Text(formatTime(duration - position))
-                                    ],
-                                  ),
-                                ),
-                                CircleAvatar(
-                                    radius: 35,
-                                    child: IconButton(
-                                      icon: Icon(
-                                        isPlaying
-                                            ? Icons.pause
-                                            : Icons.play_arrow,
-                                      ),
-                                      iconSize: 50,
-                                      onPressed: () async {
-                                        if (isPlaying) {
-                                          // await audioPlayer.pause();
-                                          pauseAudio();
-                                        } else {
-                                          // String url =
-                                          // 'https://www.youtube.com/results?search_query=e+scooby+dooby+doo+where+are+you';
-                                          // 'assets/recordings/Scoobydoo.mp3';
-                                          // await audioPlayer.play(url);
-                                          playAudio();
-                                        }
-                                      },
-                                    )),
-                                // CustomRectangle(
-                                //     // myIconEnabled: true,
-                                //     myIconSize: 30,
-                                //     myIcon: Icons.location_on_outlined,
-                                //     myIconColor: Colors.red,
-                                //     //Rad: 30,
-                                //     width: (widget.screen_width * 3 / 4),
-                                //     text:
-                                //         widget.latitude + "  ,  " + widget.longtitude,
-                                //     title: "Recording"),
-                              ],
-                            )),
+                      //if (emptyFields[4])
+                      // GestureDetector(
+                      //   onTap: () {
+                      //     // MapUtils.openMap(double.parse(widget.latitude),
+                      //     //     double.parse(widget.longtitude));
+                      //     // MapsLauncher.launchCoordinates(
+                      //     //     double.parse(widget.latitude),
+                      //     //     double.parse(widget.longtitude));
+                      //   },
+                      // child:
+                      // Container(
+                      //     padding: const EdgeInsets.all(10),
+                      //     child: Column(
+                      //       children: [
+                      //         Slider(
+                      //           min: 0,
+                      //           max: duration.inSeconds.toDouble(),
+                      //           thumbColor: widget.color_Blacks,
+                      //           inactiveColor: widget.color_Blacks,
+                      //           onChanged: (value) async {
+                      //             final position =
+                      //                 Duration(seconds: value.toInt());
+                      //             await audioPlayer.seek(position);
+                      //             await audioPlayer.resume();
+                      //           },
+                      //           value: position.inSeconds.toDouble(),
+                      //         ),
+                      //         Padding(
+                      //           padding: const EdgeInsets.symmetric(
+                      //               horizontal: 16),
+                      //           child: Row(
+                      //             mainAxisAlignment:
+                      //                 MainAxisAlignment.spaceBetween,
+                      //             children: [
+                      //               Text(formatTime(position)),
+                      //               Text(formatTime(duration - position))
+                      //             ],
+                      //           ),
+                      //         ),
+                      //         CircleAvatar(
+                      //             radius: 35,
+                      //             child: IconButton(
+                      //               icon: Icon(
+                      //                 isPlaying
+                      //                     ? Icons.pause
+                      //                     : Icons.play_arrow,
+                      //               ),
+                      //               iconSize: 50,
+                      //               onPressed: () async {
+                      //                 if (isPlaying) {
+                      //                   // await audioPlayer.pause();
+                      //                   pauseAudio();
+                      //                 } else {
+                      //                   // String url =
+                      //                   // 'https://www.youtube.com/results?search_query=e+scooby+dooby+doo+where+are+you';
+                      //                   // 'assets/recordings/Scoobydoo.mp3';
+                      //                   // await audioPlayer.play(url);
+                      //                   playAudio();
+                      //                 }
+                      //               },
+                      //             )),
+                      //         // CustomRectangle(
+                      //         //     // myIconEnabled: true,
+                      //         //     myIconSize: 30,
+                      //         //     myIcon: Icons.location_on_outlined,
+                      //         //     myIconColor: Colors.red,
+                      //         //     //Rad: 30,
+                      //         //     width: (widget.screen_width * 3 / 4),
+                      //         //     text:
+                      //         //         widget.latitude + "  ,  " + widget.longtitude,
+                      //         //     title: "Recording"),
+                      //       ],
+                      //     )),
                     ]),
               ),
             ),
