@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:atrax/routes/routes.dart';
 import 'package:flutter/services.dart';
 import 'package:hive_flutter/adapters.dart';
-import 'package:hive/hive.dart';
 import 'package:path_provider/path_provider.dart';
 
 import 'components/HiveInit.dart';
@@ -18,7 +17,10 @@ void main() async {
   //showing hive how to read/write Task
   Hive.registerAdapter(TaskAdapter());
 
-  //open box(database)
+  //showing hive how to read/write Task
+  Hive.registerAdapter(FriendAdapter());
+  // await Hive.deleteBoxFromDisk('mybox');
+  //open box(database) and friendbox
   var box = await Hive.openBox('mybox');
   var friendbox = await Hive.openBox('friendbox');
   // box.clear();

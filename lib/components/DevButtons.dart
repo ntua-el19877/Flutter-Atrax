@@ -57,7 +57,7 @@ class _DevButtonsState extends State<DevButtons> {
                     }
                   ],
                   importance: 'High',
-                  location: {'latitude': '37.7749', 'longitude': '-122.4194'},
+                  location: 'latitude' + '37.7749' + 'longitude' + '-122.4194',
                   recordingFilePath: '/path/to/recording',
                   photoFilePath: '/path/to/photo',
                   friendName: ['John', 'Jane'],

@@ -25,7 +25,7 @@ class Task extends HiveObject {
   String importance;
 
   @HiveField(7)
-  Map<String, String> location;
+  String location;
 
   @HiveField(8)
   String recordingFilePath;
@@ -48,6 +48,20 @@ class Task extends HiveObject {
     required this.recordingFilePath,
     required this.photoFilePath,
     required this.friendName,
+  });
+}
+
+@HiveType(typeId: 1)
+class Friend extends HiveObject {
+  @HiveField(0)
+  String name;
+
+  @HiveField(1)
+  String last_name;
+
+  Friend({
+    required this.name,
+    required this.last_name,
   });
 }
 

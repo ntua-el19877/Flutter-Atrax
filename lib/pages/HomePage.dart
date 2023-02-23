@@ -1,29 +1,31 @@
 import 'package:atrax/components/HomeDownBar.dart';
 import 'package:atrax/components/TaskMessage.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'dart:convert';
 import 'package:flutter/services.dart';
 import 'package:hive/hive.dart';
+import 'package:hive_flutter/adapters.dart';
 
 import '../components/ColumnTaskMessages.dart';
 import '../components/HiveInit.dart';
 import '../components/DevButtons.dart';
 
-// final _contr = TextEditingController();
-List<dynamic> taskNames = [];
-List<String> taskDescriptions = [];
-List<String> taskDates = [];
-List<String> taskTimes = [];
-List<String> taskRepetitiveness = [];
-List<List<String>> taskNotificatios_Date = [];
+// // final _contr = TextEditingController();
+// List<dynamic> taskNames = [];
+// List<String> taskDescriptions = [];
+// List<String> taskDates = [];
+// List<String> taskTimes = [];
+// List<String> taskRepetitiveness = [];
+// List<List<String>> taskNotificatios_Date = [];
 
-List<List<String>> taskNotificatios_Time = [];
-List<String> taskImportance = [];
-List<String> taskLocationLatitude = [];
-List<String> taskLocationLongtitude = [];
-List<String> taskRecording = [];
-List<String> taskPhoto = [];
-List<List<String>> taskFriends = [];
+// List<List<String>> taskNotificatios_Time = [];
+// List<String> taskImportance = [];
+// List<String> taskLocationLatitude = [];
+// List<String> taskLocationLongtitude = [];
+// List<String> taskRecording = [];
+// List<String> taskPhoto = [];
+// List<List<String>> taskFriends = [];
 
 class MainPage extends StatefulWidget {
   final Box box;
@@ -44,13 +46,15 @@ const Color color_Red = Color(0xffa54e54);
 const Color color_Green = Color(0xff1f8a87);
 
 class _MainPageState extends State<MainPage> {
-  final _mybox = Hive.box('mybox');
+  // final _mybox = Hive.box('mybox');
 
+  late final ValueListenable<Box> _myBoxListenable;
   int currentIndex = 0;
   double TaskLeftPadding = 10;
   @override
   void initState() {
     super.initState();
+    _myBoxListenable = widget.box.listenable();
   }
 
   bool isPlaying = false;
@@ -60,10 +64,6 @@ class _MainPageState extends State<MainPage> {
     final screenHeight = MediaQuery.of(context).size.height;
     double screenWidth = MediaQuery.of(context).size.width;
     final bottomNavBarHeight = (screenHeight / 12);
-    // return FutureBuilder(
-    //     // future: readJson(),
-    //     builder: (context, snapshot) {
-    //   if (snapshot.connectionState == ConnectionState.done) {
     return Scaffold(
         backgroundColor: const Color(0xffe6f4f1),
         body: Stack(
@@ -85,140 +85,36 @@ class _MainPageState extends State<MainPage> {
             DevButtons(
               mybox: _mybox,
             ),
-            Center(
-                child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                const SizedBox(height: 20),
-                Padding(
-                  padding: EdgeInsets.all(10),
-                  child: GestureDetector(
-                    onPanUpdate: (details) {
-                      int sensitivity = 10;
-                      // Swiping in right direction.
-                      if (details.delta.dx > sensitivity) {
-                        setState(() {
-                          _color_TaskMessage = color_Green;
-                        });
-                      }
+            // Use ValueListenableBuilder to rebuild the widget tree
+            // whenever the data in _mybox changes
+            ValueListenableBuilder(
+                valueListenable: _myBoxListenable,
+                builder: (context, box, child) {
+                  return Center(
+                      child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      const SizedBox(height: 20),
+                      ColumnTaskMessages(
+                          mybox: _mybox,
+                          color_Secondary: color_Secondary,
+                          color_Green: color_Green,
+                          screenWidth: screenWidth,
+                          TaskLeftPadding: TaskLeftPadding,
+                          currentIndex: currentIndex)
+                      // ),
+                    ],
+                  )
 
-                      // Swiping in left direction.
-                      if (details.delta.dx < -sensitivity) {
-                        setState(() {
-                          _color_TaskMessage = color_Secondary;
-                        });
-                      }
-                    },
-                    // child: Positioned(
-                    //   left: TaskLeftPadding,
-                    //   top: 40,
-                    child: TaskMessage(
-                      color_Secondary: _color_TaskMessage,
-                      screen_width: screenWidth,
-                      name: "taskNames.elementAt(0)",
-                      description:
-                          "taskDescriptions.elementAt(0) ith this code, the Column widget will expand vertically if the widget.text is too big to fit in the available space. The Flexible widget is wrapped around the Column widget to allow it to grow vertically. The fit property of the Flexible widget is set to FlexFit.loose to indicate that the Column widget should grow only as much as necessary to fit its children.",
-                      date: "taskDates.elementAt(0)",
-                      time: "10:30 AM",
-                      repetitiveness: "Every Day",
-                      notifications_date: ["1-1-1", "2-2-2"],
-                      notifications_time: ["11:11", "12:00"],
-                      notifications_halfOfDay: ["AM", "PM"],
-                      importance: "High",
-                      latitude: "taskLocationLatitude.elementAt(0)",
-                      longtitude: "taskLocationLongtitude.elementAt(0)",
-                      recording_file_path: 'assets/recordings/Scoobydoo.mp3',
-                      photo_file_path: "photo_file_path",
-                      friend_name: ["Friend1", "Friend2"],
-                      RemoveWidth: 2 * TaskLeftPadding,
-                      indexListDate: [
-                        "taskNotificatios_Date.elementAt(0)",
-                        "gres  erw re 1"
-                      ],
-                      indexListTime: [
-                        "taskNotificatios_Time.elementAt(0)",
-                        " yrew e 1"
-                      ],
-                      onTap: (int index1) {
-                        setState(() {
-                          // readJson();
-                          currentIndex = index1;
-                        });
-                      },
-                    ),
-                  ),
-                ),
-                // ),
-                Padding(
-                  padding: EdgeInsets.all(10),
-                  child: GestureDetector(
-                    onPanUpdate: (details) {
-                      int sensitivity = 10;
-                      // Swiping in right direction.
-                      if (details.delta.dx > sensitivity) {
-                        setState(() {
-                          _color_TaskMessage = color_Green;
-                        });
-                      }
-
-                      // Swiping in left direction.
-                      if (details.delta.dx < -sensitivity) {
-                        setState(() {
-                          _color_TaskMessage = color_Secondary;
-                        });
-                      }
-                    },
-                    // child: Positioned(
-                    // left: TaskLeftPadding,
-                    // top: 40,
-                    child: TaskMessage(
-                      color_Secondary: _color_TaskMessage,
-                      screen_width: screenWidth,
-                      name: "taskNames.elementAt(0)",
-                      description:
-                          "taskDescriptions.elementAt(0) ith this code, the Column widget will expand vertically if the widget.text is too big to fit in the available space. The Flexible widget is wrapped around the Column widget to allow it to grow vertically. The fit property of the Flexible widget is set to FlexFit.loose to indicate that the Column widget should grow only as much as necessary to fit its children.",
-                      date: "taskDates.elementAt(0)",
-                      time: "10:30 AM",
-                      repetitiveness: "Every Day",
-                      notifications_date: ["1-1-1", "2-2-2"],
-                      notifications_time: ["11:11", "12:00"],
-                      notifications_halfOfDay: ["AM", "PM"],
-                      importance: "High",
-                      latitude: "taskLocationLatitude.elementAt(0)",
-                      longtitude: "taskLocationLongtitude.elementAt(0)",
-                      recording_file_path: 'assets/recordings/Scoobydoo.mp3',
-                      photo_file_path: "photo_file_path",
-                      friend_name: ["Friend1", "Friend2"],
-                      RemoveWidth: 2 * TaskLeftPadding,
-                      indexListDate: [
-                        "taskNotificatios_Date.elementAt(0)",
-                        "gres  erw re 1"
-                      ],
-                      indexListTime: [
-                        "taskNotificatios_Time.elementAt(0)",
-                        " yrew e 1"
-                      ],
-                      onTap: (int index1) {
-                        setState(() {
-                          // readJson();
-                          currentIndex = index1;
-                        });
-                      },
-                    ),
-                  ),
-                ),
-                // ),
-              ],
-            )
-
-                // ColumnTaskMessages(
-                // color_Secondary: color_Secondary,
-                // mybox: _mybox,
-                // color_Green: color_Green,
-                // screenWidth: screenWidth,
-                // TaskLeftPadding: TaskLeftPadding,
-                // currentIndex: currentIndex,
-                )
+                      // ColumnTaskMessages(
+                      // color_Secondary: color_Secondary,
+                      // mybox: _mybox,
+                      // color_Green: color_Green,
+                      // screenWidth: screenWidth,
+                      // TaskLeftPadding: TaskLeftPadding,
+                      // currentIndex: currentIndex,)
+                      );
+                })
           ],
         ));
     // } else {
@@ -228,4 +124,13 @@ class _MainPageState extends State<MainPage> {
     // }
     // });
   }
+
+  // @override
+  // void didUpdateWidget(MainPage oldWidget) {
+  //   super.didUpdateWidget(oldWidget);
+
+  //   // if (_mybox.length != oldWidget._mybox.length) {
+  //   setState(() {});
+  //   // }
+  // }
 }

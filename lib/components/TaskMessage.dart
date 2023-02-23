@@ -34,19 +34,17 @@ class TaskMessage extends StatefulWidget {
   final String description;
   final String date;
   final String time;
-  final String halfOfDay;
   final String repetitiveness;
-  final List<String> notifications_date;
-  final List<String> notifications_time;
-  final List<String> notifications_halfOfDay;
+  final List<Map<String, String>> notifications;
+  // final List<String> notifications_time;
   final String importance;
-  final String latitude;
-  final String longtitude;
+  final String location;
+  // final String longtitude;
   final String recording_file_path;
   final String photo_file_path;
   final List<String> friend_name;
-  final List<dynamic> indexListDate;
-  final List<dynamic> indexListTime;
+  // final List<dynamic> indexListDate;
+  // final List<dynamic> indexListTime;
   final Function(int) onTap;
 
   TaskMessage({
@@ -60,19 +58,16 @@ class TaskMessage extends StatefulWidget {
     required this.description,
     required this.date,
     required this.time,
-    this.halfOfDay = "",
     required this.repetitiveness,
-    required this.notifications_date,
-    required this.notifications_time,
-    required this.notifications_halfOfDay,
+    required this.notifications,
     required this.importance,
-    required this.latitude,
-    required this.longtitude,
+    required this.location,
+    // required this.longtitude,
     required this.recording_file_path,
     required this.photo_file_path,
     required this.friend_name,
-    required this.indexListDate,
-    required this.indexListTime,
+    // required this.indexListDate,
+    // required this.indexListTime,
     required this.onTap,
     Key? key,
   }) : super(key: key);
@@ -93,8 +88,8 @@ class _TaskMessageState extends State<TaskMessage> {
 
     if (widget.description == "") emptyFields[0] = false;
     if (widget.repetitiveness == "") emptyFields[1] = false;
-    if (widget.notifications_date.isEmpty) emptyFields[2] = false;
-    if (widget.latitude == "") emptyFields[3] = false;
+    if (widget.notifications.isEmpty) emptyFields[2] = false;
+    if (widget.location == "") emptyFields[3] = false;
     if (widget.recording_file_path == "") emptyFields[4] = false;
     if (widget.photo_file_path == "") emptyFields[5] = false;
     if (widget.date == "") emptyFields[6] = false;
@@ -189,7 +184,7 @@ class _TaskMessageState extends State<TaskMessage> {
                               SizedBox(
                                 width: MediaQuery.of(context).size.width / 5,
                                 child: Text(
-                                  "${widget.time} ${widget.halfOfDay}",
+                                  "${widget.time} ",
                                   style: TextStyle(
                                     color: widget.color_Blacks,
                                     fontSize: 13,
@@ -306,7 +301,7 @@ class _TaskMessageState extends State<TaskMessage> {
                                 child: Container(
                                   padding: const EdgeInsets.only(right: 5),
                                   child: CustomRectangle(
-                                      width: widget.screen_width * 3 / 10 - 15,
+                                      width: widget.screen_width * 3 / 8 - 15,
                                       text: widget.date,
                                       title: "Date"),
                                 ),
@@ -317,7 +312,7 @@ class _TaskMessageState extends State<TaskMessage> {
                                 child: Container(
                                   padding: const EdgeInsets.only(left: 5),
                                   child: CustomRectangle(
-                                      width: widget.screen_width * 3 / 10 - 15,
+                                      width: widget.screen_width * 3 / 8 - 15,
                                       text: widget.time,
                                       title: "Time"),
                                 ),
@@ -339,7 +334,7 @@ class _TaskMessageState extends State<TaskMessage> {
                                   padding: const EdgeInsets.symmetric(
                                       horizontal: 5, vertical: 10),
                                   child: CustomRectangle(
-                                      width: widget.screen_width * 3 / 10 - 15,
+                                      width: widget.screen_width * 3 / 8 - 15,
                                       text: widget.repetitiveness,
                                       title: "Repeat"),
                                 ),
@@ -352,21 +347,21 @@ class _TaskMessageState extends State<TaskMessage> {
                                           horizontal: 5, vertical: 10),
                                       child: CustomRectangle(
                                           width:
-                                              widget.screen_width * 3 / 10 - 15,
+                                              widget.screen_width * 3 / 8 - 15,
                                           text: widget.importance,
                                           title: "Importance"))),
                           ],
                         ),
                       ),
-                      for (int i = 0; i < widget.indexListDate.length; i++)
+                      for (int i = 0; i < widget.notifications.length; i++)
                         Container(
                           padding: const EdgeInsets.only(
                               top: 10, right: 0, left: 0, bottom: 10),
                           child: CustomRectangle(
                               width: widget.screen_width * 3 / 4 - 20,
-                              text: widget.indexListTime.elementAt(i) +
-                                  "    " +
-                                  widget.indexListDate.elementAt(i),
+                              text: "",
+                              // "${widget.notifications[i].keys.last}    " +
+                              // "${widget.notifications[i].keys.first}",
                               title: "Notifications"),
                         ),
                       if (emptyFields[3])
@@ -374,9 +369,7 @@ class _TaskMessageState extends State<TaskMessage> {
                           onTap: () {
                             // MapUtils.openMap(double.parse(widget.latitude),
                             //     double.parse(widget.longtitude));
-                            MapsLauncher.launchCoordinates(
-                                double.parse(widget.latitude),
-                                double.parse(widget.longtitude));
+                            MapsLauncher.launchQuery(widget.location);
                           },
                           child: Container(
                             padding: const EdgeInsets.only(
@@ -388,9 +381,7 @@ class _TaskMessageState extends State<TaskMessage> {
                                 // myIconColor: Colors.red,
                                 Rad: 30,
                                 width: (widget.screen_width * 3 / 4 - 20),
-                                text: widget.latitude +
-                                    "  ,  " +
-                                    widget.longtitude,
+                                text: widget.location,
                                 title: "Location"),
                           ),
                         ),
