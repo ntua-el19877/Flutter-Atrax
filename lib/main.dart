@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:atrax/routes/routes.dart';
 import 'package:flutter/services.dart';
@@ -11,8 +13,8 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   // Initialize hive
   await Hive.initFlutter();
-  final document = await getApplicationDocumentsDirectory();
-  Hive.init(document.path);
+ //Directory document = await getApplicationDocumentsDirectory();
+  //Hive.init(document.path);
   // Hive.registerAdapter<Task>(TaskAdapter());
 
   //showing hive how to read/write Task

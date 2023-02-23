@@ -1,9 +1,8 @@
 import 'package:atrax/components/plus_Button.dart';
 import 'package:atrax/routes/routes.dart';
 import 'package:flutter/material.dart';
-import 'package:hive/hive.dart';
 
-class HomeDownBar extends StatefulWidget {
+class CalendarDownBar extends StatefulWidget {
   final int currentIndex;
   final double preferredSize;
   final double top;
@@ -15,9 +14,8 @@ class HomeDownBar extends StatefulWidget {
   final EdgeInsets itemPadding_Left;
   final EdgeInsets itemPadding_Right;
   final Function(int) onTap;
-  final Box box;
 
-  HomeDownBar({
+  CalendarDownBar({
     this.currentIndex = 0,
     required this.preferredSize,
     required this.top,
@@ -29,15 +27,14 @@ class HomeDownBar extends StatefulWidget {
     this.itemPadding_Left = const EdgeInsets.only(right: 0),
     this.itemPadding_Right = const EdgeInsets.only(left: 0),
     required this.onTap,
-    required this.box,
     Key? key,
   }) : super(key: key);
 
   @override
-  _HomeDownBarState createState() => _HomeDownBarState();
+  _CalendarDownBarState createState() => _CalendarDownBarState();
 }
 
-class _HomeDownBarState extends State<HomeDownBar> {
+class _CalendarDownBarState extends State<CalendarDownBar> {
   late int currentIndex;
 
   @override
@@ -71,8 +68,8 @@ class _HomeDownBarState extends State<HomeDownBar> {
                   if (index == 0) {
                     Navigator.of(context).pushNamed(RouteManager.friendspage);
                   } else if (index == 1) {
-                    Navigator.of(context).pushNamed(RouteManager.calendarpage);
-                  }//widget.mybox.getAt(1).notifications[1].
+                    Navigator.of(context).pop();
+                  }
                 },
                 showSelectedLabels: false,
                 showUnselectedLabels: false,
@@ -90,11 +87,11 @@ class _HomeDownBarState extends State<HomeDownBar> {
                         ),
                       )),
                   BottomNavigationBarItem(
-                      label: 'Calendar',
+                      label: 'Home',
                       icon: Container(
                         padding: widget.itemPadding_Right,
                         child: Icon(
-                          Icons.calendar_month_rounded,
+                          Icons.home,
                           size: 35,
                           color: widget.color_Blacks,
                         ),

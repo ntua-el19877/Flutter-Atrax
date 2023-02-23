@@ -29,7 +29,8 @@ class RouteManager {
         return MaterialPageRoute(builder: (context) => ThirdPage());
 
       case calendarpage:
-        return MaterialPageRoute(builder: (context) => CalendarPage());
+        return MaterialPageRoute(
+          builder: (context) => CalendarPage(box:box));
 
       case addtaskpage:
         return MaterialPageRoute(builder: (context) => AddTaskPage());
