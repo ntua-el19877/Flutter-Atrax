@@ -72,7 +72,7 @@ class _HomeDownBarState extends State<HomeDownBar> {
                     Navigator.of(context).pushNamed(RouteManager.friendspage);
                   } else if (index == 1) {
                     Navigator.of(context).pushNamed(RouteManager.calendarpage);
-                  }//widget.mybox.getAt(1).notifications[1].
+                  } //widget.mybox.getAt(1).notifications[1].
                 },
                 showSelectedLabels: false,
                 showUnselectedLabels: false,
@@ -106,6 +106,7 @@ class _HomeDownBarState extends State<HomeDownBar> {
         ),
         Positioned(
             child: plus_Button(
+                box: widget.box,
                 preferredSize: widget.preferredSize,
                 circle_back_Radius: widget.circle_back_Radius,
                 circle_front_Radius: widget.circle_front_Radius,

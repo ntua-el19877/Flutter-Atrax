@@ -3,15 +3,15 @@ import 'package:hive/hive.dart';
 
 import 'TaskMessage.dart';
 
-class ColumnTaskMessages extends StatefulWidget {
-  final Box mybox;
+class ColumnTaskMessagesFromList extends StatefulWidget {
+  final List myboxList;
   final Color color_Secondary;
   final Color color_Green;
   final double screenWidth;
   final double TaskLeftPadding;
   late final int currentIndex;
-  ColumnTaskMessages({
-    required this.mybox,
+  ColumnTaskMessagesFromList({
+    required this.myboxList,
     required this.color_Secondary,
     required this.color_Green,
     required this.screenWidth,
@@ -20,10 +20,12 @@ class ColumnTaskMessages extends StatefulWidget {
   });
 
   @override
-  _ColumnTaskMessagesState createState() => _ColumnTaskMessagesState();
+  _ColumnTaskMessagesFromListState createState() =>
+      _ColumnTaskMessagesFromListState();
 }
 
-class _ColumnTaskMessagesState extends State<ColumnTaskMessages> {
+class _ColumnTaskMessagesFromListState
+    extends State<ColumnTaskMessagesFromList> {
   @override
   Widget build(BuildContext context) {
     Color _color_TaskMessage = widget.color_Secondary;
@@ -32,14 +34,12 @@ class _ColumnTaskMessagesState extends State<ColumnTaskMessages> {
       children: [
         const SizedBox(height: 20),
         ...List.generate(
-          widget.mybox.length,
+          widget.myboxList.length,
           (index) => Padding(
             padding: EdgeInsets.all(10),
             child: GestureDetector(
-              behavior: HitTestBehavior.translucent,
               onPanUpdate: (details) {
-                print(details.delta.dx);
-                int sensitivity = 1;
+                int sensitivity = 10;
                 // Swiping in right direction.
                 if (details.delta.dx > sensitivity) {
                   setState(() {
@@ -57,20 +57,23 @@ class _ColumnTaskMessagesState extends State<ColumnTaskMessages> {
               child: TaskMessage(
                 color_Secondary: _color_TaskMessage,
                 screen_width: widget.screenWidth,
-                name: widget.mybox.getAt(index).name,
-                description: widget.mybox.getAt(index).description,
-                date: widget.mybox.getAt(index).date,
-                time: widget.mybox.getAt(index).time,
-                repetitiveness: widget.mybox.getAt(index).repetitiveness,
-                notifications: widget.mybox.getAt(index).notifications,
+                name: widget.myboxList[index].name,
+                description: widget.myboxList[index].getAt(index).description,
+                date: widget.myboxList[index].getAt(index).date,
+                time: widget.myboxList[index].getAt(index).time,
+                repetitiveness:
+                    widget.myboxList[index].getAt(index).repetitiveness,
+                notifications:
+                    widget.myboxList[index].getAt(index).notifications,
                 // notifications_halfOfDay: widget.mybox.getAt(index).description,
-                importance: widget.mybox.getAt(index).importance,
-                location: widget.mybox.getAt(index).location,
+                importance: widget.myboxList[index].getAt(index).importance,
+                location: widget.myboxList[index].getAt(index).location,
                 // longtitude: widget.mybox.getAt(index).location['key2'],
                 recording_file_path:
-                    widget.mybox.getAt(index).recordingFilePath,
-                photo_file_path: widget.mybox.getAt(index).photoFilePath,
-                friend_name: widget.mybox.getAt(index).friendName,
+                    widget.myboxList[index].getAt(index).recordingFilePath,
+                photo_file_path:
+                    widget.myboxList[index].getAt(index).photoFilePath,
+                friend_name: widget.myboxList[index].getAt(index).friendName,
                 RemoveWidth: 2 * widget.TaskLeftPadding,
                 // indexListDate: [
                 //   "taskNotificatios_Date.elementAt(0)",
@@ -95,10 +98,10 @@ class _ColumnTaskMessagesState extends State<ColumnTaskMessages> {
   }
 
   @override
-  void didUpdateWidget(ColumnTaskMessages oldWidget) {
+  void didUpdateWidget(ColumnTaskMessagesFromList oldWidget) {
     super.didUpdateWidget(oldWidget);
 
-    if (widget.mybox.length != oldWidget.mybox.length) {
+    if (widget.myboxList.length != oldWidget.myboxList.length) {
       setState(() {});
     }
   }

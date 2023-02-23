@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:hive/hive.dart';
 
 import '../routes/routes.dart';
 
 class plus_Button extends StatefulWidget {
   //height of the homedownbar
   final double preferredSize;
+  final Box box;
   //if you give screenHeight it moves it to the bottom of the screen
   late double circle_back_Radius;
   late double circle_front_Radius;
@@ -14,6 +16,7 @@ class plus_Button extends StatefulWidget {
   final Function(int) onTap;
 
   plus_Button({
+    required this.box,
     required this.preferredSize,
     required this.circle_back_Radius,
     required this.circle_front_Radius,

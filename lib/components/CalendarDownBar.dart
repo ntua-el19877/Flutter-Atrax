@@ -1,8 +1,10 @@
 import 'package:atrax/components/plus_Button.dart';
 import 'package:atrax/routes/routes.dart';
 import 'package:flutter/material.dart';
+import 'package:hive/hive.dart';
 
 class CalendarDownBar extends StatefulWidget {
+  final Box box;
   final int currentIndex;
   final double preferredSize;
   final double top;
@@ -16,6 +18,7 @@ class CalendarDownBar extends StatefulWidget {
   final Function(int) onTap;
 
   CalendarDownBar({
+    required this.box,
     this.currentIndex = 0,
     required this.preferredSize,
     required this.top,
@@ -103,6 +106,7 @@ class _CalendarDownBarState extends State<CalendarDownBar> {
         ),
         Positioned(
             child: plus_Button(
+                box: widget.box,
                 preferredSize: widget.preferredSize,
                 circle_back_Radius: widget.circle_back_Radius,
                 circle_front_Radius: widget.circle_front_Radius,
