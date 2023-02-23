@@ -17,10 +17,11 @@ class RouteManager {
   static const String friendspage = '/friendspage';
 
   static Route<dynamic> generateRoute(RouteSettings settings,
-      {required Box box}) {
+      {required Box box, required Box friendbox}) {
     switch (settings.name) {
       case mainpage:
-        return MaterialPageRoute(builder: (context) => MainPage(box: box));
+        return MaterialPageRoute(
+            builder: (context) => MainPage(box: box, friendbox: friendbox));
 
       case secondpage:
         return MaterialPageRoute(builder: (context) => SecondPage());

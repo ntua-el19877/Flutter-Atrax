@@ -27,8 +27,10 @@ List<List<String>> taskFriends = [];
 
 class MainPage extends StatefulWidget {
   final Box box;
+  final Box friendbox;
 
-  const MainPage({Key? key, required this.box}) : super(key: key);
+  const MainPage({Key? key, required this.box, required this.friendbox})
+      : super(key: key);
 
   @override
   _MainPageState createState() => _MainPageState();
@@ -67,6 +69,7 @@ class _MainPageState extends State<MainPage> {
         body: Stack(
           children: [
             HomeDownBar(
+              // friendbox:widget.friendbox,
               currentIndex: currentIndex,
               top: screenHeight,
               circle_front_Radius: 35,

@@ -20,17 +20,20 @@ void main() async {
 
   //open box(database)
   var box = await Hive.openBox('mybox');
+  var friendbox = await Hive.openBox('friendbox');
   // box.clear();
 
   SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual,
       overlays: [SystemUiOverlay.top]);
-  runApp(MyApp(box: box));
+  runApp(MyApp(box: box, friendbox: friendbox));
 }
 
 class MyApp extends StatelessWidget {
   final Box box;
+  final Box friendbox;
 
-  const MyApp({Key? key, required this.box}) : super(key: key);
+  const MyApp({Key? key, required this.box, required this.friendbox})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -38,7 +41,8 @@ class MyApp extends StatelessWidget {
       title: 'My App',
       initialRoute: RouteManager.mainpage,
       onGenerateRoute: (settings) {
-        return RouteManager.generateRoute(settings, box: box);
+        return RouteManager.generateRoute(settings,
+            box: box, friendbox: friendbox);
       },
     );
   }
