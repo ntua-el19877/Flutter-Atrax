@@ -122,11 +122,11 @@ class _TaskMessageState extends State<TaskMessage> {
         duration = newDuration;
       });
     });
-    audioPlayer.onAudioPositionChanged.listen((newPosition) {
-      setState(() {
-        position = newPosition;
-      });
-    });
+    // audioPlayer.onAudioPositionChanged.listen((newPosition) {
+    //   setState(() {
+    //     position = newPosition;
+    //   });
+    // });
   }
 
   @override

@@ -5,7 +5,9 @@ import 'dart:convert';
 import 'package:flutter/services.dart';
 import 'package:hive/hive.dart';
 
+import '../components/ColumnTaskMessages.dart';
 import '../components/HiveInit.dart';
+import '../components/DevButtons.dart';
 
 // final _contr = TextEditingController();
 List<dynamic> taskNames = [];
@@ -40,76 +42,6 @@ const Color color_Red = Color(0xffa54e54);
 const Color color_Green = Color(0xff1f8a87);
 
 class _MainPageState extends State<MainPage> {
-  // Future<void> readJson() async {
-  //   try {
-  //     // your existing code here
-
-  //     List _items = [];
-  //     final String jsonString =
-  //         await rootBundle.loadString('assets/tasks.json');
-  //     final data = await json.decode(jsonString);
-  //     // print(data);
-  //     Map<String, dynamic> jsonData = json.decode(jsonString);
-  //     List<dynamic> tasks = jsonData['tasks'];
-
-  //     // setState(() {
-  //     //   _items = data["tasks"];
-  //     // });
-  //     taskNames.clear();
-  //     taskDescriptions.clear();
-  //     taskDates.clear();
-  //     taskNotificatios_Date.clear();
-  //     taskNotificatios_Time.clear();
-  //     taskTimes.clear();
-  //     taskRepetitiveness.clear();
-  //     taskImportance.clear();
-  //     taskLocationLatitude.clear();
-  //     taskLocationLongtitude.clear();
-  //     taskRecording.clear();
-  //     taskPhoto.clear();
-  //     // int i = 0;
-  //     for (var task in tasks) {
-  //       List<String> taskNotificationsD = [];
-  //       List<String> taskNotificationsT = [];
-  //       for (var notification in task['notifications']) {
-  //         taskNotificationsD.add(notification['date']);
-  //         taskNotificationsT.add(notification['time']);
-  //       }
-  //       taskNotificatios_Date.add(taskNotificationsD);
-  //       taskNotificatios_Time.add(taskNotificationsT);
-  //     }
-  //     for (var task in tasks) {
-  //       List<String> taskFr = [];
-  //       for (var friend in task['friend_name']) {
-  //         taskFr.add(friend);
-  //       }
-  //       taskFriends.add(taskFr);
-  //     }
-
-  //     for (var task in tasks) {
-  //       taskNames.add(task['name']);
-  //       taskDescriptions.add(task['description']);
-  //       taskDates.add(task['date']);
-  //       taskTimes.add(task['time']);
-  //       taskRepetitiveness.add(task['repetitiveness']);
-  //       //taskRepetitiveness.add(task['repetitiveness']);
-  //       taskImportance.add(task['importance']);
-  //       taskLocationLatitude.add(task['location']['latitude']);
-  //       taskLocationLongtitude.add(task['location']['longitude']);
-  //       taskRecording.add(task['recording_file_path']);
-  //       taskPhoto.add(task['photo_file_path']);
-  //     }
-  //     // hhh = taskNames.elementAt(0);
-  //     print('----------------------');
-  //     for (int i = 0; i < taskNames.length; i++) {
-  //       print(taskNames.elementAt(i));
-  //     }
-  //     print("-----------------");
-  //   } catch (e) {
-  //     print('An error occurred while reading the JSON file: $e');
-  //   }
-  // }
-  //reference my box
   final _mybox = Hive.box('mybox');
 
   int currentIndex = 0;
@@ -117,9 +49,6 @@ class _MainPageState extends State<MainPage> {
   @override
   void initState() {
     super.initState();
-    // Hive.registerAdapter(TaskAdapter());
-
-    // readJson();
   }
 
   bool isPlaying = false;
@@ -150,61 +79,9 @@ class _MainPageState extends State<MainPage> {
                 });
               },
             ),
-            Positioned(
-                child: Row(
-              children: [
-                ElevatedButton(
-                    onPressed: () {
-                      setState(() {
-                        final _mytask = _mybox.get('mytask');
-                        if (_mytask != null) {
-                          print(
-                              _mytask.name); // will print the name of the task
-                        } else {
-                          print('No task found!');
-                        }
-                      });
-                    },
-                    child: Text("read task")),
-                ElevatedButton(
-                    onPressed: () {
-                      setState(() {
-                        Task task = Task(
-                          name: 'My Task',
-                          description: 'This is my task',
-                          date: '2023-02-22',
-                          time: '10:00 AM',
-                          repetitiveness: 'Daily',
-                          notifications: [
-                            {
-                              'time': '9:30 AM',
-                              'message': 'Reminder: My Task at 10:00 AM'
-                            }
-                          ],
-                          importance: 'High',
-                          location: {
-                            'latitude': '37.7749',
-                            'longitude': '-122.4194'
-                          },
-                          recordingFilePath: '/path/to/recording',
-                          photoFilePath: '/path/to/photo',
-                          friendName: ['John', 'Jane'],
-                        );
-                        final _mytask = _mybox.get('mytask');
-                        int itemCount;
-                        if (_mytask != null) {
-                          itemCount = _mybox.length;
-                        } else {
-                          itemCount = 0;
-                        }
-                        _mybox.put("mytask$itemCount", task);
-
-                        print('Number of items in my box: $itemCount');
-                      });
-                    },
-                    child: Text("add task")),
-              ],
-            )),
+            DevButtons(
+              mybox: _mybox,
+            ),
             Center(
                 child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
@@ -329,7 +206,16 @@ class _MainPageState extends State<MainPage> {
                 ),
                 // ),
               ],
-            ))
+            )
+
+                // ColumnTaskMessages(
+                // color_Secondary: color_Secondary,
+                // mybox: _mybox,
+                // color_Green: color_Green,
+                // screenWidth: screenWidth,
+                // TaskLeftPadding: TaskLeftPadding,
+                // currentIndex: currentIndex,
+                )
           ],
         ));
     // } else {

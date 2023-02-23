@@ -8,18 +8,19 @@ import 'package:path_provider/path_provider.dart';
 import 'components/HiveInit.dart';
 
 void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
   // Initialize hive
   await Hive.initFlutter();
   final document = await getApplicationDocumentsDirectory();
   Hive.init(document.path);
-  Hive.registerAdapter<Task>(TaskAdapter());
+  // Hive.registerAdapter<Task>(TaskAdapter());
 
   //showing hive how to read/write Task
   Hive.registerAdapter(TaskAdapter());
 
   //open box(database)
   var box = await Hive.openBox('mybox');
-  box.clear();
+  // box.clear();
 
   SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual,
       overlays: [SystemUiOverlay.top]);
