@@ -55,6 +55,7 @@ class _ColumnTaskMessagesFromListState
                 }
               },
               child: TaskMessage(
+                color_Green: widget.color_Green,
                 color_Secondary: _color_TaskMessage,
                 screen_width: widget.screenWidth,
                 name: widget.myboxList[index].name,

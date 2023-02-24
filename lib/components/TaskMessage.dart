@@ -29,6 +29,7 @@ class TaskMessage extends StatefulWidget {
   final Color color_Primary;
   final Color color_Blacks;
   final Color color_Red;
+  final Color color_Green;
 
   final String name;
   final String description;
@@ -54,6 +55,7 @@ class TaskMessage extends StatefulWidget {
     this.color_Primary = const Color(0xffe6f4f1),
     this.color_Blacks = const Color(0xff252525),
     this.color_Red = const Color(0xffae4e54),
+    required this.color_Green,
     required this.name,
     required this.description,
     required this.date,
@@ -82,6 +84,18 @@ class _TaskMessageState extends State<TaskMessage> {
   bool isPlaying = false;
   Duration duration = Duration.zero;
   Duration position = Duration.zero;
+  @override
+  void didUpdateWidget(TaskMessage oldWidget) {
+    if (oldWidget.color_Secondary != widget.color_Secondary) {
+      // color_secondary has changed, rebuild the widget
+      // print("i want to update");
+      setState(() {});
+    }
+    print('old key: ${oldWidget.key}');
+    print('new key: ${widget.key}');
+    // print("i want to update a little");
+    super.didUpdateWidget(oldWidget);
+  }
 
   void check() {
     emptyFields = [true, true, true, true, true, true, true, true, true, true];
@@ -103,9 +117,10 @@ class _TaskMessageState extends State<TaskMessage> {
   //   audioPlayer.dispose();
   //   super.dispose();
   // }
-
+  Color _color_TaskMessage = Colors.red;
   @override
   void initState() {
+    _color_TaskMessage = widget.color_Secondary;
     super.initState();
     // audioPlayer.onPlayerStateChanged.listen((state) {
     //   setState(() {
@@ -130,15 +145,35 @@ class _TaskMessageState extends State<TaskMessage> {
     double iconHeight = 22;
     double iconRoomHeight = 15;
     return GestureDetector(
-      onTap: () {
-        openTaskWindow();
-        // pauseAudio();
+      behavior: HitTestBehavior.translucent,
+      onPanUpdate: (details) {
+        // print(details.delta.dx);
+        int sensitivity = 8;
+        // Swiping in right direction.
+        if (details.delta.dx > sensitivity) {
+          setState(() {
+            _color_TaskMessage = widget.color_Green;
+            // print("$_color_TaskMessage");
+          });
+        }
+
+        // Swiping in left direction.
+        if (details.delta.dx < -sensitivity) {
+          setState(() {
+            _color_TaskMessage = widget.color_Secondary;
+            // print("$_color_TaskMessage");
+          });
+        }
       },
+      // onTap: () {
+      //   openTaskWindow();
+      //   // pauseAudio();
+      // },
       child: Container(
         width: MediaQuery.of(context).size.width - widget.RemoveWidth,
         height: 60,
         decoration: BoxDecoration(
-          color: widget.color_Secondary,
+          color: _color_TaskMessage,
           borderRadius: BorderRadius.circular(10),
         ),
         child: Padding(
