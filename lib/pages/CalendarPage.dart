@@ -80,7 +80,7 @@ class _CalendarPageState extends State<CalendarPage> {
       final DateFormat formatter = DateFormat('yyyy-MM-dd');
       final String formatted = formatter.format(today);
       print(formatted);
-      var date = widget.box.getAt(1).date;
+      // var date = widget.box.getAt(1).date;
       //print(date);
       var tasks =
           widget.box.values.where((task) => task.date == formatted).toList();
