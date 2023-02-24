@@ -147,6 +147,29 @@ class _TaskMessageState extends State<TaskMessage> {
     return GestureDetector(
       behavior: HitTestBehavior.translucent,
       onPanUpdate: (details) {
+        // double Distance = 0;
+        // int sensitivity = 8;
+        // if (details.delta.dx > sensitivity) {
+        //   Distance += details.delta.dx;
+        // }
+
+        // // Swiping in left direction.
+        // if (details.delta.dx < -sensitivity) {
+        //   Distance += details.delta.dx;
+        // }
+        // if (Distance > 100) {
+        //   setState(() {
+        //     _color_TaskMessage = widget.color_Green;
+        //     // print("$_color_TaskMessage");
+        //   });
+        // }
+        // if (Distance < -100) {
+        //   setState(() {
+        //     _color_TaskMessage = widget.color_Secondary;
+        //     // print("$_color_TaskMessage");
+        //   });
+        // }
+
         // print(details.delta.dx);
         int sensitivity = 8;
         // Swiping in right direction.
