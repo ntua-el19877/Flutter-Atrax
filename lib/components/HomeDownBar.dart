@@ -110,7 +110,9 @@ class _HomeDownBarState extends State<HomeDownBar> {
                 preferredSize: widget.preferredSize,
                 circle_back_Radius: widget.circle_back_Radius,
                 circle_front_Radius: widget.circle_front_Radius,
-                onTap: widget.onTap))
+                onTap: widget.onTap
+                )
+                )
       ],
     );
   }
