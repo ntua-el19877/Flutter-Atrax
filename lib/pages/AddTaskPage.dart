@@ -16,6 +16,28 @@ import 'package:geolocator/geolocator.dart';
 
 import '../components/HiveInit.dart' as HiveInit;
 
+String formatDate(var day){
+  print(day.month.runtimeType);
+  var m = day.month.toString().length;
+  var d = day.day.toString().length;
+  var formatted_day;
+  formatted_day = "${day.year}-${day.month}-${day.day}";
+  print("month digits : " + m.toString() + " day digits : " + d.toString());
+  if(m==1){
+    print("Adding zero to month");
+    formatted_day = "${day.year}-${"0"+day.month.toString()}-${day.day}";
+  }
+  if(d==1){
+    print("Adding zero to day");
+    formatted_day = "${day.year}-${day.month}-${"0"+day.day.toString()}";
+  } 
+  if(m==1 && d==1){
+    print("Adding zero to day and month");
+    formatted_day = "${day.year}-${"0"+day.month.toString()}-${"0"+day.day.toString()}";
+  }      
+  return formatted_day;
+}
+
 class Notification {
   String date;
   String time;
@@ -67,6 +89,7 @@ class _AddTaskPageState extends State<AddTaskPage> {
   var new_Notifications_List =
       List.generate(10, (i) => Notification('', ''), growable: true);
   var jsonNotifications;
+  var new_notifications_list = List<Map<String, String>>; 
 
   String task = ''; /*  user task   */
   String description = ''; /*  user description   */
@@ -256,6 +279,7 @@ class _AddTaskPageState extends State<AddTaskPage> {
       time: DueTime,
       repetitiveness: repetitiveness,
       notifications: widget.box.getAt(0).notifications,
+      //notifications: new_notifications_list,
       importance: importance,
       location: 'latitude' + '37.7749' + 'longitude' + '-122.4194',
       recordingFilePath: '/path/to/recording',
@@ -282,6 +306,7 @@ class _AddTaskPageState extends State<AddTaskPage> {
     AddTaskData.getJsonData();
     AddTaskData.parseJson(rawData);
     //FileManager().writeJsonFile(rawData);
+    Navigator.of(context).pushNamed(RouteManager.mainpage);
   }
 
   void openDatePicker() {
@@ -293,7 +318,11 @@ class _AddTaskPageState extends State<AddTaskPage> {
     ).then((value) {
       setState(() {
         due_date = value!;
-        DueDate = "${due_date.day}-${due_date.month}-${due_date.year}";
+        //DueDate = "${due_date.day}-${due_date.month}-${due_date.year}";
+        //print(due_date.month.runtimeType);       
+        DueDate = "${due_date.year}-${due_date.month}-${due_date.day}";
+        DueDate = formatDate(due_date);
+        print(DueDate);
       });
     });
   }
@@ -504,8 +533,17 @@ class _AddTaskPageState extends State<AddTaskPage> {
         Notifications_Day_and_Time[0] = NotDate;
         Notifications_List[list_counter][0] = NotDate;
         new_Notifications_List[list_counter] = Notification(NotDate, NotTime);
+
         if (Notifications_List[list_counter][1] != '') {
           list_counter = list_counter + 1;
+
+          final Map<String,String> notifications_map = {
+          "date": NotDate,
+          "time" : NotTime
+        };
+        //new_notifications_list.insert(list_counter-1,notifications_map);
+        print(new_notifications_list);
+
         }
         debugPrint('${(Notifications_List.toString())}');
         Navigator.pop(context);
@@ -523,8 +561,16 @@ class _AddTaskPageState extends State<AddTaskPage> {
         Notifications_Day_and_Time[1] = NotTime;
         Notifications_List[list_counter][1] = NotTime;
         new_Notifications_List[list_counter] = Notification(NotDate, NotTime);
+
         if (Notifications_List[list_counter][0] != '') {
           list_counter = list_counter + 1;
+
+          final Map<String,String> notifications_map = {
+          "date": NotDate,
+          "time" : NotTime
+        };
+        //new_notifications_list.insert(list_counter-1,notifications_map);
+        print(new_notifications_list);
         }
         debugPrint('${(Notifications_List.toString())}');
         Navigator.pop(context);

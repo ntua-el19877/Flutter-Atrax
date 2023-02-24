@@ -59,22 +59,22 @@ class _ColumnTaskMessagesFromListState
                 color_Secondary: _color_TaskMessage,
                 screen_width: widget.screenWidth,
                 name: widget.myboxList[index].name,
-                description: widget.myboxList[index].getAt(index).description,
-                date: widget.myboxList[index].getAt(index).date,
-                time: widget.myboxList[index].getAt(index).time,
+                description: widget.myboxList[index].description,
+                date: widget.myboxList[index].date,
+                time: widget.myboxList[index].time,
                 repetitiveness:
-                    widget.myboxList[index].getAt(index).repetitiveness,
+                    widget.myboxList[index].repetitiveness,
                 notifications:
-                    widget.myboxList[index].getAt(index).notifications,
+                    widget.myboxList[index].notifications,
                 // notifications_halfOfDay: widget.mybox.getAt(index).description,
-                importance: widget.myboxList[index].getAt(index).importance,
-                location: widget.myboxList[index].getAt(index).location,
+                importance: widget.myboxList[index].importance,
+                location: widget.myboxList[index].location,
                 // longtitude: widget.mybox.getAt(index).location['key2'],
                 recording_file_path:
-                    widget.myboxList[index].getAt(index).recordingFilePath,
+                    widget.myboxList[index].recordingFilePath,
                 photo_file_path:
-                    widget.myboxList[index].getAt(index).photoFilePath,
-                friend_name: widget.myboxList[index].getAt(index).friendName,
+                    widget.myboxList[index].photoFilePath,
+                friend_name: widget.myboxList[index].friendName,
                 RemoveWidth: 2 * widget.TaskLeftPadding,
                 // indexListDate: [
                 //   "taskNotificatios_Date.elementAt(0)",

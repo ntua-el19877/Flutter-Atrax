@@ -1,4 +1,5 @@
 import 'package:atrax/components/CalendarDownBar.dart';
+import 'package:atrax/components/ColumnTaskMessagesFromList.dart';
 import 'package:atrax/components/TaskMessage.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
@@ -9,26 +10,52 @@ import '../MyWidgets.dart';
 import '../TableCalendar.dart';
 import 'package:table_calendar/table_calendar.dart';
 
+
 class CalendarPage extends StatefulWidget {
   final Box box;
+  var tasks = [];
 
-  const CalendarPage({Key? key, required this.box}) : super(key: key);
+  CalendarPage({Key? key, required this.box}) : super(key: key);
+
 
   @override
   _CalendarPageState createState() => _CalendarPageState();
 }
-// var tasks = widget.mybox.values
-// .where((task) => task.name == 'My Task1')
-// .toList();
+
+Color _color_TaskMessage = color_Secondary;
+const Color color_Secondary = Color(0xff929ae7);
+const Color color_Primary = Color(0xffe6f4f1);
+const Color color_Blacks = Color(0xff252525);
+const Color color_Red = Color(0xffa54e54);
+const Color color_Green = Color(0xff1f8a87);
+double TaskLeftPadding = 10;
 
 class _CalendarPageState extends State<CalendarPage> {
+
+  var tasks = [];
+  @override
+  void initState() {
+    DateTime today = DateTime.now();
+    print(today.toString());
+      final DateFormat formatter = DateFormat('yyyy-MM-dd');
+      final String formatted = formatter.format(today);
+      print(formatted);
+      //var date = widget.box.getAt(1).date;
+      tasks =
+          widget.box.values.where((task) => task.date == formatted).toList();
+      print("1st print :");
+      print(tasks);
+  }
+
   @override
   Widget build(BuildContext context) {
+
     final screenHeight = MediaQuery.of(context).size.height;
     double screenWidth = MediaQuery.of(context).size.width;
     final bottomNavBarHeight = (screenHeight / 12);
     int currentIndex = 0;
-    DateTime day;
+
+
     return Scaffold(
       body: Stack(
         children: [
@@ -51,7 +78,9 @@ class _CalendarPageState extends State<CalendarPage> {
                   ),
                 )),
           ),
-          // getSelectedDayTasks(today),
+
+          Positioned(child: getSelectedDayTasks(),top:0.5*screenHeight),
+
           CalendarDownBar(
             box: widget.box,
             currentIndex: currentIndex,
@@ -76,15 +105,16 @@ class _CalendarPageState extends State<CalendarPage> {
   void _onDaySelected(DateTime day, DateTime focusedDay) {
     setState(() {
       today = day;
+      print("You selected the day");
       print(today.toString());
       final DateFormat formatter = DateFormat('yyyy-MM-dd');
       final String formatted = formatter.format(today);
       print(formatted);
-      var date = widget.box.getAt(1).date;
+      //var date = widget.box.getAt(1).date;
       //print(date);
-      var tasks =
+      tasks =
           widget.box.values.where((task) => task.date == formatted).toList();
-      print(tasks[1].name);
+      //print(tasks[0].date);
     });
   }
   // Widget getSelectedDayTasks(DateTime sel_date){
@@ -124,4 +154,14 @@ class _CalendarPageState extends State<CalendarPage> {
   //   }
   // }
   // }
+  Widget getSelectedDayTasks(){
+    return ColumnTaskMessagesFromList(
+      myboxList: tasks, 
+      color_Secondary: color_Secondary, 
+      color_Green: color_Green, 
+      screenWidth: MediaQuery.of(context).size.width, 
+      TaskLeftPadding: TaskLeftPadding, 
+      currentIndex: 0
+      );
+  }
 }
