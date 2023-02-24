@@ -62,6 +62,7 @@ class _DevButtonsState extends State<DevButtons> {
                   photoFilePath: '/path/to/photo',
                   friendName: ['John', 'Jane'],
                 );
+
                 // final _mytask = _mybox.get('mytask');
                 widget.mybox.put(generateRandomString(), task);
 

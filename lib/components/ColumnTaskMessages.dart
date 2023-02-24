@@ -28,53 +28,71 @@ class _ColumnTaskMessagesState extends State<ColumnTaskMessages> {
   @override
   Widget build(BuildContext context) {
     Color _color_TaskMessage = widget.color_Secondary;
-    List<TaskMessage> taskMessages = List.generate(
-      widget.mybox.length,
-      (index) => TaskMessage(
-        color_Green: color_Green,
-        color_Secondary: _color_TaskMessage,
-        screen_width: widget.screenWidth,
-        name: widget.mybox.getAt(index).name,
-        description: widget.mybox.getAt(index).description,
-        date: widget.mybox.getAt(index).date,
-        time: widget.mybox.getAt(index).time,
-        repetitiveness: widget.mybox.getAt(index).repetitiveness,
-        notifications: widget.mybox.getAt(index).notifications,
-        importance: widget.mybox.getAt(index).importance,
-        location: widget.mybox.getAt(index).location,
-        recording_file_path: widget.mybox.getAt(index).recordingFilePath,
-        photo_file_path: widget.mybox.getAt(index).photoFilePath,
-        friend_name: widget.mybox.getAt(index).friendName,
-        RemoveWidth: 2 * widget.TaskLeftPadding,
-        onTap: (int index1) {
-          setState(() {
-            print("yes");
-            widget.currentIndex = index1;
-          });
-        },
-      ),
-    );
-
-// Sort the taskMessages list based on date and time
-    taskMessages.sort((a, b) {
-      // Compare the dates first
-      int dateComparison = a.date.compareTo(b.date);
-      if (dateComparison != 0) {
-        return dateComparison;
-      }
-
-      // If the dates are the same, compare the times
-      return a.time.compareTo(b.time);
-    });
-
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         const SizedBox(height: 20),
-        ...taskMessages.map((taskMessage) => Padding(
-              padding: const EdgeInsets.all(10),
-              child: taskMessage,
-            )),
+        ...List.generate(
+          widget.mybox.length,
+          (index) => Padding(
+            padding: EdgeInsets.all(10),
+            // child: GestureDetector(
+            //   behavior: HitTestBehavior.translucent,
+            // onPanUpdate: (details) {
+            //   // print(details.delta.dx);
+            //   int sensitivity = 1;
+            //   // Swiping in right direction.
+            //   if (details.delta.dx > sensitivity) {
+            //     setState(() {
+            //       _color_TaskMessage = widget.color_Green;
+            //       print("$_color_TaskMessage");
+            //     });
+            //   }
+
+            //   // Swiping in left direction.
+            //   if (details.delta.dx < -sensitivity) {
+            //     setState(() {
+            //       _color_TaskMessage = widget.color_Secondary;
+            //       print("$_color_TaskMessage");
+            //     });
+            //   }
+            // },
+            child: TaskMessage(
+              color_Green: color_Green,
+              color_Secondary: _color_TaskMessage,
+              screen_width: widget.screenWidth,
+              name: widget.mybox.getAt(index).name,
+              description: widget.mybox.getAt(index).description,
+              date: widget.mybox.getAt(index).date,
+              time: widget.mybox.getAt(index).time,
+              repetitiveness: widget.mybox.getAt(index).repetitiveness,
+              notifications: widget.mybox.getAt(index).notifications,
+              // notifications_halfOfDay: widget.mybox.getAt(index).description,
+              importance: widget.mybox.getAt(index).importance,
+              location: widget.mybox.getAt(index).location,
+              // longtitude: widget.mybox.getAt(index).location['key2'],
+              recording_file_path: widget.mybox.getAt(index).recordingFilePath,
+              photo_file_path: widget.mybox.getAt(index).photoFilePath,
+              friend_name: widget.mybox.getAt(index).friendName,
+              RemoveWidth: 2 * widget.TaskLeftPadding,
+              // indexListDate: [
+              //   "taskNotificatios_Date.elementAt(0)",
+              //   "gres  erw re 1"
+              // ],
+              // indexListTime: [
+              //   "taskNotificatios_Time.elementAt(0)",
+              //   " yrew e 1"
+              // ],
+              onTap: (int index1) {
+                setState(() {
+                  // readJson();
+                  widget.currentIndex = index1;
+                });
+              },
+            ),
+          ),
+        ),
+        // ),
       ],
     );
   }
@@ -85,8 +103,6 @@ class _ColumnTaskMessagesState extends State<ColumnTaskMessages> {
 
     if (widget.mybox.length != oldWidget.mybox.length) {
       setState(() {});
-      // List values = widget.mybox.values.toList();
-      // values.sort((a, b) => a.date.compareTo(b.date));
     }
   }
 

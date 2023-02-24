@@ -188,10 +188,10 @@ class _TaskMessageState extends State<TaskMessage> {
           });
         }
       },
-      // onTap: () {
-      //   openTaskWindow();
-      //   // pauseAudio();
-      // },
+      onTap: () {
+        openTaskWindow();
+        // pauseAudio();
+      },
       child: Container(
         width: MediaQuery.of(context).size.width - widget.RemoveWidth,
         height: 60,

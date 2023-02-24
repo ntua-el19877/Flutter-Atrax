@@ -262,6 +262,7 @@ class _AddTaskPageState extends State<AddTaskPage> {
       photoFilePath: '/path/to/photo',
       friendName: ['John', 'Jane'],
     );
+
     // final _mytask = _mybox.get('mytask');
     widget.box.put(generateRandomString(), task2);
 
