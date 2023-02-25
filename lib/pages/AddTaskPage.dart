@@ -8,6 +8,7 @@ import 'package:hive/hive.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
+import '../services/notifi_service.dart';
 import '../routes/routes.dart';
 import '../GoogleMap.dart';
 
@@ -51,6 +52,11 @@ String convertTo24HourFormat(String time) {
   return twentyFourHourFormat.format(dateTime);
 }
 
+bool is24HourFormat(String time) {
+  RegExp regExp = new RegExp(r'^([01]?[0-9]|2[0-3]):[0-5][0-9]$');
+  return regExp.hasMatch(time);
+}
+
 class Notification {
   String date;
   String time;
@@ -92,6 +98,7 @@ class _AddTaskPageState extends State<AddTaskPage> {
   /*DateTime due_date = DateTime.now();   */
   DateTime due_date = DateUtils.dateOnly(DateTime.now());
   var DueDate = ''; /*  user due date  */
+  var useless_date = '';
 
   TimeOfDay due_time = TimeOfDay(hour: 8, minute: 00);
   var DueTime = ''; /*  user due time  */
@@ -358,10 +365,29 @@ class _AddTaskPageState extends State<AddTaskPage> {
       'friendName': ["julie", "jess"]
     };
     await AddTaskData.saveJsonData(rawData);
-    AddTaskData.getJsonData();
-    AddTaskData.parseJson(rawData);
+    //AddTaskData.getJsonData();
+    //AddTaskData.parseJson(rawData);
     //FileManager().writeJsonFile(rawData);
-    Navigator.pop(context);
+
+    if (DueDate != '' && DueTime != '') {
+      print("Due Date " + DueDate + " Due Time " + DueTime);
+      //print(convertTo24HourFormat(DueTime));
+
+      //DateTime day = DateTime.parse(DueDate);
+      //print("day :" +'$day');
+      //DateTime time = DateTime.parse(DueTime+':00');
+      //print(time.toString());
+      //DateTime dateTime = DateTime(day.year, day.month, day.day, time.hour, time.minute, time.second);
+
+      //var passed_time = DateTime.parse('$DueDate $DueTime');
+      //print("Passed time : " + passed_time.toString());
+      NotificationService().scheduleNotification(
+          title: task,
+          body: description,
+          scheduledNotificationDateTime:
+              DateTime.parse('$DueDate' + ' ' + '$DueTime'));
+    }
+    Navigator.of(context).pushNamed(RouteManager.mainpage);
   }
 
   void openDatePicker() {
@@ -388,7 +414,10 @@ class _AddTaskPageState extends State<AddTaskPage> {
       setState(() {
         due_time = value!;
         DueTime = due_time.format(context).toString();
-        DueTime = convertTo24HourFormat(due_time.format(context).toString());
+        DueTime = is24HourFormat(due_time.format(context).toString())
+            ? due_time.format(context).toString()
+            : convertTo24HourFormat(due_time.format(context).toString());
+        //DueTime = convertTo24HourFormat(due_time.format(context).toString());
         print(DueTime);
       });
     });
@@ -617,8 +646,11 @@ class _AddTaskPageState extends State<AddTaskPage> {
       setState(() {
         notification_time = value!;
         //NotTime = notification_time.format(context).toString();
-        NotTime =
-            convertTo24HourFormat(notification_time.format(context).toString());
+        NotTime = is24HourFormat(notification_time.format(context).toString())
+            ? notification_time.format(context).toString()
+            : convertTo24HourFormat(
+                notification_time.format(context).toString());
+        //NotTime = is24HourFormat(notification_time.toString()) ? convertTo24HourFormat(notification_time.format(context).toString()) : notification_time.toString();
         Notifications_Day_and_Time[1] = NotTime;
         Notifications_List[list_counter][1] = NotTime;
         new_Notifications_List[list_counter] = Notification(NotDate, NotTime);

@@ -10,6 +10,7 @@ import 'components/HiveInit.dart';
 
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'services/notifi_service.dart';
+import 'package:timezone/data/latest.dart' as tz;
 
 final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
     FlutterLocalNotificationsPlugin();
@@ -34,6 +35,7 @@ void main() async {
   // box.clear();
 
   NotificationService().initNotification();
+  tz.initializeTimeZones();
 
   SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual,
       overlays: [SystemUiOverlay.top]);
