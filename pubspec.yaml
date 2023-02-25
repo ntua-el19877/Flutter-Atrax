@@ -44,9 +44,9 @@ dependencies:
   hive_flutter: ^1.1.0
   image_picker: ^0.8.6+3
   permission_handler: ^10.2.0
-  camera: ^0.9.4+19
+  camera: ^0.8.1
   flutter_local_notifications: ^13.0.0
-
+  flutter_sound: ^9.2.13
 dev_dependencies:
   flutter_test:
     sdk: flutter

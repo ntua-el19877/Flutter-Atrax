@@ -3,9 +3,11 @@ import 'dart:math';
 
 import 'package:atrax/entities/AddTaskJSON.dart';
 import 'package:atrax/file_manager.dart';
+import 'package:flutter_sound/flutter_sound.dart';
 import 'package:hive/hive.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:permission_handler/permission_handler.dart';
 import '../routes/routes.dart';
 import '../GoogleMap.dart';
 
@@ -72,6 +74,15 @@ class AddTaskPage extends StatefulWidget {
 }
 
 class _AddTaskPageState extends State<AddTaskPage> {
+  @override
+  void initState() {
+    super.initState();
+    initRecorder();
+  }
+
+  String audioFile = '';
+  double IconSpacing = -15;
+  double IconSize = 30;
   File _image = File('assets/icons/empty.png');
   final imagePicker = ImagePicker();
   var _TaskController = TextEditingController(); /*  task controller  */
@@ -173,54 +184,70 @@ class _AddTaskPageState extends State<AddTaskPage> {
 
             /*    ROW WITH ICON BUTTONS     */
 
-            Container(
-              color: Color(0xffff929AE7),
-              child: Row(
-                children: [
-                  TextButton(
-                    //child: Text("Calendar"),
-                    child: const Icon(Icons.date_range_rounded,
-                        color: Color(0xff252525)),
-                    onPressed: openDatePicker,
-                  ),
-                  TextButton(
-                    //child: Text("Clock"),
-                    child:
-                        const Icon(Icons.access_time, color: Color(0xff252525)),
-                    onPressed: openTimePicker,
-                  ),
-                  TextButton(
-                    //child: Text("Repeat"),
-                    child: const Icon(Icons.replay, color: Color(0xff252525)),
-                    onPressed: openRepetitiveness,
-                  ),
-                  TextButton(
-                    child: const Icon(Icons.notifications_none_outlined,
-                        color: Color(0xff252525)),
-                    onPressed: openNotificationWindow,
-                  ),
-                  TextButton(
-                    child: const Icon(Icons.outlined_flag,
-                        color: Color(0xff252525)),
-                    onPressed: openImportanceWindow,
-                  ),
-                  TextButton(
-                      child: const Icon(Icons.location_on_outlined,
-                          color: Color(0xff252525)),
-                      onPressed: () {
-                        openLocationWindow().then((value) {
-                          lat = '${value.latitude}';
-                          long = '${value.longitude}';
-                          MapUtils.openMap(lat, long);
-                        });
-                      }),
-                  TextButton(
-                    child: const Icon(Icons.photo_camera_outlined,
-                        color: Color(0xff252525)),
-                    onPressed: openCamera,
-                  ),
-                ],
-              ),
+            SizedBox(
+              width: MediaQuery.of(context).size.width,
+              child: Container(
+                  color: Color(0xffff929AE7),
+                  child: Wrap(
+                    alignment: WrapAlignment.center,
+                    spacing:
+                        IconSpacing, // adjust the spacing between the icons horizontally
+                    runSpacing:
+                        8.0, // adjust the spacing between the rows vertically
+                    children: [
+                      TextButton(
+                        //child: Text("Calendar"),
+                        onPressed: openDatePicker,
+                        //child: Text("Calendar"),
+                        child: Icon(Icons.date_range_rounded,
+                            size: IconSize, color: Color(0xff252525)),
+                      ),
+                      TextButton(
+                        //child: Text("Clock"),
+                        onPressed: openTimePicker,
+                        //child: Text("Clock"),
+                        child: Icon(Icons.access_time,
+                            size: IconSize, color: Color(0xff252525)),
+                      ),
+                      TextButton(
+                        //child: Text("Repeat"),
+                        onPressed: openRepetitiveness,
+                        //child: Text("Repeat"),
+                        child: Icon(Icons.replay,
+                            size: IconSize, color: Color(0xff252525)),
+                      ),
+                      TextButton(
+                        onPressed: openNotificationWindow,
+                        child: Icon(Icons.notifications_none_outlined,
+                            size: IconSize, color: Color(0xff252525)),
+                      ),
+                      TextButton(
+                        onPressed: openImportanceWindow,
+                        child: Icon(Icons.outlined_flag,
+                            size: IconSize, color: Color(0xff252525)),
+                      ),
+                      TextButton(
+                          child: Icon(Icons.location_on_outlined,
+                              size: IconSize, color: Color(0xff252525)),
+                          onPressed: () {
+                            openLocationWindow().then((value) {
+                              lat = '${value.latitude}';
+                              long = '${value.longitude}';
+                              MapUtils.openMap(lat, long);
+                            });
+                          }),
+                      TextButton(
+                        onPressed: openCamera,
+                        child: Icon(Icons.photo_camera_outlined,
+                            size: IconSize, color: Color(0xff252525)),
+                      ),
+                      TextButton(
+                        onPressed: openRecorder,
+                        child: Icon(Icons.mic_none,
+                            size: IconSize, color: Color(0xff252525)),
+                      ),
+                    ],
+                  )),
             ),
 
             /*   CONFIRM BUTTONS  */
@@ -285,6 +312,13 @@ class _AddTaskPageState extends State<AddTaskPage> {
         .join();
   }
 
+  String returnlocation() {
+    if (lat == '')
+      return '';
+    else
+      return lat + ',' + long;
+  }
+
   void _SaveTask() async {
     // setState(() {
     //   task = _TaskController.text;
@@ -301,8 +335,8 @@ class _AddTaskPageState extends State<AddTaskPage> {
       //notifications: widget.box.getAt(0).notifications,
       notifications: new_notifications_list,
       importance: importance,
-      location: 'latitude' + '37.7749' + 'longitude' + '-122.4194',
-      recordingFilePath: '/path/to/recording',
+      location: returnlocation(),
+      recordingFilePath: audioFile,
       photoFilePath: imageDestination,
       friendName: ['John', 'Jane'],
     );
@@ -320,7 +354,7 @@ class _AddTaskPageState extends State<AddTaskPage> {
       'importance': importance,
       'location': Location(latitude: 1, longitude: 7),
       'recordingFilePath': 'path1',
-      'photoFilePath': 'path2',
+      'photoFilePath': imageDestination,
       'friendName': ["julie", "jess"]
     };
     await AddTaskData.saveJsonData(rawData);
@@ -723,17 +757,86 @@ class _AddTaskPageState extends State<AddTaskPage> {
                 ElevatedButton(
                   onPressed: () async {
                     await getImage();
-                    print("---------------1");
+                    // print("---------------1");
                     if (_image != null) {
-                      print("---------------2");
+                      // print("---------------2");
                       await saveImage();
                     }
+                    setState(() {
+                      _image;
+                    });
                   },
                   child: const Icon(Icons.camera_alt),
                 )
               ],
             ))),
       );
+  final recorder = FlutterSoundRecorder();
+  bool isRecorderReady = false;
+  Future record() async {
+    if (!isRecorderReady) return;
+    await recorder.startRecorder(toFile: 'audio');
+  }
 
-  // ...
+  Future initRecorder() async {
+    final status = await Permission.microphone.request();
+    if (status != PermissionStatus.granted) {
+      throw 'Microphone permission not granted';
+    }
+    await recorder.openRecorder();
+    isRecorderReady = true;
+    recorder.setSubscriptionDuration(
+      const Duration(milliseconds: 500),
+    );
+  }
+
+  Future stop() async {
+    if (!isRecorderReady) return;
+    final path = await recorder.stopRecorder();
+    audioFile = File(path!) as String;
+    // print('Recorded audio:$audioFile');
+    await recorder.stopRecorder();
+  }
+
+  void openRecorder() => showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+            // title: Text("Recor"),
+            content: Column(
+          children: [
+            StreamBuilder<RecordingDisposition>(
+              stream: recorder.onProgress,
+              builder: (context, snapshot) {
+                final duration =
+                    snapshot.hasData ? snapshot.data!.duration : Duration.zero;
+                String twoDigits(int n) => n.toString().padLeft(60);
+                final twoDigitMinutes =
+                    twoDigits(duration.inMinutes.remainder(60));
+                final twoDigitSeconds =
+                    twoDigits(duration.inSeconds.remainder(60));
+                return Text('$twoDigitMinutes:$twoDigitSeconds',
+                    style: const TextStyle(
+                        fontSize: 80, fontWeight: FontWeight.bold));
+              },
+            ),
+            const SizedBox(height: 32),
+            ElevatedButton(
+              child:
+                  Icon(recorder.isRecording ? Icons.stop : Icons.mic, size: 80),
+              onPressed: () async {
+                if (recorder.isRecording) {
+                  await stop();
+                } else {
+                  await record();
+                }
+              },
+            ),
+          ],
+        )),
+      );
+  @override
+  void dispose() {
+    recorder.closeRecorder();
+    super.dispose();
+  }
 }

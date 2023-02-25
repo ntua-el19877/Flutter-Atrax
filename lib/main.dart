@@ -9,10 +9,10 @@ import 'package:path_provider/path_provider.dart';
 import 'components/HiveInit.dart';
 
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'Services/notifi_service.dart';
+import 'services/notifi_service.dart';
 
 final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
-      FlutterLocalNotificationsPlugin();
+    FlutterLocalNotificationsPlugin();
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -60,6 +60,4 @@ class MyApp extends StatelessWidget {
   }
 }
 
-void scheduleNotification(){
-  
-}
+void scheduleNotification() {}

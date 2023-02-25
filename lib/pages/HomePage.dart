@@ -7,7 +7,7 @@ import 'package:flutter/services.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/adapters.dart';
 
-import '../Services/notifi_service.dart';
+import '../services/notifi_service.dart';
 import '../components/ColumnTaskMessages.dart';
 import '../components/HiveInit.dart';
 import '../components/DevButtons.dart';
