@@ -32,10 +32,8 @@ dependencies:
   flutter:
     sdk: flutter
   table_calendar: ^3.0.9
-  # audioplayers: ^0.21.2
-  #dwds: ^16.0.1
-  # The following adds the Cupertino Icons font to your application.
-  # Use with the CupertinoIcons class for iOS style icons.
+  dio: ^5.0.1
+  image_gallery_saver: '^1.7.1'
   cupertino_icons: ^1.0.2
   maps_launcher: ^2.0.1
   shared_preferences: ^2.0.17
@@ -45,6 +43,7 @@ dependencies:
   hive: ^2.0.4
   hive_flutter: ^1.1.0
   image_picker: ^0.8.6+3
+  permission_handler: ^10.2.0
 
 dev_dependencies:
   flutter_test:

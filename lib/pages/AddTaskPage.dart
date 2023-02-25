@@ -5,6 +5,7 @@ import 'package:atrax/entities/AddTaskJSON.dart';
 import 'package:atrax/file_manager.dart';
 import 'package:hive/hive.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:path_provider/path_provider.dart';
 import '../routes/routes.dart';
 import '../GoogleMap.dart';
 
@@ -82,6 +83,8 @@ class _AddTaskPageState extends State<AddTaskPage> {
 
   var lat = ''; /*  GPS variables  */
   var long = '';
+
+  String imageDestination = '';
 
   TimeOfDay notification_time = TimeOfDay(hour: 8, minute: 00);
   DateTime notification_date = DateUtils.dateOnly(DateTime.now());
@@ -291,7 +294,7 @@ class _AddTaskPageState extends State<AddTaskPage> {
       importance: importance,
       location: 'latitude' + '37.7749' + 'longitude' + '-122.4194',
       recordingFilePath: '/path/to/recording',
-      photoFilePath: '/path/to/photo',
+      photoFilePath: imageDestination,
       friendName: ['John', 'Jane'],
     );
 
@@ -655,95 +658,66 @@ class _AddTaskPageState extends State<AddTaskPage> {
 
   Future getImage() async {
     final image = await imagePicker.getImage(source: ImageSource.camera);
-    setState(() {
-      if (image!.path != null) {
+    if (image != null) {
+      setState(() {
         _image = File(image.path);
-      } else {
-        _image = File('assets/icons/user_barcode_1.png');
-      }
-    });
+      });
+    } else {
+      print('No image selected.');
+    }
   }
 
-  // Future openCamera() => showDialog(
-  //     context: context,
-  //     builder: (context) => AlertDialog(
-  //           title: Text("Add Image"),
-  //           content: Container(
-  //             child: Column(
-  //               children: [
-  //                 _image == null
-  //                     ? Text("No Image Selected")
-  //                     : FittedBox(
-  //                         child: Image.file(
-  //                           _image,
-  //                           width: MediaQuery.of(context).size.width - 20,
-  //                           // height: 50,
-  //                           fit: BoxFit
-  //                               .cover, // add this property to maintain the aspect ratio
-  //                         ),
-  //                         fit: BoxFit.cover,
-  //                       ),
-  //                 ElevatedButton(
-  //                   onPressed: () {
-  //                     getImage();
-  //                   },
-  //                   child: const Icon(Icons.abc),
-  //                 )
-  //               ],
-  //             ),
-  //           ),
-  //         ));
-  // void openCamera() => showDialog(
-  //       context: context,
-  //       builder: (context) => AlertDialog(
-  //           title: Text("Add Image"),
-  //           content: Container(
-  //             child: LayoutBuilder(
-  //               builder: (context, constraints) => SizedBox(
-  //                 width: 10,
-  //                 height: 10,
-  //                 child: Column(
-  //                   children: [
-  //                     _image == null
-  //                         ? Text("No Image Selected")
-  //                         : FittedBox(
-  //                             child: Image.file(
-  //                               _image,
-  //                               width: MediaQuery.of(context).size.width - 20,
-  //                               fit: BoxFit.cover,
-  //                             ),
-  //                             fit: BoxFit.cover,
-  //                           ),
-  //                     ElevatedButton(
-  //                       onPressed: () {
-  //                         getImage();
-  //                       },
-  //                       child: const Icon(Icons.abc),
-  //                     )
-  //                   ],
-  //                 ),
-  //               ),
-  //             ),
-  //           )),
-  //     );
+  Future<void> saveImage() async {
+    final directory = await getApplicationDocumentsDirectory();
+    final imagePath =
+        '${directory.path}/photos/${DateTime.now().millisecondsSinceEpoch}.jpg';
+    imageDestination = imagePath;
+    final imageFile = await _image.copy(imagePath);
+    // print('--------------------------Image saved to: ${imageFile.path}');
+  }
+
+  // bool loading = false;
+
+  // Future<bool> saveFile() async {}
+  // downloadFile() async {
+  //   setState(() {
+  //     loading = true;
+  //   });
+  //   bool downloaded = saveFile();
+  //   setState(() {
+  //     loading = false;
+  //   });
+  // }
 
   void openCamera() => showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-          title: Text("Select task's importance"),
-          content: Container(
-              child: Row(
-            children: [
-              Image.file(
-                _image,
-                width: MediaQuery.of(context).size.width / 2,
-              ),
-              ElevatedButton(
-                onPressed: () {
-                  getImage();
-                },
-                child: const Icon(Icons.abc),
-              )
-            ],
-          ))));
+        context: context,
+        builder: (context) => AlertDialog(
+            title: Text("Take Picture"),
+            content: Container(
+                child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                if (_image != null)
+                  Image.file(
+                    _image,
+                    width: MediaQuery.of(context).size.width / 2,
+                  )
+                else
+                  Text('No Image Selected'),
+                ElevatedButton(
+                  onPressed: () async {
+                    await getImage();
+                    print("---------------1");
+                    if (_image != null) {
+                      print("---------------2");
+                      await saveImage();
+                    }
+                  },
+                  child: const Icon(Icons.camera_alt),
+                )
+              ],
+            ))),
+      );
+
+  // ...
 }
