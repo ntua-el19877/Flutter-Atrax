@@ -382,12 +382,12 @@ class _AddTaskPageState extends State<AddTaskPage> {
       //var passed_time = DateTime.parse('$DueDate $DueTime');
       //print("Passed time : " + passed_time.toString());
       NotificationService().scheduleNotification(
-          title: task,
-          body: description,
+          title: _TaskController.text + '  (Now)',
+          body: _DescriptionController.text,
           scheduledNotificationDateTime:
               DateTime.parse('$DueDate' + ' ' + '$DueTime'));
     }
-    Navigator.of(context).pushNamed(RouteManager.mainpage);
+    Navigator.of(context).pop();
   }
 
   void openDatePicker() {
@@ -833,38 +833,41 @@ class _AddTaskPageState extends State<AddTaskPage> {
   void openRecorder() => showDialog(
         context: context,
         builder: (context) => AlertDialog(
-            // title: Text("Recor"),
-            content: Column(
-          children: [
-            StreamBuilder<RecordingDisposition>(
-              stream: recorder.onProgress,
-              builder: (context, snapshot) {
-                final duration =
-                    snapshot.hasData ? snapshot.data!.duration : Duration.zero;
-                String twoDigits(int n) => n.toString().padLeft(60);
-                final twoDigitMinutes =
-                    twoDigits(duration.inMinutes.remainder(60));
-                final twoDigitSeconds =
-                    twoDigits(duration.inSeconds.remainder(60));
-                return Text('$twoDigitMinutes:$twoDigitSeconds',
-                    style: const TextStyle(
-                        fontSize: 80, fontWeight: FontWeight.bold));
-              },
-            ),
-            const SizedBox(height: 32),
-            ElevatedButton(
-              child:
-                  Icon(recorder.isRecording ? Icons.stop : Icons.mic, size: 80),
-              onPressed: () async {
-                if (recorder.isRecording) {
-                  await stop();
-                } else {
-                  await record();
-                }
-              },
-            ),
-          ],
-        )),
+          // title: Text("Recor"),
+          content: SizedBox(
+              child: Column(
+            children: [
+              StreamBuilder<RecordingDisposition>(
+                stream: recorder.onProgress,
+                builder: (context, snapshot) {
+                  final duration = snapshot.hasData
+                      ? snapshot.data!.duration
+                      : Duration.zero;
+                  String twoDigits(int n) => n.toString().padLeft(1);
+                  final twoDigitMinutes =
+                      twoDigits(duration.inMinutes.remainder(60));
+                  final twoDigitSeconds =
+                      twoDigits(duration.inSeconds.remainder(60));
+                  return Text('$twoDigitMinutes:$twoDigitSeconds',
+                      style: const TextStyle(
+                          fontSize: 80, fontWeight: FontWeight.bold));
+                },
+              ),
+              const SizedBox(height: 32),
+              ElevatedButton(
+                child: Icon(recorder.isRecording ? Icons.stop : Icons.mic,
+                    size: 80),
+                onPressed: () async {
+                  if (recorder.isRecording) {
+                    await stop();
+                  } else {
+                    await record();
+                  }
+                },
+              ),
+            ],
+          )),
+        ),
       );
   @override
   void dispose() {
