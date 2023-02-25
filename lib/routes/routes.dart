@@ -36,7 +36,7 @@ class RouteManager {
             builder: (context) => AddTaskPage(box: box, friendbox: friendbox));
 
       case friendspage:
-        return MaterialPageRoute(builder: (context) => FriendsPage());
+        return MaterialPageRoute(builder: (context) => FriendsPage(friendbox: friendbox));
 
       default:
         throw const FormatException('Route not found');

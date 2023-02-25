@@ -12,6 +12,7 @@ import 'package:flutter/material.dart';
 
 import 'package:geolocator/geolocator.dart';
 
+import 'package:intl/intl.dart';
 // <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />;
 
 import '../components/HiveInit.dart' as HiveInit;
@@ -36,6 +37,13 @@ String formatDate(var day){
     formatted_day = "${day.year}-${"0"+day.month.toString()}-${"0"+day.day.toString()}";
   }      
   return formatted_day;
+}
+
+String convertTo24HourFormat(String time) {
+  final format = DateFormat('h:mm a');
+  final dateTime = format.parse(time);
+  final twentyFourHourFormat = DateFormat('HH:mm');
+  return twentyFourHourFormat.format(dateTime);
 }
 
 class Notification {
@@ -89,7 +97,7 @@ class _AddTaskPageState extends State<AddTaskPage> {
   var new_Notifications_List =
       List.generate(10, (i) => Notification('', ''), growable: true);
   var jsonNotifications;
-  var new_notifications_list = List<Map<String, String>>; 
+  List<Map<String, String>> new_notifications_list = []; 
 
   String task = ''; /*  user task   */
   String description = ''; /*  user description   */
@@ -278,8 +286,8 @@ class _AddTaskPageState extends State<AddTaskPage> {
       date: DueDate,
       time: DueTime,
       repetitiveness: repetitiveness,
-      notifications: widget.box.getAt(0).notifications,
-      //notifications: new_notifications_list,
+      //notifications: widget.box.getAt(0).notifications,
+      notifications: new_notifications_list,
       importance: importance,
       location: 'latitude' + '37.7749' + 'longitude' + '-122.4194',
       recordingFilePath: '/path/to/recording',
@@ -334,6 +342,8 @@ class _AddTaskPageState extends State<AddTaskPage> {
       setState(() {
         due_time = value!;
         DueTime = due_time.format(context).toString();
+        DueTime = convertTo24HourFormat(due_time.format(context).toString());
+        print(DueTime);
       });
     });
   }
@@ -477,6 +487,7 @@ class _AddTaskPageState extends State<AddTaskPage> {
                 List.generate(10, (i) => ['', ''], growable: true);
             new_Notifications_List =
                 List.generate(10, (i) => Notification('', ''), growable: true);
+            new_notifications_list = []; 
             debugPrint('${(Notifications_List.toString())}');
           });
         },
@@ -510,6 +521,7 @@ class _AddTaskPageState extends State<AddTaskPage> {
               new_Notifications_List = List.generate(
                   10, (i) => Notification('', ''),
                   growable: true);
+              new_notifications_list = []; 
               debugPrint('${(Notifications_List.toString())}');
             });
           },
@@ -529,8 +541,9 @@ class _AddTaskPageState extends State<AddTaskPage> {
       setState(() {
         notification_date = value!;
 
-        NotDate =
-            "${notification_date.day}-${notification_date.month}-${notification_date.year}";
+        //NotDate =
+        //    "${notification_date.day}-${notification_date.month}-${notification_date.year}";
+        NotDate = formatDate(notification_date);
         Notifications_Day_and_Time[0] = NotDate;
         Notifications_List[list_counter][0] = NotDate;
         new_Notifications_List[list_counter] = Notification(NotDate, NotTime);
@@ -542,7 +555,7 @@ class _AddTaskPageState extends State<AddTaskPage> {
           "date": NotDate,
           "time" : NotTime
         };
-        //new_notifications_list.insert(list_counter-1,notifications_map);
+        new_notifications_list.insert(list_counter-1,notifications_map);
         print(new_notifications_list);
 
         }
@@ -558,7 +571,8 @@ class _AddTaskPageState extends State<AddTaskPage> {
         .then((value) {
       setState(() {
         notification_time = value!;
-        NotTime = notification_time.format(context).toString();
+        //NotTime = notification_time.format(context).toString();
+        NotTime = convertTo24HourFormat(notification_time.format(context).toString());
         Notifications_Day_and_Time[1] = NotTime;
         Notifications_List[list_counter][1] = NotTime;
         new_Notifications_List[list_counter] = Notification(NotDate, NotTime);
@@ -570,7 +584,7 @@ class _AddTaskPageState extends State<AddTaskPage> {
           "date": NotDate,
           "time" : NotTime
         };
-        //new_notifications_list.insert(list_counter-1,notifications_map);
+        new_notifications_list.insert(list_counter-1,notifications_map);
         print(new_notifications_list);
         }
         debugPrint('${(Notifications_List.toString())}');

@@ -45,6 +45,7 @@ dependencies:
   hive: ^2.0.4
   hive_flutter: ^1.1.0
   camera: ^0.9.4+19
+  flutter_local_notifications: ^13.0.0
 
 dev_dependencies:
   flutter_test:

@@ -16,6 +16,7 @@ class HomeDownBar extends StatefulWidget {
   final EdgeInsets itemPadding_Right;
   final Function(int) onTap;
   final Box box;
+  final Box friendbox;
 
   HomeDownBar({
     this.currentIndex = 0,
@@ -30,6 +31,7 @@ class HomeDownBar extends StatefulWidget {
     this.itemPadding_Right = const EdgeInsets.only(left: 0),
     required this.onTap,
     required this.box,
+    required this.friendbox,
     Key? key,
   }) : super(key: key);
 
