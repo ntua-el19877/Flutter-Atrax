@@ -1,9 +1,10 @@
-import 'dart:convert';
+import 'dart:io';
 import 'dart:math';
 
 import 'package:atrax/entities/AddTaskJSON.dart';
 import 'package:atrax/file_manager.dart';
 import 'package:hive/hive.dart';
+import 'package:image_picker/image_picker.dart';
 import '../routes/routes.dart';
 import '../GoogleMap.dart';
 
@@ -62,6 +63,8 @@ class AddTaskPage extends StatefulWidget {
 }
 
 class _AddTaskPageState extends State<AddTaskPage> {
+  File _image = File('assets/icons/empty.png');
+  final imagePicker = ImagePicker();
   var _TaskController = TextEditingController(); /*  task controller  */
   final _DescriptionController =
       TextEditingController(); /*  description controller  */
@@ -199,6 +202,11 @@ class _AddTaskPageState extends State<AddTaskPage> {
                           MapUtils.openMap(lat, long);
                         });
                       }),
+                  TextButton(
+                    child: const Icon(Icons.photo_camera_outlined,
+                        color: Color(0xff252525)),
+                    onPressed: openCamera,
+                  ),
                 ],
               ),
             ),
@@ -237,23 +245,23 @@ class _AddTaskPageState extends State<AddTaskPage> {
               ),
             ),
 
-            /*    SAVED PARAMETERS WINDOW   */
-            Container(
-              color: Colors.green,
-              child: Column(children: [
-                Text("USER'S INPUTS"),
-                Text("Task name :"),
-                Text(task),
-                Text("Task Decription :"),
-                Text(description),
-                Text("Due date"),
-                Text(DueDate),
-                Text("Due time"),
-                Text(DueTime),
-                Text("Your Location :"),
-                Text(long + " " '$lat')
-              ]),
-            ),
+            // /*    SAVED PARAMETERS WINDOW   */
+            // Container(
+            //   color: Colors.green,
+            //   child: Column(children: [
+            //     Text("USER'S INPUTS"),
+            //     Text("Task name :"),
+            //     Text(task),
+            //     Text("Task Decription :"),
+            //     Text(description),
+            //     Text("Due date"),
+            //     Text(DueDate),
+            //     Text("Due time"),
+            //     Text(DueTime),
+            //     Text("Your Location :"),
+            //     Text(long + " " '$lat')
+            //   ]),
+            // ),
           ],
         ));
   }
@@ -307,7 +315,7 @@ class _AddTaskPageState extends State<AddTaskPage> {
     AddTaskData.getJsonData();
     AddTaskData.parseJson(rawData);
     //FileManager().writeJsonFile(rawData);
-    Navigator.of(context).pushNamed(RouteManager.mainpage);
+    Navigator.pop(context);
   }
 
   void openDatePicker() {
@@ -580,49 +588,52 @@ class _AddTaskPageState extends State<AddTaskPage> {
   }
 
   void openImportanceWindow() => showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
+        context: context,
+        builder: (context) => AlertDialog(
           title: Text("Select task's importance"),
           content: Container(
-              child: Row(
-            children: [
-              ElevatedButton(
-                child: Text("Low"),
-                style: ElevatedButton.styleFrom(
-                    backgroundColor: Color(0xff9787D7)),
-                onPressed: () {
-                  setState(() {
-                    importance = 'Low';
-                    Navigator.of(context).pop();
-                  });
-                },
-              ),
-              SizedBox(width: 20),
-              ElevatedButton(
-                child: Text("Mid"),
-                style: ElevatedButton.styleFrom(
-                    backgroundColor: Color(0xffA15EAF)),
-                onPressed: () {
-                  setState(() {
-                    importance = 'Mid';
-                    Navigator.of(context).pop();
-                  });
-                },
-              ),
-              SizedBox(width: 20),
-              ElevatedButton(
-                child: Text("High"),
-                style: ElevatedButton.styleFrom(
-                    backgroundColor: Color(0xffA32F7D)),
-                onPressed: () {
-                  setState(() {
-                    importance = 'High';
-                    Navigator.of(context).pop();
-                  });
-                },
-              ),
-            ],
-          ))));
+            child: Row(
+              children: [
+                ElevatedButton(
+                  child: Text("Low"),
+                  style: ElevatedButton.styleFrom(
+                      backgroundColor: Color(0xff9787D7)),
+                  onPressed: () {
+                    setState(() {
+                      importance = 'Low';
+                      Navigator.of(context).pop();
+                    });
+                  },
+                ),
+                SizedBox(width: 20),
+                ElevatedButton(
+                  child: Text("Mid"),
+                  style: ElevatedButton.styleFrom(
+                      backgroundColor: Color(0xffA15EAF)),
+                  onPressed: () {
+                    setState(() {
+                      importance = 'Mid';
+                      Navigator.of(context).pop();
+                    });
+                  },
+                ),
+                SizedBox(width: 20),
+                ElevatedButton(
+                  child: Text("High"),
+                  style: ElevatedButton.styleFrom(
+                      backgroundColor: Color(0xffA32F7D)),
+                  onPressed: () {
+                    setState(() {
+                      importance = 'High';
+                      Navigator.of(context).pop();
+                    });
+                  },
+                ),
+              ],
+            ),
+          ),
+        ),
+      );
 
   Future<Position> openLocationWindow() async {
     bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
@@ -641,4 +652,98 @@ class _AddTaskPageState extends State<AddTaskPage> {
     }
     return await Geolocator.getCurrentPosition();
   }
+
+  Future getImage() async {
+    final image = await imagePicker.getImage(source: ImageSource.camera);
+    setState(() {
+      if (image!.path != null) {
+        _image = File(image.path);
+      } else {
+        _image = File('assets/icons/user_barcode_1.png');
+      }
+    });
+  }
+
+  // Future openCamera() => showDialog(
+  //     context: context,
+  //     builder: (context) => AlertDialog(
+  //           title: Text("Add Image"),
+  //           content: Container(
+  //             child: Column(
+  //               children: [
+  //                 _image == null
+  //                     ? Text("No Image Selected")
+  //                     : FittedBox(
+  //                         child: Image.file(
+  //                           _image,
+  //                           width: MediaQuery.of(context).size.width - 20,
+  //                           // height: 50,
+  //                           fit: BoxFit
+  //                               .cover, // add this property to maintain the aspect ratio
+  //                         ),
+  //                         fit: BoxFit.cover,
+  //                       ),
+  //                 ElevatedButton(
+  //                   onPressed: () {
+  //                     getImage();
+  //                   },
+  //                   child: const Icon(Icons.abc),
+  //                 )
+  //               ],
+  //             ),
+  //           ),
+  //         ));
+  // void openCamera() => showDialog(
+  //       context: context,
+  //       builder: (context) => AlertDialog(
+  //           title: Text("Add Image"),
+  //           content: Container(
+  //             child: LayoutBuilder(
+  //               builder: (context, constraints) => SizedBox(
+  //                 width: 10,
+  //                 height: 10,
+  //                 child: Column(
+  //                   children: [
+  //                     _image == null
+  //                         ? Text("No Image Selected")
+  //                         : FittedBox(
+  //                             child: Image.file(
+  //                               _image,
+  //                               width: MediaQuery.of(context).size.width - 20,
+  //                               fit: BoxFit.cover,
+  //                             ),
+  //                             fit: BoxFit.cover,
+  //                           ),
+  //                     ElevatedButton(
+  //                       onPressed: () {
+  //                         getImage();
+  //                       },
+  //                       child: const Icon(Icons.abc),
+  //                     )
+  //                   ],
+  //                 ),
+  //               ),
+  //             ),
+  //           )),
+  //     );
+
+  void openCamera() => showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+          title: Text("Select task's importance"),
+          content: Container(
+              child: Row(
+            children: [
+              Image.file(
+                _image,
+                width: MediaQuery.of(context).size.width / 2,
+              ),
+              ElevatedButton(
+                onPressed: () {
+                  getImage();
+                },
+                child: const Icon(Icons.abc),
+              )
+            ],
+          ))));
 }

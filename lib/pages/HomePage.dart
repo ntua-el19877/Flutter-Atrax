@@ -69,7 +69,7 @@ class _MainPageState extends State<MainPage> {
         body: Stack(
           children: [
             HomeDownBar(
-              box:_mybox,
+              box: _mybox,
               currentIndex: currentIndex,
               top: screenHeight,
               circle_front_Radius: 35,
