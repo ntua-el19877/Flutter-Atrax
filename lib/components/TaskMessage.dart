@@ -417,9 +417,8 @@ class _TaskMessageState extends State<TaskMessage> {
                               top: 10, right: 0, left: 0, bottom: 10),
                           child: CustomRectangle(
                               width: widget.screen_width * 3 / 4 - 20,
-                              text: "",
-                              // "${widget.notifications[i].keys.last}    " +
-                              // "${widget.notifications[i].keys.first}",
+                              text: "${widget.notifications[i].entries.last.value}    " +
+                                  "${widget.notifications[i].entries.first.value}",
                               title: "Notifications"),
                         ),
                       if (emptyFields[3])
