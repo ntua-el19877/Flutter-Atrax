@@ -8,6 +8,12 @@ import 'package:path_provider/path_provider.dart';
 
 import 'components/HiveInit.dart';
 
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'Services/notifi_service.dart';
+
+final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+      FlutterLocalNotificationsPlugin();
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   // Initialize hive
@@ -26,6 +32,8 @@ void main() async {
   var box = await Hive.openBox('mybox');
   var friendbox = await Hive.openBox('friendbox');
   // box.clear();
+
+  NotificationService().initNotification();
 
   SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual,
       overlays: [SystemUiOverlay.top]);
@@ -50,4 +58,8 @@ class MyApp extends StatelessWidget {
       },
     );
   }
+}
+
+void scheduleNotification(){
+  
 }

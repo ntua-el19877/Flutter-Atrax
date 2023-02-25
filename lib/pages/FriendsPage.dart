@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'dart:convert';
 import 'dart:async';
 
+import 'package:hive/hive.dart';
+
 /*Future<void> readJson() async {
 //final AssetBundle rootBundle = _initRootBundle();
 //final String response = await rootBundle.loadString('assets/friends.json');
@@ -14,14 +16,19 @@ setState(() { _myState = newValue; });Friends = _items;
 } */
 
 class FriendsPage extends StatefulWidget {
+
+  final Box friendbox;
+
   @override
   _FriendsPageState createState() => _FriendsPageState();
+
+  FriendsPage({Key? key, required this.friendbox}) : super(key: key);
 }
 
 class _FriendsPageState extends State<FriendsPage> {
   var Friends = [];
 
-  var prev_user_name = 'Spyros_2';
+  var prev_user_name = 'username123';
   var Username_controller = TextEditingController(text: 'Spyros');
 
   var N_friend_requests = 1;
@@ -29,6 +36,19 @@ class _FriendsPageState extends State<FriendsPage> {
   Future<void> readFriendsJson() async {
 //final AssetBundle rootBundle = _initRootBundle();
 //final String response = await rootBundle.loadString('assets/friends.json');
+    final String response =
+        '{"friends": [{"fname": "Spyros","lname": "Giannopoulos","icon_symbol": "SG"},{"fname": "Aggelos","lname": "Loukas","icon_symbol": "AL"}]}';
+    final data = await json.decode(response);
+    final _items = data["friends"];
+    //print(_items);
+    //print("number of friends : ${_items.length}");
+    setState(() {
+      Friends = _items;
+    });
+    //print(Friends[0]["fname"]);
+  }
+
+  Future<void> readFriendsFromDB() async {
     final String response =
         '{"friends": [{"fname": "Spyros","lname": "Giannopoulos","icon_symbol": "SG"},{"fname": "Aggelos","lname": "Loukas","icon_symbol": "AL"}]}';
     final data = await json.decode(response);

@@ -7,6 +7,7 @@ import 'package:flutter/services.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/adapters.dart';
 
+import '../Services/notifi_service.dart';
 import '../components/ColumnTaskMessages.dart';
 import '../components/HiveInit.dart';
 import '../components/DevButtons.dart';
@@ -61,6 +62,7 @@ class _MainPageState extends State<MainPage> {
   @override
   Widget build(BuildContext context) {
     final _mybox = widget.box;
+    final _myfriendsbox = widget.friendbox;
     final screenHeight = MediaQuery.of(context).size.height;
     double screenWidth = MediaQuery.of(context).size.width;
     final bottomNavBarHeight = (screenHeight / 12);
@@ -70,6 +72,7 @@ class _MainPageState extends State<MainPage> {
           children: [
             HomeDownBar(
               box: _mybox,
+              friendbox: _myfriendsbox,
               currentIndex: currentIndex,
               top: screenHeight,
               circle_front_Radius: 35,
@@ -85,6 +88,7 @@ class _MainPageState extends State<MainPage> {
             DevButtons(
               mybox: _mybox,
             ),
+
             // Use ValueListenableBuilder to rebuild the widget tree
             // whenever the data in _mybox changes
             ValueListenableBuilder(
@@ -95,6 +99,15 @@ class _MainPageState extends State<MainPage> {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       const SizedBox(height: 20),
+
+                      ElevatedButton(
+                        child: const Text('Notification'),
+                        onPressed: () {
+                          NotificationService().showNotification(
+                              title: 'Sample title', body: 'Gaaaay');
+                        },
+                      ),
+
                       ColumnTaskMessages(
                           mybox: _mybox,
                           color_Secondary: color_Secondary,

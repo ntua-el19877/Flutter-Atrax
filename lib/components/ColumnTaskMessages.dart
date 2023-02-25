@@ -54,7 +54,6 @@ class _ColumnTaskMessagesState extends State<ColumnTaskMessages> {
         },
       ),
     );
-
 // Sort the taskMessages list based on date and time
     taskMessages.sort((a, b) {
       // Compare the dates first

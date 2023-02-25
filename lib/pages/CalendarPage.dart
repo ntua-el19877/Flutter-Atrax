@@ -110,43 +110,6 @@ class _CalendarPageState extends State<CalendarPage> {
     });
   }
 
-  // Widget getSelectedDayTasks(DateTime sel_date){
-  //   List<Widget> list = [];
-  //   final DateFormat formatter = DateFormat('yyyy-MM-dd');
-  //   final String formatted = formatter.format(sel_date);
-  //   var tasks = widget.box.values
-  //                   .where((task) => task.date == formatted)
-  //                   .toList();
-  //   print(tasks);
-  //   if(tasks.length==0){
-  //     list.add(
-  //       Container()
-  //     );
-  //   }
-  // if(tasks.length>0){
-  //   for(int i=0; i<tasks.length; i=i+1){
-  //   list.add(
-  //     TaskMessage(name: widget.box.getAt(i).name,
-  //     description: widget.box.getAt(i).description,
-  //     date: widget.box.getAt(i).date,
-  //     time: widget.box.getAt(i).time,
-  //     repetitiveness: widget.box.getAt(i).repetitiveness,
-  //     notifications_date: widget.box.getAt(i).notifications_date,
-  //     notifications_time: widget.box.getAt(i).notifications_time,
-  //     notifications_halfOfDay: notifications_halfOfDay,
-  //     importance: importance,
-  //     latitude: latitude,
-  //     longtitude: longtitude,
-  //     recording_file_path: recording_file_path,
-  //     photo_file_path: photo_file_path,
-  //     friend_name: friend_name,
-  //     indexListDate: indexListDate,
-  //     indexListTime: indexListTime,
-  //     onTap: onTap)
-  //   );
-  //   }
-  // }
-  // }
   Widget getSelectedDayTasks() {
     return ColumnTaskMessagesFromList(
         myboxList: tasks,
