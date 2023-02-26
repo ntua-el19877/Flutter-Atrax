@@ -112,6 +112,7 @@ class _CalendarPageState extends State<CalendarPage> {
 
   Widget getSelectedDayTasks() {
     return ColumnTaskMessagesFromList(
+        mybox: widget.box,
         myboxList: tasks,
         color_Secondary: color_Secondary,
         color_Green: color_Green,

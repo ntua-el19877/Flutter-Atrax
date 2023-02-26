@@ -4,6 +4,7 @@ import 'package:hive/hive.dart';
 import 'TaskMessage.dart';
 
 class ColumnTaskMessagesFromList extends StatefulWidget {
+  final Box mybox;
   final List myboxList;
   final Color color_Secondary;
   final Color color_Green;
@@ -17,6 +18,7 @@ class ColumnTaskMessagesFromList extends StatefulWidget {
     required this.screenWidth,
     required this.TaskLeftPadding,
     required this.currentIndex,
+    required this.mybox,
   });
 
   @override
@@ -55,6 +57,8 @@ class _ColumnTaskMessagesFromListState
                 }
               },
               child: TaskMessage(
+                mybox: widget.mybox,
+                index: index,
                 color_Green: widget.color_Green,
                 color_Secondary: _color_TaskMessage,
                 screen_width: widget.screenWidth,
@@ -62,18 +66,14 @@ class _ColumnTaskMessagesFromListState
                 description: widget.myboxList[index].description,
                 date: widget.myboxList[index].date,
                 time: widget.myboxList[index].time,
-                repetitiveness:
-                    widget.myboxList[index].repetitiveness,
-                notifications:
-                    widget.myboxList[index].notifications,
+                repetitiveness: widget.myboxList[index].repetitiveness,
+                notifications: widget.myboxList[index].notifications,
                 // notifications_halfOfDay: widget.mybox.getAt(index).description,
                 importance: widget.myboxList[index].importance,
                 location: widget.myboxList[index].location,
                 // longtitude: widget.mybox.getAt(index).location['key2'],
-                recording_file_path:
-                    widget.myboxList[index].recordingFilePath,
-                photo_file_path:
-                    widget.myboxList[index].photoFilePath,
+                recording_file_path: widget.myboxList[index].recordingFilePath,
+                photo_file_path: widget.myboxList[index].photoFilePath,
                 friend_name: widget.myboxList[index].friendName,
                 RemoveWidth: 2 * widget.TaskLeftPadding,
                 // indexListDate: [

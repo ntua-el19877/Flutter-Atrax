@@ -1,9 +1,12 @@
+import 'dart:io';
+
 import 'package:atrax/components/CustomRectangle.dart';
 import 'package:atrax/components/IconRow.dart';
 import 'package:atrax/components/plus_Button.dart';
 import 'package:atrax/routes/routes.dart';
 // import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
+import 'package:hive/hive.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'TaskInfo.dart';
 import 'package:maps_launcher/maps_launcher.dart';
@@ -23,6 +26,8 @@ class MapUtils {
 }
 
 class TaskMessage extends StatefulWidget {
+  final Box mybox;
+  final int index;
   final double screen_width;
   final double RemoveWidth;
   final Color color_Secondary;
@@ -49,6 +54,8 @@ class TaskMessage extends StatefulWidget {
   final Function(int) onTap;
 
   TaskMessage({
+    required this.mybox,
+    this.index = 0,
     this.screen_width = 200,
     this.RemoveWidth = 0,
     this.color_Secondary = const Color(0xff929ae7),
@@ -429,6 +436,7 @@ class _TaskMessageState extends State<TaskMessage> {
                             MapsLauncher.launchQuery(widget.location);
                           },
                           child: Container(
+                            width: widget.screen_width * 3 / 4 - 20,
                             padding: const EdgeInsets.only(
                                 left: 0, bottom: 10, top: 10, right: 0),
                             child: CustomRectangle(
@@ -442,7 +450,20 @@ class _TaskMessageState extends State<TaskMessage> {
                                 title: "Location"),
                           ),
                         ),
-                      //if (emptyFields[4])
+                      if (emptyFields[5])
+                        Container(
+                          child: Image.file(
+                            widget.photo_file_path as File,
+                            width: MediaQuery.of(context).size.width / 2,
+                          ),
+                        ),
+                      ElevatedButton(
+                          onPressed: () {
+                            widget.mybox.deleteAt(widget.index);
+                          },
+                          child: const Text("Delete"))
+
+                      // if (emptyFields[4])
                       // GestureDetector(
                       //   onTap: () {
                       //     // MapUtils.openMap(double.parse(widget.latitude),
