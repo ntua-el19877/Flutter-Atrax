@@ -19,6 +19,13 @@ import 'package:shared_preferences/shared_preferences.dart';
 final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
     FlutterLocalNotificationsPlugin();
 
+Future isFriendsBoxEmpty(Box friendbox) async  {
+  print("Checking");
+  //var friendBox = await Hive.openBox('friendbox');
+  print("Checking");
+  return friendbox.isEmpty;
+}
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   // Initialize hive
@@ -36,12 +43,21 @@ void main() async {
   //open box(database) and friendbox
   var box = await Hive.openBox('mybox1');
   var friendbox = await Hive.openBox('friendbox');
-  // box.clear();
+  //friendbox.clear();
 
   NotificationService().initNotification();
   tz.initializeTimeZones();
 
   WidgetsFlutterBinding.ensureInitialized();
+
+  /*if(await isFriendsBoxEmpty(friendbox)==true)  {
+    print("Its empty");
+    initializeApp(friendbox);
+    
+  }*/
+
+  //try{friendbox.isEmpty;} catch(e){ print('$e');}
+  //initializeApp(friendbox); 
 
   /*final prefs = await SharedPreferences.getInstance();
   final isFirstLaunch = prefs.getBool('isFirstLaunch') ?? true;
@@ -88,9 +104,9 @@ class MyApp extends StatelessWidget {
   }
 }
 
-void initializeApp(var friendbox) {
+void initializeApp(var friendbox) async {
   print("Initializing App");
-  friendbox.add(Friend(name: 'John', last_name: 'A', is_active: true));
-  friendbox.add(Friend(name: 'Jane', last_name: 'B', is_active: true));
-  friendbox.add(Friend(name: 'Bob', last_name: 'C', is_active: true));
+  await friendbox.add(Friend(name: 'John', last_name: 'A', is_active: true));
+  await friendbox.add(Friend(name: 'Jane', last_name: 'B', is_active: true));
+  await friendbox.add(Friend(name: 'Bob', last_name: 'C', is_active: true));
 }

@@ -398,7 +398,7 @@ class _AddTaskPageState extends State<AddTaskPage> {
           title: _TaskController.text + " (Now)",
           body: _DescriptionController.text,
           scheduledNotificationDateTime:
-              DateTime.parse(' ($DueDate' + ' ' + '$DueTime)'));
+              DateTime.parse('$DueDate' + ' ' + '$DueTime'));
     }
 
     if (list_counter > 0) {
@@ -412,10 +412,10 @@ class _AddTaskPageState extends State<AddTaskPage> {
           NotificationService().scheduleNotification(
               id: i + 1,
               title: _TaskController.text +
-                  " " +
+                  " (" +
                   new_notifications_list[i].entries.first.value +
                   " " +
-                  new_notifications_list[i].entries.last.value,
+                  new_notifications_list[i].entries.last.value + ")",
               body: _DescriptionController.text,
               scheduledNotificationDateTime: DateTime.parse(
                   new_notifications_list[i].entries.first.value +
@@ -468,49 +468,57 @@ class _AddTaskPageState extends State<AddTaskPage> {
               children: [
                 SizedBox(
                   width: 200,
-                  height: 50,
+                  height: 30,
                   child: ElevatedButton(
                       child: Text("Does Not Repeat"),
+                      style: ElevatedButton.styleFrom(
+                            primary: Color(0xff8B8DB9),),
                       onPressed: () => setState(() {
                             repetitiveness = 'does not repeat';
                             Navigator.of(context).pop();
                           })),
                 ),
-                SizedBox(height: 50),
+                SizedBox(height: 20),
                 SizedBox(
                   width: 200,
-                  height: 50,
+                  height: 30,
                   child: ElevatedButton(
                       child: Text("Every Day"),
+                      style: ElevatedButton.styleFrom(
+                            primary: Color(0xff8B8DB9),),
                       onPressed: () => setState(() {
                             repetitiveness = 'every day';
                             Navigator.of(context).pop();
                           })),
                 ),
-                SizedBox(height: 50),
+                SizedBox(height: 20),
                 SizedBox(
                   width: 200,
-                  height: 50,
+                  height: 30,
                   child: ElevatedButton(
                       child: Text("Every Week"),
+                      style: ElevatedButton.styleFrom(
+                            primary: Color(0xff8B8DB9),),
                       onPressed: () => setState(() {
                             repetitiveness = 'every week';
                             Navigator.of(context).pop();
                           })),
                 ),
-                SizedBox(height: 50),
+                SizedBox(height: 20),
                 SizedBox(
                   width: 200,
-                  height: 50,
+                  height: 30,
                   child: ElevatedButton(
                       child: Text("Every Month"),
+                      style: ElevatedButton.styleFrom(
+                            primary: Color(0xff8B8DB9),),
                       onPressed: () => setState(() {
                             repetitiveness = 'every month';
                             Navigator.of(context).pop();
                           })),
                 ),
-                SizedBox(height: 50),
-                SizedBox(
+                //SizedBox(height: 50),
+                /*SizedBox(
                   width: 200,
                   height: 50,
                   child: ElevatedButton(
@@ -521,7 +529,7 @@ class _AddTaskPageState extends State<AddTaskPage> {
                       onPressed: () => setState(() {
                             Navigator.of(context).pop();
                           })),
-                ),
+                ),*/
               ],
             ),
           ])));
