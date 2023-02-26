@@ -459,7 +459,7 @@ class _AddTaskPageState extends State<AddTaskPage> {
       context: context,
       builder: (context) => AlertDialog(
           title: Text("Select task's repetitiveness"),
-          content: Column(children: [
+          content: Column(mainAxisSize: MainAxisSize.min, children: [
             Column(
               children: [
                 SizedBox(
@@ -527,7 +527,7 @@ class _AddTaskPageState extends State<AddTaskPage> {
         builder: (context) => AlertDialog(
           title: Text("Add a notification"),
           content: Container(
-            child: Column(children: [
+            child: Column(mainAxisSize: MainAxisSize.min, children: [
               Row(
                 children: [
                   ElevatedButton(
@@ -868,6 +868,7 @@ class _AddTaskPageState extends State<AddTaskPage> {
           // title: Text("Recor"),
           content: SizedBox(
               child: Column(
+            mainAxisSize: MainAxisSize.min,
             children: [
               StreamBuilder<RecordingDisposition>(
                 stream: recorder.onProgress,
