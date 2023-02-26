@@ -7,7 +7,7 @@ import 'package:flutter/services.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
-
+import 'package:permission_handler/permission_handler.dart';
 import 'components/HiveInit.dart';
 
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
@@ -35,14 +35,32 @@ void main() async {
   // await Hive.deleteBoxFromDisk('mybox');
   //open box(database) and friendbox
   var box = await Hive.openBox('mybox1');
-  var friendbox = await Hive.openBox('friendbox');
+  var friendbox = await Hive.openBox('myfriendbox');
   // box.clear();
-
+  // friendbox.clear();
   NotificationService().initNotification();
   tz.initializeTimeZones();
 
   WidgetsFlutterBinding.ensureInitialized();
 
+  if (friendbox.length == 0) {
+    var f1 = '1111';
+    var f2 = '2222';
+    Friend friend1 = Friend(
+      is_active: 'false',
+      last_name: 'Loukas',
+      name: 'Angelos',
+      friendID: f1,
+    );
+    Friend friend2 = Friend(
+      is_active: 'false',
+      last_name: 'Giannopoulos',
+      name: 'Spyros',
+      friendID: f2,
+    );
+    friendbox.put(f1, friend1);
+    friendbox.put(f2, friend2);
+  }
   /*final prefs = await SharedPreferences.getInstance();
   final isFirstLaunch = prefs.getBool('isFirstLaunch') ?? true;
   print(isFirstLaunch);
@@ -88,9 +106,9 @@ class MyApp extends StatelessWidget {
   }
 }
 
-void initializeApp(var friendbox) {
-  print("Initializing App");
-  friendbox.add(Friend(name: 'John', last_name: 'A', is_active: true));
-  friendbox.add(Friend(name: 'Jane', last_name: 'B', is_active: true));
-  friendbox.add(Friend(name: 'Bob', last_name: 'C', is_active: true));
-}
+// void initializeApp(var friendbox) {
+//   print("Initializing App");
+//   friendbox.add(Friend(name: 'John', last_name: 'A', is_active: true));
+//   friendbox.add(Friend(name: 'Jane', last_name: 'B', is_active: true));
+//   friendbox.add(Friend(name: 'Bob', last_name: 'C', is_active: true));
+// }

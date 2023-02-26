@@ -7,7 +7,8 @@ import 'HiveInit.dart';
 
 class DevButtons extends StatefulWidget {
   final Box mybox;
-  const DevButtons({required this.mybox});
+  final Box friendbox;
+  const DevButtons({required this.mybox, required this.friendbox});
 
   @override
   _DevButtonsState createState() => _DevButtonsState();
@@ -82,6 +83,37 @@ class _DevButtonsState extends State<DevButtons> {
           },
           child: Text("clear database"),
         ),
+        ElevatedButton(
+          onPressed: () {
+            setState(() {
+              var f1 = generateRandomString();
+              var f2 = generateRandomString();
+              Friend friend1 = Friend(
+                is_active: 'false',
+                last_name: 'Loukas',
+                name: 'Angelos',
+                friendID: f1,
+              );
+              Friend friend2 = Friend(
+                is_active: 'false',
+                last_name: 'Giannopoulos',
+                name: 'Spyros',
+                friendID: f2,
+              );
+              widget.friendbox.put(f1, friend1);
+              widget.friendbox.put(f2, friend2);
+            });
+          },
+          child: Text("fill friend database"),
+        ),
+        ElevatedButton(
+          onPressed: () {
+            setState(() {
+              widget.friendbox.clear();
+            });
+          },
+          child: Text("clear friend database"),
+        )
       ],
     ));
   }

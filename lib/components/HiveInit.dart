@@ -64,13 +64,15 @@ class Friend extends HiveObject {
   String last_name;
 
   @HiveField(2)
-  bool is_active;
+  String is_active;
+  @HiveField(3)
+  String friendID;
 
-  Friend({
-    required this.name,
-    required this.last_name,
-    required this.is_active
-  });
+  Friend(
+      {required this.name,
+      required this.last_name,
+      required this.is_active,
+      required this.friendID});
 }
 
 // class TaskAdapter extends TypeAdapter<Task> {

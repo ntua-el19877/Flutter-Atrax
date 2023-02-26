@@ -86,6 +86,7 @@ class _MainPageState extends State<MainPage> {
               },
             ),
             DevButtons(
+              friendbox: _myfriendsbox,
               mybox: _mybox,
             ),
 

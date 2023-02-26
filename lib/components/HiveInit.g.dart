@@ -88,18 +88,23 @@ class FriendAdapter extends TypeAdapter<Friend> {
     return Friend(
       name: fields[0] as String,
       last_name: fields[1] as String,
-      is_active : fields[2] as bool
+      is_active: fields[2] as String,
+      friendID: fields[3] as String,
     );
   }
 
   @override
   void write(BinaryWriter writer, Friend obj) {
     writer
-      ..writeByte(2)
+      ..writeByte(4)
       ..writeByte(0)
       ..write(obj.name)
       ..writeByte(1)
-      ..write(obj.last_name);
+      ..write(obj.last_name)
+      ..writeByte(2)
+      ..write(obj.is_active)
+      ..writeByte(3)
+      ..write(obj.friendID);
   }
 
   @override

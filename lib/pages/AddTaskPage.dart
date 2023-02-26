@@ -398,7 +398,7 @@ class _AddTaskPageState extends State<AddTaskPage> {
           title: _TaskController.text + " (Now)",
           body: _DescriptionController.text,
           scheduledNotificationDateTime:
-              DateTime.parse(' ($DueDate' + ' ' + '$DueTime)'));
+              DateTime.parse('$DueDate' + ' ' + '$DueTime'));
     }
 
     if (list_counter > 0) {
