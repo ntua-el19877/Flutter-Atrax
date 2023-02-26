@@ -109,24 +109,17 @@ class _MainPageState extends State<MainPage> {
                       ),
 
                       ColumnTaskMessages(
-                          mybox: _mybox,
-                          color_Secondary: color_Secondary,
-                          color_Green: color_Green,
-                          screenWidth: screenWidth,
-                          TaskLeftPadding: TaskLeftPadding,
-                          currentIndex: currentIndex)
+                        mybox: _mybox,
+                        color_Secondary: color_Secondary,
+                        color_Green: color_Green,
+                        screenWidth: screenWidth,
+                        TaskLeftPadding: TaskLeftPadding,
+                        currentIndex: currentIndex,
+                        maxHeight: 200,
+                      )
                       // ),
                     ],
-                  )
-
-                      // ColumnTaskMessages(
-                      // color_Secondary: color_Secondary,
-                      // mybox: _mybox,
-                      // color_Green: color_Green,
-                      // screenWidth: screenWidth,
-                      // TaskLeftPadding: TaskLeftPadding,
-                      // currentIndex: currentIndex,)
-                      );
+                  ));
                 })
           ],
         ));

@@ -5,6 +5,7 @@ import 'package:hive/hive.dart';
 import 'TaskMessage.dart';
 
 class ColumnTaskMessages extends StatefulWidget {
+  final double maxHeight;
   final Box mybox;
   final Color color_Secondary;
   final Color color_Green;
@@ -18,6 +19,7 @@ class ColumnTaskMessages extends StatefulWidget {
     required this.screenWidth,
     required this.TaskLeftPadding,
     required this.currentIndex,
+    required this.maxHeight,
   });
 
   @override
@@ -52,7 +54,6 @@ class _ColumnTaskMessagesState extends State<ColumnTaskMessages> {
         RemoveWidth: 2 * widget.TaskLeftPadding,
         onTap: (int index1) {
           setState(() {
-            print("yes");
             widget.currentIndex = index1;
           });
         },
@@ -70,7 +71,15 @@ class _ColumnTaskMessagesState extends State<ColumnTaskMessages> {
       return a.time.compareTo(b.time);
     });
 
-    return Column(
+    return
+        // SingleChildScrollView(
+        // physics: const AlwaysScrollableScrollPhysics(),
+        // child: ConstrainedBox(
+        // constraints: BoxConstraints(
+        // maxHeight: widget.maxHeight,
+        // ),
+        // child:
+        Column(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         const SizedBox(height: 20),
@@ -79,6 +88,8 @@ class _ColumnTaskMessagesState extends State<ColumnTaskMessages> {
               child: taskMessage,
             )),
       ],
+      //     ),
+      //   ),
     );
   }
 
@@ -97,9 +108,4 @@ class _ColumnTaskMessagesState extends State<ColumnTaskMessages> {
       // values.sort((a, b) => a.date.compareTo(b.date));
     }
   }
-
-  // void getInfo(int taskNumber) {
-  //   Box box = widget.mybox.getAt(taskNumber);
-
-  // }
 }
