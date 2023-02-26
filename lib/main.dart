@@ -14,6 +14,8 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'services/notifi_service.dart';
 import 'package:timezone/data/latest.dart' as tz;
 
+import 'package:shared_preferences/shared_preferences.dart';
+
 final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
     FlutterLocalNotificationsPlugin();
 
@@ -38,6 +40,26 @@ void main() async {
 
   NotificationService().initNotification();
   tz.initializeTimeZones();
+
+  WidgetsFlutterBinding.ensureInitialized();
+
+  /*final prefs = await SharedPreferences.getInstance();
+  final isFirstLaunch = prefs.getBool('isFirstLaunch') ?? true;
+  print(isFirstLaunch);
+  if (isFirstLaunch) {
+    await {
+      print("Initializing App"),
+     /*friendbox.add(Friend(name: 'John', last_name: 'A', is_active: true)),
+      friendbox.add(Friend(name: 'Jane', last_name: 'B', is_active: true)),
+      friendbox.add(Friend(name: 'Bob', last_name: 'C', is_active: true)),*/
+      prefs.setBool('isFirstLaunch', false),
+      print(isFirstLaunch),
+    };
+
+    // Set isFirstLaunch to false so the code doesn't run again
+    //await prefs.setBool('isFirstLaunch', false);
+  }
+  */
 
   SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual,
       overlays: [SystemUiOverlay.top]);
@@ -66,4 +88,9 @@ class MyApp extends StatelessWidget {
   }
 }
 
-void scheduleNotification() {}
+void initializeApp(var friendbox) {
+  print("Initializing App");
+  friendbox.add(Friend(name: 'John', last_name: 'A', is_active: true));
+  friendbox.add(Friend(name: 'Jane', last_name: 'B', is_active: true));
+  friendbox.add(Friend(name: 'Bob', last_name: 'C', is_active: true));
+}

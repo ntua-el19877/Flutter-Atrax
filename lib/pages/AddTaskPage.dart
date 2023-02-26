@@ -380,14 +380,45 @@ class _AddTaskPageState extends State<AddTaskPage> {
       //print(time.toString());
       //DateTime dateTime = DateTime(day.year, day.month, day.day, time.hour, time.minute, time.second);
 
+      //DateTime day = DateTime.parse(DueDate);
+      //print("day :" +'$day');
+      //DateTime time = DateTime.parse(DueTime+':00');
+      //print(time.toString());
+      //DateTime dateTime = DateTime(day.year, day.month, day.day, time.hour, time.minute, time.second);
+
       //var passed_time = DateTime.parse('$DueDate $DueTime');
       //print("Passed time : " + passed_time.toString());
       NotificationService().scheduleNotification(
-          title: _TaskController.text + '  (Now)',
+          title:
+              _TaskController.text + " " + DueDate + " " + DueTime + " (Now)",
           body: _DescriptionController.text,
           scheduledNotificationDateTime:
               DateTime.parse('$DueDate' + ' ' + '$DueTime'));
     }
+
+    if (list_counter > 0) {
+      for (int i = 0; i < list_counter; i++) {
+        print("Notification date : " +
+            new_notifications_list[i].entries.first.value +
+            " Notification time :" +
+            new_notifications_list[i].entries.last.value);
+        if (new_notifications_list[i].entries.last.value != '' &&
+            new_notifications_list[i].entries.first.value != '') {
+          NotificationService().scheduleNotification(
+              title: _TaskController.text +
+                  " " +
+                  new_notifications_list[i].entries.first.value +
+                  " " +
+                  new_notifications_list[i].entries.last.value,
+              body: _DescriptionController.text,
+              scheduledNotificationDateTime: DateTime.parse(
+                  new_notifications_list[i].entries.first.value +
+                      ' ' +
+                      new_notifications_list[i].entries.last.value));
+        }
+      }
+    }
+
     Navigator.of(context).pop();
   }
 

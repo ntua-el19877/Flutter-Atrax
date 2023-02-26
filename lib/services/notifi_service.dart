@@ -44,10 +44,9 @@ class NotificationService {
       String? body,
       String? payLoad,
       required DateTime scheduledNotificationDateTime}) async {
-    print("Scheduled notification with the date and time " +
-        scheduledNotificationDateTime.toString());
-    print(title);
-    print(body);
+    // print("Scheduled notification with the date and time " + scheduledNotificationDateTime.toString());
+    // print(title);
+    // print(body);
     return notificationsPlugin.zonedSchedule(
         id,
         title,

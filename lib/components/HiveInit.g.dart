@@ -88,6 +88,7 @@ class FriendAdapter extends TypeAdapter<Friend> {
     return Friend(
       name: fields[0] as String,
       last_name: fields[1] as String,
+      is_active : fields[2] as bool
     );
   }
 
