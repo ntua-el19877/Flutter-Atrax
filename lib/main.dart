@@ -19,6 +19,13 @@ import 'package:shared_preferences/shared_preferences.dart';
 final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
     FlutterLocalNotificationsPlugin();
 
+Future isFriendsBoxEmpty(Box friendbox) async {
+  print("Checking");
+  //var friendBox = await Hive.openBox('friendbox');
+  print("Checking");
+  return friendbox.isEmpty;
+}
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   // Initialize hive
