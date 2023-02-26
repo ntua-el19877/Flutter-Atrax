@@ -30,13 +30,14 @@ class TaskAdapter extends TypeAdapter<Task> {
       recordingFilePath: fields[8] as String,
       photoFilePath: fields[9] as String,
       friendName: (fields[10] as List).cast<String>(),
+      completed: fields[11] as String,
     );
   }
 
   @override
   void write(BinaryWriter writer, Task obj) {
     writer
-      ..writeByte(11)
+      ..writeByte(12)
       ..writeByte(0)
       ..write(obj.name)
       ..writeByte(1)
@@ -58,7 +59,9 @@ class TaskAdapter extends TypeAdapter<Task> {
       ..writeByte(9)
       ..write(obj.photoFilePath)
       ..writeByte(10)
-      ..write(obj.friendName);
+      ..write(obj.friendName)
+      ..writeByte(11)
+      ..write(obj.completed);
   }
 
   @override

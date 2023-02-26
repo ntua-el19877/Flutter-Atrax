@@ -48,6 +48,8 @@ dependencies:
   camera: ^0.8.1
   flutter_local_notifications: ^13.0.0
   flutter_sound: ^9.2.13
+  provider: ^6.0.5
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

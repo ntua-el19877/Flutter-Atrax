@@ -31,6 +31,7 @@ class _ColumnTaskMessagesState extends State<ColumnTaskMessages> {
     List<TaskMessage> taskMessages = List.generate(
       widget.mybox.length,
       (index) => TaskMessage(
+        completed: widget.mybox.getAt(index).completed,
         mybox: widget.mybox,
         index: index,
         color_Green: color_Green,
@@ -83,7 +84,12 @@ class _ColumnTaskMessagesState extends State<ColumnTaskMessages> {
   @override
   void didUpdateWidget(ColumnTaskMessages oldWidget) {
     super.didUpdateWidget(oldWidget);
-
+    // for (int i = 0; i < widget.mybox.length; i++) {
+    //   if (oldWidget.mybox.getAt(i).completed !=
+    //       widget.mybox.getAt(i).completed) {
+    //     setState(() {});
+    //   }
+    // }
     if (widget.mybox.length != oldWidget.mybox.length) {
       setState(() {});
       // List values = widget.mybox.values.toList();

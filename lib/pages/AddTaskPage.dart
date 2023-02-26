@@ -346,6 +346,7 @@ class _AddTaskPageState extends State<AddTaskPage> {
       recordingFilePath: audioFile,
       photoFilePath: imageDestination,
       friendName: ['John', 'Jane'],
+      completed: 'false',
     );
 
     // final _mytask = _mybox.get('mytask');

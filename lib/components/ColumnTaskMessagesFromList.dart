@@ -57,6 +57,7 @@ class _ColumnTaskMessagesFromListState
                 }
               },
               child: TaskMessage(
+                completed: widget.myboxList[index].completed,
                 mybox: widget.mybox,
                 index: index,
                 color_Green: widget.color_Green,

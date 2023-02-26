@@ -7,7 +7,9 @@ import 'package:atrax/routes/routes.dart';
 // import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
+import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
+import '../services/color_state.dart';
 import 'TaskInfo.dart';
 import 'package:maps_launcher/maps_launcher.dart';
 
@@ -35,7 +37,8 @@ class TaskMessage extends StatefulWidget {
   final Color color_Blacks;
   final Color color_Red;
   final Color color_Green;
-
+  final Color color_Success;
+  final String completed;
   final String name;
   final String description;
   final String date;
@@ -56,12 +59,14 @@ class TaskMessage extends StatefulWidget {
   TaskMessage({
     required this.mybox,
     this.index = 0,
+    required this.completed,
     this.screen_width = 200,
     this.RemoveWidth = 0,
     this.color_Secondary = const Color(0xff929ae7),
     this.color_Primary = const Color(0xffe6f4f1),
     this.color_Blacks = const Color(0xff252525),
     this.color_Red = const Color(0xffae4e54),
+    this.color_Success = const Color(0xff06661b),
     required this.color_Green,
     required this.name,
     required this.description,
@@ -91,9 +96,11 @@ class _TaskMessageState extends State<TaskMessage> {
   bool isPlaying = false;
   Duration duration = Duration.zero;
   Duration position = Duration.zero;
+
   @override
   void didUpdateWidget(TaskMessage oldWidget) {
-    if (oldWidget.color_Secondary != widget.color_Secondary) {
+    if ((oldWidget.color_Secondary != widget.color_Secondary) ||
+        (oldWidget.completed != widget.mybox.getAt(widget.index).completed)) {
       // color_secondary has changed, rebuild the widget
       // print("i want to update");
       setState(() {});
@@ -124,10 +131,16 @@ class _TaskMessageState extends State<TaskMessage> {
   //   audioPlayer.dispose();
   //   super.dispose();
   // }
+  late ColorModel colorModel;
   Color _color_TaskMessage = Colors.red;
   @override
   void initState() {
-    _color_TaskMessage = widget.color_Secondary;
+    if (widget.completed == 'true') {
+      _color_TaskMessage = widget.color_Green;
+    } else {
+      _color_TaskMessage = widget.color_Secondary;
+    }
+    colorModel = ColorModel();
     super.initState();
     // audioPlayer.onPlayerStateChanged.listen((state) {
     //   setState(() {
@@ -151,148 +164,161 @@ class _TaskMessageState extends State<TaskMessage> {
     check();
     double iconHeight = 22;
     double iconRoomHeight = 15;
-    return GestureDetector(
-      behavior: HitTestBehavior.translucent,
-      onPanUpdate: (details) {
-        // double Distance = 0;
-        // int sensitivity = 8;
-        // if (details.delta.dx > sensitivity) {
-        //   Distance += details.delta.dx;
-        // }
+    return Consumer<ColorModel>(
+      builder: (context, colorModel, child) {
+        return GestureDetector(
+          behavior: HitTestBehavior.translucent,
+          onPanUpdate: (details) {
+            // double Distance = 0;
+            // int sensitivity = 8;
+            // if (details.delta.dx > sensitivity) {
+            //   Distance += details.delta.dx;
+            // }
 
-        // // Swiping in left direction.
-        // if (details.delta.dx < -sensitivity) {
-        //   Distance += details.delta.dx;
-        // }
-        // if (Distance > 100) {
-        //   setState(() {
-        //     _color_TaskMessage = widget.color_Green;
-        //     // print("$_color_TaskMessage");
-        //   });
-        // }
-        // if (Distance < -100) {
-        //   setState(() {
-        //     _color_TaskMessage = widget.color_Secondary;
-        //     // print("$_color_TaskMessage");
-        //   });
-        // }
+            // // Swiping in left direction.
+            // if (details.delta.dx < -sensitivity) {
+            //   Distance += details.delta.dx;
+            // }
+            // if (Distance > 100) {
+            //   setState(() {
+            //     _color_TaskMessage = widget.color_Green;
+            //     // print("$_color_TaskMessage");
+            //   });
+            // }
+            // if (Distance < -100) {
+            //   setState(() {
+            //     _color_TaskMessage = widget.color_Secondary;
+            //     // print("$_color_TaskMessage");
+            //   });
+            // }
 
-        // print(details.delta.dx);
-        int sensitivity = 8;
-        // Swiping in right direction.
-        if (details.delta.dx > sensitivity) {
-          setState(() {
-            _color_TaskMessage = widget.color_Green;
-            // print("$_color_TaskMessage");
-          });
-        }
+            // print(details.delta.dx);
+            int sensitivity = 8;
+            // Swiping in right direction.
+            if (details.delta.dx > sensitivity) {
+              setState(() {
+                _color_TaskMessage = widget.color_Green;
+                widget.mybox.getAt(widget.index).completed = 'true';
+                colorModel.setColor(_color_TaskMessage);
+                // print("$_color_TaskMessage");
+              });
+            }
 
-        // Swiping in left direction.
-        if (details.delta.dx < -sensitivity) {
-          setState(() {
-            _color_TaskMessage = widget.color_Secondary;
-            // print("$_color_TaskMessage");
-          });
-        }
-      },
-      onTap: () {
-        openTaskWindow();
-        // pauseAudio();
-      },
-      child: Container(
-        width: MediaQuery.of(context).size.width - widget.RemoveWidth,
-        height: 60,
-        decoration: BoxDecoration(
-          color: _color_TaskMessage,
-          borderRadius: BorderRadius.circular(10),
-        ),
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.end,
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: <Widget>[
-              Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.only(right: 5, top: 0),
-                    child: Icon(
-                      Icons.check_box_outline_blank,
-                      color: widget.color_Blacks,
-                      size: 20,
-                    ),
-                  ),
-                  Padding(
-                      padding: const EdgeInsets.only(right: 5),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const SizedBox(
-                            height: 8,
-                          ),
-                          Text(
-                            widget.name,
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                            style: TextStyle(
-                              color: widget.color_Blacks,
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          Row(
+            // Swiping in left direction.
+            if (details.delta.dx < -sensitivity) {
+              setState(() {
+                _color_TaskMessage = widget.color_Secondary;
+
+                widget.mybox.getAt(widget.index).completed = 'false';
+                colorModel.setColor(_color_TaskMessage);
+                // print("$_color_TaskMessage");
+              });
+            }
+          },
+          onTap: () {
+            openTaskWindow();
+            // pauseAudio();
+          },
+          child: Container(
+            width: MediaQuery.of(context).size.width - widget.RemoveWidth,
+            height: 60,
+            decoration: BoxDecoration(
+              color: colorModel.color,
+              borderRadius: BorderRadius.circular(10),
+            ),
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.end,
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: <Widget>[
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(right: 5, top: 0),
+                        child: Icon(
+                          Icons.check_box_outline_blank,
+                          color: widget.color_Blacks,
+                          size: 20,
+                        ),
+                      ),
+                      Padding(
+                          padding: const EdgeInsets.only(right: 5),
+                          child: Column(
                             mainAxisAlignment: MainAxisAlignment.center,
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              SizedBox(
-                                width: MediaQuery.of(context).size.width / 5,
-                                child: Text(
-                                  "${widget.time} ",
-                                  style: TextStyle(
-                                    color: widget.color_Blacks,
-                                    fontSize: 13,
-                                    fontWeight: FontWeight.bold,
-                                  ),
+                              const SizedBox(
+                                height: 8,
+                              ),
+                              Text(
+                                widget.name,
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                                style: TextStyle(
+                                  color: widget.color_Blacks,
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.bold,
                                 ),
                               ),
-                              Padding(
-                                padding: const EdgeInsets.only(right: 0),
-                                child: Row(
-                                  // mainAxisAlignment: MainAxisAlignment.end,
-                                  // crossAxisAlignment: CrossAxisAlignment.end,
-                                  children: [
-                                    SizedBox(height: iconRoomHeight, width: 10),
-                                    SizedBox(
-                                      height: iconRoomHeight,
-                                      width:
-                                          MediaQuery.of(context).size.width / 4,
-                                      child: Text(
-                                        widget.date,
-                                        style: TextStyle(
-                                          color: widget.color_Blacks,
-                                          fontSize: 13,
-                                          fontWeight: FontWeight.bold,
-                                        ),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  SizedBox(
+                                    width:
+                                        MediaQuery.of(context).size.width / 5,
+                                    child: Text(
+                                      "${widget.time} ",
+                                      style: TextStyle(
+                                        color: widget.color_Blacks,
+                                        fontSize: 13,
+                                        fontWeight: FontWeight.bold,
                                       ),
                                     ),
-                                    IconRow(
-                                      emptyFields: emptyFields,
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.only(right: 0),
+                                    child: Row(
+                                      // mainAxisAlignment: MainAxisAlignment.end,
+                                      // crossAxisAlignment: CrossAxisAlignment.end,
+                                      children: [
+                                        SizedBox(
+                                            height: iconRoomHeight, width: 10),
+                                        SizedBox(
+                                          height: iconRoomHeight,
+                                          width: MediaQuery.of(context)
+                                                  .size
+                                                  .width /
+                                              4,
+                                          child: Text(
+                                            widget.date,
+                                            style: TextStyle(
+                                              color: widget.color_Blacks,
+                                              fontSize: 13,
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          ),
+                                        ),
+                                        IconRow(
+                                          emptyFields: emptyFields,
+                                        ),
+                                      ],
                                     ),
-                                  ],
-                                ),
-                              ),
+                                  ),
+                                ],
+                              )
                             ],
-                          )
-                        ],
-                      ))
+                          ))
+                    ],
+                  )
                 ],
-              )
-            ],
+              ),
+            ),
           ),
-        ),
-      ),
+        );
+      },
     );
   }
 
@@ -325,13 +351,43 @@ class _TaskMessageState extends State<TaskMessage> {
   Future openTaskWindow() => showDialog(
       context: context,
       builder: (context) => AlertDialog(
-            title: Text(
-              widget.name,
-              style: TextStyle(
-                color: widget.color_Blacks,
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
-              ),
+            title: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  widget.name,
+                  style: TextStyle(
+                    color: widget.color_Blacks,
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                // RawMaterialButton(
+                //   onPressed: () => Navigator.of(context).pop(),
+                //   elevation: 2.0,
+                //   fillColor: Colors.white,
+                //   child: Icon(
+                //     Icons.close,
+                //     size: 15.0,
+                //   ),
+                //   padding: EdgeInsets.only(right: 0),
+                //   shape: CircleBorder(),
+                // ),
+                // ElevatedButton(
+                //   onPressed: () {},
+                //   child: Icon(Icons.menu, color: Colors.white),
+                //   style: ElevatedButton.styleFrom(
+                //     shape: CircleBorder(),
+                //     padding: EdgeInsets.all(20),
+                //     backgroundColor: Colors.blue, // <-- Button color
+                //     foregroundColor: Colors.red, // <-- Splash color
+                //   ),
+                // )
+                IconButton(
+                  icon: Icon(Icons.close),
+                  onPressed: () => Navigator.of(context).pop(),
+                ),
+              ],
             ),
             content: SingleChildScrollView(
               physics: const AlwaysScrollableScrollPhysics(),
@@ -354,7 +410,9 @@ class _TaskMessageState extends State<TaskMessage> {
                           ),
                         ),
                       Container(
-                        padding: const EdgeInsets.only(bottom: 10, top: 10),
+                        padding: EdgeInsets.only(
+                            bottom: _paddingIfFIelds67(),
+                            top: _paddingIfFIelds67()),
                         child: Row(
                           crossAxisAlignment: CrossAxisAlignment.center,
                           mainAxisAlignment: MainAxisAlignment
@@ -386,13 +444,15 @@ class _TaskMessageState extends State<TaskMessage> {
                         ),
                       ),
                       Container(
-                        padding: const EdgeInsets.only(bottom: 10, top: 10),
+                        padding: EdgeInsets.only(
+                            bottom: _paddingIfFIelds18(),
+                            top: _paddingIfFIelds18()),
                         child: Row(
                           crossAxisAlignment: CrossAxisAlignment.center,
                           mainAxisAlignment: MainAxisAlignment
                               .center, // Set to CrossAxisAlignment.start
                           children: [
-                            if (emptyFields[6])
+                            if (emptyFields[1])
                               Flexible(
                                 // Wrap the child widget with a Flexible widget
                                 child: Container(
@@ -404,7 +464,7 @@ class _TaskMessageState extends State<TaskMessage> {
                                       title: "Repeat"),
                                 ),
                               ),
-                            if (emptyFields[7])
+                            if (emptyFields[8])
                               Flexible(
                                   // Wrap the child widget with a Flexible widget
                                   child: Container(
@@ -451,17 +511,84 @@ class _TaskMessageState extends State<TaskMessage> {
                           ),
                         ),
                       if (emptyFields[5])
-                        Container(
-                          child: Image.file(
-                            widget.photo_file_path as File,
-                            width: MediaQuery.of(context).size.width / 2,
+                        Padding(
+                          padding: EdgeInsets.only(top: 10, bottom: 10),
+                          child: Container(
+                            child: Image.file(
+                              File(widget.photo_file_path),
+                              width: MediaQuery.of(context).size.width / 2,
+                            ),
                           ),
                         ),
-                      ElevatedButton(
-                          onPressed: () {
-                            widget.mybox.deleteAt(widget.index);
-                          },
-                          child: const Text("Delete"))
+                      Padding(
+                        padding: EdgeInsets.only(top: 10),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Padding(
+                              padding: EdgeInsets.only(right: 10),
+                              child: ElevatedButton(
+                                onPressed: () {
+                                  // do something
+                                },
+                                style: ButtonStyle(
+                                  backgroundColor:
+                                      MaterialStateProperty.resolveWith<Color>(
+                                    (states) => widget.color_Success,
+                                  ),
+                                  shape: MaterialStateProperty.all<
+                                      RoundedRectangleBorder>(
+                                    RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(10.0),
+                                    ),
+                                  ),
+                                  minimumSize: MaterialStateProperty.all<Size>(
+                                    Size(120, 50),
+                                  ),
+                                ),
+                                child: Text(
+                                  "Modify",
+                                  style: TextStyle(
+                                    color: widget.color_Primary,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ),
+                            ),
+                            Padding(
+                              padding: EdgeInsets.only(left: 10),
+                              child: ElevatedButton(
+                                onPressed: () {
+                                  widget.mybox.deleteAt(widget.index);
+                                  Navigator.of(context).pop();
+                                },
+                                style: ButtonStyle(
+                                  backgroundColor:
+                                      MaterialStateProperty.resolveWith<Color>(
+                                    (states) => widget.color_Red,
+                                  ),
+                                  shape: MaterialStateProperty.resolveWith<
+                                      OutlinedBorder>(
+                                    (states) => RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(10),
+                                    ),
+                                  ),
+                                  minimumSize: MaterialStateProperty.all<Size>(
+                                    Size(120, 50),
+                                  ),
+                                ),
+                                child: Text(
+                                  "Delete",
+                                  style: TextStyle(
+                                    color: widget.color_Primary,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
 
                       // if (emptyFields[4])
                       // GestureDetector(
@@ -540,4 +667,17 @@ class _TaskMessageState extends State<TaskMessage> {
               ),
             ),
           ));
+  double _paddingIfFIelds67() {
+    if (emptyFields[6] || emptyFields[7]) {
+      return 10;
+    }
+    return 0;
+  }
+
+  double _paddingIfFIelds18() {
+    if (emptyFields[1] || emptyFields[8]) {
+      return 10;
+    }
+    return 0;
+  }
 }

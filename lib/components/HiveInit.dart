@@ -36,6 +36,9 @@ class Task extends HiveObject {
   @HiveField(10)
   List<String> friendName;
 
+  @HiveField(11)
+  String completed;
+
   Task({
     required this.name,
     required this.description,
@@ -48,6 +51,7 @@ class Task extends HiveObject {
     required this.recordingFilePath,
     required this.photoFilePath,
     required this.friendName,
+    required this.completed,
   });
 }
 

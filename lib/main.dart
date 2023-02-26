@@ -1,10 +1,12 @@
 // import 'dart:io';
 
+import 'package:atrax/services/color_state.dart';
 import 'package:flutter/material.dart';
 import 'package:atrax/routes/routes.dart';
 import 'package:flutter/services.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:provider/provider.dart';
 
 import 'components/HiveInit.dart';
 
@@ -30,16 +32,18 @@ void main() async {
   Hive.registerAdapter(FriendAdapter());
   // await Hive.deleteBoxFromDisk('mybox');
   //open box(database) and friendbox
-  var box = await Hive.openBox('mybox');
+  var box = await Hive.openBox('mybox1');
   var friendbox = await Hive.openBox('friendbox');
-  // box.clear();
+  box.clear();
 
   NotificationService().initNotification();
   tz.initializeTimeZones();
 
   SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual,
       overlays: [SystemUiOverlay.top]);
-  runApp(MyApp(box: box, friendbox: friendbox));
+  runApp(MultiProvider(providers: [
+    ChangeNotifierProvider(create: (_) => ColorModel()),
+  ], child: MyApp(box: box, friendbox: friendbox)));
 }
 
 class MyApp extends StatelessWidget {
