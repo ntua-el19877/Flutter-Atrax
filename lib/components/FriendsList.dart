@@ -29,6 +29,9 @@ class _FriendListState extends State<FriendList> {
             last_name: widget.friendbox.getAt(index).last_name,
             name: widget.friendbox.getAt(index).name));
 // Sort the taskMessages list based on date and time
+    // Remove inactive FriendMessages from the list
+    friendList =
+        friendList.where((friend) => friend.is_active == 'true').toList();
     friendList.sort((a, b) {
       // Compare the dates first
       int nameComparison = a.name.compareTo(b.name);

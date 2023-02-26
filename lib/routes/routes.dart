@@ -7,6 +7,7 @@ import '../pages/ThirdPage.dart';
 import '../pages/CalendarPage.dart';
 import '../pages/AddTaskPage.dart';
 import '../pages/FriendsPage.dart';
+import '../pages/modifyTaskPage.dart';
 
 class RouteManager {
   static const String mainpage = '/';
@@ -15,6 +16,8 @@ class RouteManager {
   static const String calendarpage = '/calendarpage';
   static const String addtaskpage = '/addtaskpage';
   static const String friendspage = '/friendspage';
+
+  static const String modifytaskpage = '/modifyTaskPage';
 
   static Route<dynamic> generateRoute(RouteSettings settings,
       {required Box box, required Box friendbox}) {
@@ -30,13 +33,17 @@ class RouteManager {
 
       case calendarpage:
         return MaterialPageRoute(builder: (context) => CalendarPage(box: box));
+      // case modifytaskpage:
+      //   return MaterialPageRoute(
+      //       builder: (context) => modifyTaskPage(box: box));
 
       case addtaskpage:
         return MaterialPageRoute(
             builder: (context) => AddTaskPage(box: box, friendbox: friendbox));
 
       case friendspage:
-        return MaterialPageRoute(builder: (context) => FriendsPage(friendbox: friendbox));
+        return MaterialPageRoute(
+            builder: (context) => FriendsPage(friendbox: friendbox));
 
       default:
         throw const FormatException('Route not found');

@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:atrax/components/CustomRectangle.dart';
 import 'package:atrax/components/IconRow.dart';
 import 'package:atrax/components/plus_Button.dart';
+import 'package:atrax/pages/modifyTaskPage.dart';
 import 'package:atrax/routes/routes.dart';
 // import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
@@ -98,6 +99,7 @@ class _TaskMessageState extends State<TaskMessage> {
   bool isPlaying = false;
   Duration duration = Duration.zero;
   Duration position = Duration.zero;
+  IconData checkIcon = Icons.check_box_outline_blank;
   @override
   void didUpdateWidget(TaskMessage oldWidget) {
     if ((oldWidget.color_Secondary != widget.color_Secondary) ||
@@ -143,6 +145,9 @@ class _TaskMessageState extends State<TaskMessage> {
     }
     colorModel = ColorModel();
     colorModel.setColor(_color_TaskMessage, widget.boxkey);
+    if (widget.mybox.get(widget.boxkey).completed == 'true') {
+      checkIcon = Icons.check_box_rounded;
+    }
     super.initState();
     // audioPlayer.onPlayerStateChanged.listen((state) {
     //   setState(() {
@@ -201,6 +206,8 @@ class _TaskMessageState extends State<TaskMessage> {
               setState(() {
                 _color_TaskMessage = widget.color_Green;
                 widget.mybox.getAt(widget.index).completed = 'true';
+                checkIcon = Icons.check_box_rounded;
+
                 colorModel.setColor(_color_TaskMessage, widget.boxkey);
                 // print("$_color_TaskMessage");
               });
@@ -210,7 +217,7 @@ class _TaskMessageState extends State<TaskMessage> {
             if (details.delta.dx < -sensitivity) {
               setState(() {
                 _color_TaskMessage = widget.color_Secondary;
-
+                checkIcon = Icons.check_box_outline_blank;
                 widget.mybox.getAt(widget.index).completed = 'false';
                 colorModel.setColor(_color_TaskMessage, widget.boxkey);
                 // print("$_color_TaskMessage");
@@ -240,7 +247,7 @@ class _TaskMessageState extends State<TaskMessage> {
                       Padding(
                         padding: const EdgeInsets.only(right: 5, top: 0),
                         child: Icon(
-                          Icons.check_box_outline_blank,
+                          checkIcon,
                           color: widget.color_Blacks,
                           size: 20,
                         ),
@@ -531,7 +538,19 @@ class _TaskMessageState extends State<TaskMessage> {
                               padding: EdgeInsets.only(right: 10),
                               child: ElevatedButton(
                                 onPressed: () {
-                                  // do something
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => modifyTaskPage(
+                                        box: widget.mybox,
+                                        emptyFields: emptyFields,
+                                        boxkey: widget.boxkey,
+                                      ),
+                                    ),
+                                  ).then((value) {
+                                    Navigator.pop(context);
+                                  });
+                                  setState(() {});
                                 },
                                 style: ButtonStyle(
                                   backgroundColor:

@@ -54,13 +54,13 @@ void main() async {
     var f1 = '1111';
     var f2 = '2222';
     Friend friend1 = Friend(
-      is_active: 'false',
+      is_active: 'true',
       last_name: 'Loukas',
       name: 'Angelos',
       friendID: f1,
     );
     Friend friend2 = Friend(
-      is_active: 'false',
+      is_active: 'true',
       last_name: 'Giannopoulos',
       name: 'Spyros',
       friendID: f2,

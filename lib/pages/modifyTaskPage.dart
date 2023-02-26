@@ -69,20 +69,30 @@ class Notification {
       };
 }
 
-class AddTaskPage extends StatefulWidget {
-  final Box box;
-  final Box friendbox;
+//---------------------------------------------------------
 
-  const AddTaskPage({Key? key, required this.box, required this.friendbox})
+class modifyTaskPage extends StatefulWidget {
+  final Box box;
+  final List<bool> emptyFields;
+  final String boxkey;
+
+  const modifyTaskPage(
+      {Key? key,
+      required this.box,
+      required this.emptyFields,
+      required this.boxkey
+      // , required this.friendbox
+      })
       : super(key: key);
   @override
-  _AddTaskPageState createState() => _AddTaskPageState();
+  _modifyTaskPageState createState() => _modifyTaskPageState();
 }
 
-class _AddTaskPageState extends State<AddTaskPage> {
+class _modifyTaskPageState extends State<modifyTaskPage> {
   @override
   void initState() {
     super.initState();
+    _insertLastFiles();
     initRecorder();
   }
 
@@ -111,6 +121,7 @@ class _AddTaskPageState extends State<AddTaskPage> {
   var long = '';
 
   String imageDestination = '';
+  String mylocation = '';
 
   TimeOfDay notification_time = TimeOfDay(hour: 8, minute: 00);
   DateTime notification_date = DateUtils.dateOnly(DateTime.now());
@@ -123,7 +134,7 @@ class _AddTaskPageState extends State<AddTaskPage> {
       List.generate(10, (i) => Notification('', ''), growable: true);
   var jsonNotifications;
   List<Map<String, String>> new_notifications_list = [];
-  String mylocation = '';
+
   String task = ''; /*  user task   */
   String description = ''; /*  user description   */
 
@@ -151,29 +162,16 @@ class _AddTaskPageState extends State<AddTaskPage> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   const Text(
-                    'Task Name : ',
+                    'Task name : ',
                     style: TextStyle(fontSize: 21),
                   ),
-                  SizedBox(
-                      width: double.infinity,
-                      height: 50,
-                      child: Align(
-                          alignment: Alignment.center,
-                          child: TextField(
-                              controller: _TaskController,
-                              decoration: const InputDecoration(
-                                border: OutlineInputBorder(
-                                    borderRadius:
-                                        BorderRadius.all(Radius.circular(5)),
-                                    borderSide: BorderSide(width: 2)),
-                                filled: true,
-                                fillColor: Colors.white,
-                                contentPadding: EdgeInsets.all(20),
-                                isDense: true,
-                                hintText: 'Enter a Name',
-                                hintStyle: TextStyle(fontSize: 18),
-                                alignLabelWithHint: true,
-                              )))),
+                  TextField(
+                      controller: _TaskController,
+                      decoration: const InputDecoration(
+                        border: OutlineInputBorder(),
+                        filled: true,
+                        fillColor: Colors.white,
+                      )),
                   const Text(
                     'Description : ',
                     style: TextStyle(fontSize: 21),
@@ -194,7 +192,7 @@ class _AddTaskPageState extends State<AddTaskPage> {
                                 fillColor: Colors.white,
                                 contentPadding: EdgeInsets.all(20),
                                 isDense: true,
-                                hintText: 'Enter a Description',
+                                hintText: 'Enter a description',
                                 hintStyle: TextStyle(fontSize: 18),
                                 alignLabelWithHint: true,
                               )))),
@@ -254,6 +252,7 @@ class _AddTaskPageState extends State<AddTaskPage> {
                               lat = '${value.latitude}';
                               long = '${value.longitude}';
                               mylocation = lat + ',' + long;
+
                               MapUtils.openMap(lat, long);
                             });
                           }),
@@ -299,7 +298,7 @@ class _AddTaskPageState extends State<AddTaskPage> {
                     onPressed: () {
                       Navigator.pop(context);
                     },
-                    child: Text("Close Second Page"),
+                    child: Text("Cancel"),
                   )
                 ],
               ),
@@ -352,6 +351,7 @@ class _AddTaskPageState extends State<AddTaskPage> {
     //   jsonNotifications = jsonEncode(new_Notifications_List); //TYPE JSON MAP //
     //   debugPrint(jsonNotifications);
     // });
+
     HiveInit.Task task2 = HiveInit.Task(
       name: _TaskController.text,
       description: _DescriptionController.text,
@@ -369,7 +369,7 @@ class _AddTaskPageState extends State<AddTaskPage> {
     );
 
     // final _mytask = _mybox.get('mytask');
-    widget.box.put(generateRandomString(), task2);
+    widget.box.put(widget.boxkey, task2);
 
     final rawData = <String, dynamic>{
       'name': task,
@@ -937,5 +937,40 @@ class _AddTaskPageState extends State<AddTaskPage> {
   void dispose() {
     recorder.closeRecorder();
     super.dispose();
+  }
+
+  void _insertLastFiles() {
+    HiveInit.Task mytask = widget.box.get(widget.boxkey);
+    _TaskController.text = mytask.name;
+    if (widget.emptyFields[0]) {
+      _DescriptionController.text = mytask.description;
+    }
+    if (widget.emptyFields[1]) {
+      repetitiveness = mytask.repetitiveness;
+    }
+    if (widget.emptyFields[2]) {
+      new_notifications_list = mytask.notifications.cast<Map<String, String>>();
+    }
+    if (widget.emptyFields[3]) {
+      mylocation = mytask.location;
+    }
+    if (widget.emptyFields[4]) {
+      audioFile = mytask.recordingFilePath;
+    }
+    if (widget.emptyFields[5]) {
+      imageDestination = mytask.photoFilePath;
+    }
+    if (widget.emptyFields[6]) {
+      DueDate = mytask.date;
+    }
+    if (widget.emptyFields[7]) {
+      DueTime = mytask.time;
+    }
+    if (widget.emptyFields[8]) {
+      importance = mytask.importance;
+    }
+    // if (widget.emptyFields[9]) {
+    //   friendName = mytask.friendName;
+    // }
   }
 }
