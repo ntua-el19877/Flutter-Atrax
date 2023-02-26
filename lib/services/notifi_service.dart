@@ -3,6 +3,7 @@ import 'package:timezone/data/latest.dart' as tz;
 import 'package:timezone/timezone.dart' as tz;
 
 class NotificationService {
+  int myid = 0;
   final FlutterLocalNotificationsPlugin notificationsPlugin =
       FlutterLocalNotificationsPlugin();
 
@@ -39,16 +40,17 @@ class NotificationService {
   }
 
   Future scheduleNotification(
-      {int? id,
+      {id,
       String? title,
       String? body,
       String? payLoad,
       required DateTime scheduledNotificationDateTime}) async {
+    myid++;
     // print("Scheduled notification with the date and time " + scheduledNotificationDateTime.toString());
     // print(title);
     // print(body);
     return notificationsPlugin.zonedSchedule(
-        id!,
+        myid,
         title,
         body,
         tz.TZDateTime.from(

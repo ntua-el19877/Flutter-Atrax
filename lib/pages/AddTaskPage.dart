@@ -272,7 +272,7 @@ class _AddTaskPageState extends State<AddTaskPage> {
                       primary: Color(0xff06661B), // Background color
                     ),
                     child: Text('Confirm'),
-                    onPressed: _SaveTask,
+                    onPressed: confirmTask,
                   ),
                   ElevatedButton(
                     style: ElevatedButton.styleFrom(
@@ -310,6 +310,11 @@ class _AddTaskPageState extends State<AddTaskPage> {
             // ),
           ],
         ));
+  }
+
+  void confirmTask() async {
+    _SaveTask();
+    Navigator.of(context).pop();
   }
 
   String generateRandomString() {
@@ -419,8 +424,6 @@ class _AddTaskPageState extends State<AddTaskPage> {
         }
       }
     }
-
-    Navigator.of(context).pop();
   }
 
   void openDatePicker() {
