@@ -105,11 +105,11 @@ class _CalendarPageState extends State<CalendarPage> {
   void _onDaySelected(DateTime day, DateTime focusedDay) {
     setState(() {
       today = day;
-      print("You selected the day");
-      print(today.toString());
+      // print("You selected the day");
+      // print(today.toString());
       final DateFormat formatter = DateFormat('yyyy-MM-dd');
       final String formatted = formatter.format(today);
-      print(formatted);
+      // print(formatted);
       //var date = widget.box.getAt(1).date;
       //print(date);
       tasks =
