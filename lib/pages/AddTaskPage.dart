@@ -389,11 +389,11 @@ class _AddTaskPageState extends State<AddTaskPage> {
       //var passed_time = DateTime.parse('$DueDate $DueTime');
       //print("Passed time : " + passed_time.toString());
       NotificationService().scheduleNotification(
-          title:
-              _TaskController.text + " " + DueDate + " " + DueTime + " (Now)",
+          id: 0,
+          title: _TaskController.text + " (Now)",
           body: _DescriptionController.text,
           scheduledNotificationDateTime:
-              DateTime.parse('$DueDate' + ' ' + '$DueTime'));
+              DateTime.parse(' ($DueDate' + ' ' + '$DueTime)'));
     }
 
     if (list_counter > 0) {
@@ -405,6 +405,7 @@ class _AddTaskPageState extends State<AddTaskPage> {
         if (new_notifications_list[i].entries.last.value != '' &&
             new_notifications_list[i].entries.first.value != '') {
           NotificationService().scheduleNotification(
+              id: i + 1,
               title: _TaskController.text +
                   " " +
                   new_notifications_list[i].entries.first.value +

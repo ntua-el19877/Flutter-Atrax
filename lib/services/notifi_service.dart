@@ -39,7 +39,7 @@ class NotificationService {
   }
 
   Future scheduleNotification(
-      {int id = 0,
+      {int? id,
       String? title,
       String? body,
       String? payLoad,
@@ -48,7 +48,7 @@ class NotificationService {
     // print(title);
     // print(body);
     return notificationsPlugin.zonedSchedule(
-        id,
+        id!,
         title,
         body,
         tz.TZDateTime.from(

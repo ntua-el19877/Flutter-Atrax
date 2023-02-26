@@ -36,7 +36,7 @@ void main() async {
   //open box(database) and friendbox
   var box = await Hive.openBox('mybox1');
   var friendbox = await Hive.openBox('friendbox');
-  box.clear();
+  // box.clear();
 
   NotificationService().initNotification();
   tz.initializeTimeZones();
