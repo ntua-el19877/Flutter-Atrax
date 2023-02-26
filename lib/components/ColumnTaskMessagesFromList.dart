@@ -4,6 +4,7 @@ import 'package:hive/hive.dart';
 import 'TaskMessage.dart';
 
 class ColumnTaskMessagesFromList extends StatefulWidget {
+  final List<dynamic> taskKeys;
   final Box mybox;
   final List myboxList;
   final Color color_Secondary;
@@ -19,6 +20,7 @@ class ColumnTaskMessagesFromList extends StatefulWidget {
     required this.TaskLeftPadding,
     required this.currentIndex,
     required this.mybox,
+    required this.taskKeys,
   });
 
   @override
@@ -57,6 +59,7 @@ class _ColumnTaskMessagesFromListState
                 }
               },
               child: TaskMessage(
+                boxkey: widget.taskKeys[index],
                 completed: widget.myboxList[index].completed,
                 mybox: widget.mybox,
                 index: index,

@@ -31,6 +31,7 @@ class _ColumnTaskMessagesState extends State<ColumnTaskMessages> {
     List<TaskMessage> taskMessages = List.generate(
       widget.mybox.length,
       (index) => TaskMessage(
+        boxkey: widget.mybox.keys.toList()[index],
         completed: widget.mybox.getAt(index).completed,
         mybox: widget.mybox,
         index: index,

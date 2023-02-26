@@ -1,12 +1,22 @@
 import 'package:flutter/material.dart';
 
 class ColorModel extends ChangeNotifier {
-  Color _color = Color(0xff929ae7);
+  Map<String, Color> _colors = {};
 
-  Color get color => _color;
+  Color getColor(String index) {
+    return _colors[index] ?? Color(0xff929ae7);
+  }
 
-  void setColor(Color color) {
-    _color = color;
+  void insertColor(String index) {
+    _colors.addAll({index: Color(0xff929ae7)});
+  }
+
+  void deleteColor(String index) {
+    _colors.remove(index);
+  }
+
+  void setColor(Color color, String index) {
+    _colors[index] = color;
     notifyListeners();
   }
 }

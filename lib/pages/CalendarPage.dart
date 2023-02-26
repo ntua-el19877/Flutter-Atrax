@@ -30,6 +30,7 @@ double TaskLeftPadding = 10;
 
 class _CalendarPageState extends State<CalendarPage> {
   var tasks = [];
+  var taskKeys = [];
   @override
   void initState() {
     DateTime today = DateTime.now();
@@ -38,9 +39,16 @@ class _CalendarPageState extends State<CalendarPage> {
     final String formatted = formatter.format(today);
     print(formatted);
     //var date = widget.box.getAt(1).date;
+
     tasks = widget.box.values.where((task) => task.date == formatted).toList();
-    print("1st print :");
-    print(tasks);
+    taskKeys = widget.box
+        .toMap()
+        .entries
+        .where((entry) => entry.value.date == formatted)
+        .map((entry) => entry.key)
+        .toList();
+    //print("TASKS______________");
+    print(taskKeys);
   }
 
   @override
@@ -106,12 +114,18 @@ class _CalendarPageState extends State<CalendarPage> {
       //print(date);
       tasks =
           widget.box.values.where((task) => task.date == formatted).toList();
-      //print(tasks[0].date);
+      taskKeys = widget.box
+          .toMap()
+          .entries
+          .where((entry) => entry.value.date == formatted)
+          .map((entry) => entry.key)
+          .toList();
     });
   }
 
   Widget getSelectedDayTasks() {
     return ColumnTaskMessagesFromList(
+        taskKeys: taskKeys,
         mybox: widget.box,
         myboxList: tasks,
         color_Secondary: color_Secondary,

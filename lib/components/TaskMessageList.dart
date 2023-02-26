@@ -27,7 +27,7 @@ class MapUtils {
   }
 }
 
-class TaskMessage extends StatefulWidget {
+class TaskMessageList extends StatefulWidget {
   final Box mybox;
   final String boxkey;
   final int index;
@@ -57,7 +57,7 @@ class TaskMessage extends StatefulWidget {
   // final List<dynamic> indexListTime;
   final Function(int) onTap;
 
-  TaskMessage({
+  TaskMessageList({
     required this.mybox,
     this.index = 0,
     required this.boxkey,
@@ -92,14 +92,14 @@ class TaskMessage extends StatefulWidget {
   _TaskMessageState createState() => _TaskMessageState();
 }
 
-class _TaskMessageState extends State<TaskMessage> {
+class _TaskMessageState extends State<TaskMessageList> {
   late List<bool> emptyFields;
   // final audioPlayer = AudioPlayer();
   bool isPlaying = false;
   Duration duration = Duration.zero;
   Duration position = Duration.zero;
   @override
-  void didUpdateWidget(TaskMessage oldWidget) {
+  void didUpdateWidget(TaskMessageList oldWidget) {
     if ((oldWidget.color_Secondary != widget.color_Secondary) ||
         (oldWidget.completed != widget.mybox.getAt(widget.index).completed)) {
       // color_secondary has changed, rebuild the widget
