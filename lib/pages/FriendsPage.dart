@@ -4,6 +4,10 @@ import 'dart:async';
 
 import 'package:hive/hive.dart';
 
+import '../components/DevButtons.dart';
+import '../components/HiveInit.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
 /*Future<void> readJson() async {
 //final AssetBundle rootBundle = _initRootBundle();
 //final String response = await rootBundle.loadString('assets/friends.json');
@@ -42,11 +46,25 @@ class _FriendsPageState extends State<FriendsPage> {
     final _items = data["friends"];
     //print(_items);
     //print("number of friends : ${_items.length}");
+    
+    /*final prefs = await SharedPreferences.getInstance();
+    final isFirstLaunch = prefs.getBool('isFirstLaunch') ?? true;
+    if(isFirstLaunch){
+    widget.friendbox.put(0, Friend(name: 'John', last_name: 'A', is_active: true));
+    widget.friendbox.put(1, Friend(name: 'John_2', last_name: 'A', is_active: true));
+    widget.friendbox.put(2, Friend(name: 'John_3', last_name: 'A', is_active: true));
+    prefs.setBool('isFirstLaunch', false);
+    }*/
+
+    print(widget.friendbox.length);
+    //print(widget.friendbox.get(0).name);
     setState(() {
       Friends = _items;
     });
+    
     //print(Friends[0]["fname"]);
   }
+  
 
   Future<void> readFriendsFromDB() async {
     final String response =

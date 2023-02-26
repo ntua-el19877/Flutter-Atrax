@@ -59,9 +59,13 @@ class Friend extends HiveObject {
   @HiveField(1)
   String last_name;
 
+  @HiveField(2)
+  bool is_active;
+
   Friend({
     required this.name,
     required this.last_name,
+    required this.is_active
   });
 }
 
