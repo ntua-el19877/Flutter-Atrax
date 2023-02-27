@@ -3,34 +3,37 @@ import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 
 import 'FriendMessage.dart';
+import 'FriendRequest.dart';
 import 'HiveInit.dart';
 import 'TaskMessage.dart';
 
-class FriendList extends StatefulWidget {
+class FriendRequestsList extends StatefulWidget {
   // final Color color_Secondary;
   final Box friendbox;
-  FriendList({
+  FriendRequestsList({
     // required this.color_Secondary,
     required this.friendbox,
   });
 
   @override
-  _FriendListState createState() => _FriendListState();
+  _FriendRequestsListState createState() => _FriendRequestsListState();
 }
 
-class _FriendListState extends State<FriendList> {
+class _FriendRequestsListState extends State<FriendRequestsList> {
   @override
   Widget build(BuildContext context) {
     // Color _color_TaskMessage = widget.color_Secondary;
-    List<FriendMessage> friendList = List.generate(
+    List<FriendRequest> friendList = List.generate(
         widget.friendbox.length,
-        (index) => FriendMessage(
+        (index) => FriendRequest(
+            friendbox: widget.friendbox,
+            friendID: widget.friendbox.getAt(index).friendID,
             is_active: widget.friendbox.getAt(index).is_active,
             last_name: widget.friendbox.getAt(index).last_name,
             name: widget.friendbox.getAt(index).name));
 // Sort the taskMessages list based on date and time
-friendList =
-        friendList.where((friend) => friend.is_active == 'true').toList();
+     friendList =
+        friendList.where((friend) => friend.is_active == 'false').toList();
 
     friendList.sort((a, b) {
       // Compare the dates first
@@ -46,7 +49,7 @@ friendList =
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        const SizedBox(height: 20),
+        //const SizedBox(height: 20),
         ...friendList.map((friendList) => Padding(
               padding: const EdgeInsets.all(10),
               child: friendList,
@@ -58,7 +61,7 @@ friendList =
   }
 
   @override
-  void didUpdateWidget(FriendList oldWidget) {
+  void didUpdateWidget(FriendRequestsList oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (widget.friendbox.length != oldWidget.friendbox.length) {
       setState(() {});

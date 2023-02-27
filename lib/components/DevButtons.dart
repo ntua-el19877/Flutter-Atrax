@@ -89,7 +89,7 @@ class _DevButtonsState extends State<DevButtons> {
               var f1 = generateRandomString();
               var f2 = generateRandomString();
               Friend friend1 = Friend(
-                is_active: 'false',
+                is_active: 'true',
                 last_name: 'Loukas',
                 name: 'Angelos',
                 friendID: f1,

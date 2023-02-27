@@ -1,3 +1,5 @@
+import 'package:atrax/components/FriendRequest.dart';
+import 'package:atrax/components/FriendRequestList.dart';
 import 'package:flutter/material.dart';
 import 'dart:convert';
 import 'dart:async';
@@ -277,70 +279,15 @@ class _FriendsPageState extends State<FriendsPage> {
             "Friend Requests",
             textAlign: TextAlign.center,
           ),
-          insetPadding: EdgeInsets.symmetric(vertical: 200),
+          //insetPadding: EdgeInsets.symmetric(vertical: 200),
           backgroundColor: Color(0xffE6F4F1),
           content: Column(
+            mainAxisSize: MainAxisSize.min,
             children: [
-              if (N_friend_requests > 0)
-                Container(
-                  height: 60,
-                  width: 316,
-                  child: Card(
-                    color: Color(0xff929AE7),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.only(
-                        bottomRight: Radius.circular(10),
-                        topRight: Radius.circular(10),
-                        topLeft: Radius.circular(10),
-                        bottomLeft: Radius.circular(10),
-                      ),
-                    ),
-                    child: Container(
-                        child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                          Text('Katerina Lioliou\nsent you a friend request'),
-                          SizedBox(
-                              height: 60,
-                              child: ElevatedButton(
-                                onPressed: Navigator.of(context).pop,
-                                child: Text('Accept'),
-                                style: ElevatedButton.styleFrom(
-                                  primary: Color(0xff1F8A87),
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.only(
-                                      bottomRight: Radius.circular(0),
-                                      topRight: Radius.circular(0),
-                                      topLeft: Radius.circular(10),
-                                      bottomLeft: Radius.circular(10),
-                                    ),
-                                  ),
-                                ),
-                              )),
-                          SizedBox(
-                              height: 60,
-                              child: ElevatedButton(
-                                  onPressed: () {
-                                    setState(() {
-                                      N_friend_requests = 0;
-                                      Navigator.pop(context);
-                                    });
-                                  },
-                                  child: Text('Decline'),
-                                  style: ElevatedButton.styleFrom(
-                                    primary: Color(0xffA94C52),
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.only(
-                                        bottomRight: Radius.circular(10),
-                                        topRight: Radius.circular(10),
-                                        topLeft: Radius.circular(0),
-                                        bottomLeft: Radius.circular(0),
-                                      ),
-                                    ),
-                                  )))
-                        ])),
-                  ),
-                )
-            ],
-          )));
+                //FriendRequest(name: 'Nikos', last_name: 'Fiannopoulos', is_active: 'false',),
+                FriendRequestsList(friendbox: widget.friendbox),
+            ]
+          )
+          )
+          );
 }
