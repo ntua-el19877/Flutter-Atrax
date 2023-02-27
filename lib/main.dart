@@ -100,7 +100,7 @@ void main() async {
     friendbox.put(f5, friend5);
     friendbox.put(f6, friend6);
   }
-  /*final prefs = await SharedPreferences.getInstance();
+  final prefs = await SharedPreferences.getInstance();
   final isFirstLaunch = prefs.getBool('isFirstLaunch') ?? true;
   print(isFirstLaunch);
   if (isFirstLaunch) {
@@ -110,13 +110,15 @@ void main() async {
       friendbox.add(Friend(name: 'Jane', last_name: 'B', is_active: true)),
       friendbox.add(Friend(name: 'Bob', last_name: 'C', is_active: true)),*/
       prefs.setBool('isFirstLaunch', false),
+      //prefs.setBool('taskRequest_1', true),
+      //prefs.setBool('taskRequest_2', true),
       print(isFirstLaunch),
     };
 
     // Set isFirstLaunch to false so the code doesn't run again
     //await prefs.setBool('isFirstLaunch', false);
   }
-  */
+  
 
   SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual,
       overlays: [SystemUiOverlay.top]);

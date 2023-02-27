@@ -13,6 +13,8 @@ import 'package:hive/hive.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../services/color_state.dart';
+import 'DevButtons.dart';
+import 'HiveInit.dart';
 import 'TaskInfo.dart';
 import 'package:maps_launcher/maps_launcher.dart';
 
@@ -31,7 +33,8 @@ class MapUtils {
 }
 
 class TaskRequest extends StatefulWidget {
-  //final Box mybox;
+  final Box mybox;
+  final String friendsName;
   //final String boxkey;
   final int index;
   final double screen_width;
@@ -56,12 +59,13 @@ class TaskRequest extends StatefulWidget {
   final String recording_file_path;
   //final String photo_file_path;
   final List<String> friend_name;
+  bool ? shown;
   // final List<dynamic> indexListDate;
   // final List<dynamic> indexListTime;
   //final Function(int) onTap;
 
   TaskRequest({
-    //required this.mybox,
+    required this.mybox,
     this.index = 0,
     //required this.boxkey,
     //required this.completed,
@@ -73,6 +77,8 @@ class TaskRequest extends StatefulWidget {
     this.color_Red = const Color(0xffae4e54),
     this.color_Success = const Color(0xff06661b),
     //required this.color_Green,
+    required this.shown,
+    required this.friendsName,
     required this.name,
     required this.description,
     required this.date,
@@ -103,6 +109,10 @@ class _TaskRequestState extends State<TaskRequest> {
   Duration duration = Duration.zero;
   Duration position = Duration.zero;
   IconData checkIcon = Icons.check_box_outline_blank;
+
+  bool task_1 = true;
+  bool task_2 = true;
+
   /*@override
   void didUpdateWidget(TaskRequest oldWidget) {
     if ((oldWidget.color_Secondary != widget.color_Secondary) ||
@@ -132,11 +142,11 @@ class _TaskRequestState extends State<TaskRequest> {
     if (widget.friend_name.isEmpty) emptyFields[9] = false;
   }
 
-  @override
+ /*@override
   void dispose() {
     audioPlayer.dispose();
     super.dispose();
-  }
+  }*/
 
   late ColorModel colorModel;
   Color _color_TaskMessage = Colors.red;
@@ -207,8 +217,8 @@ class _TaskRequestState extends State<TaskRequest> {
         child:
             Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
           //Text('Katerina Lioliou\nsent you a friend request'),
-          Text('Katerina Lioliou '
-              '\nsent you a task request'),
+          Text(' ' + widget.friendsName +
+              '\n sent you a task request', style: TextStyle(fontSize: 16)),
           SizedBox(
               height: 60,
               width: (MediaQuery.of(context).size.width-40)*0.5,
@@ -232,7 +242,7 @@ class _TaskRequestState extends State<TaskRequest> {
                       ),
                     ),
                   ),
-                  child: const Text('Review Task')
+                  child: const Text('Review Task', style: TextStyle(fontSize: 17))
                   )
                   )
         ]),
@@ -516,6 +526,9 @@ class _TaskRequestState extends State<TaskRequest> {
                               padding: EdgeInsets.only(right: 10),
                               child: ElevatedButton(
                                 onPressed: () {
+                                  
+                                  print(widget.name);
+                                  acceptTask();
                                   Navigator.of(context).pop();
                                 },
                                 style: ButtonStyle(
@@ -535,6 +548,39 @@ class _TaskRequestState extends State<TaskRequest> {
                                 ),
                                 child: Text(
                                   "Accept",
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ),
+                            ),
+                            Padding(
+                              padding: EdgeInsets.only(right: 10),
+                              child: ElevatedButton(
+                                onPressed: () {
+                                  
+                                  print(widget.name);
+                                  declineTask();
+                                  Navigator.of(context).pop();
+                                },
+                                style: ButtonStyle(
+                                  backgroundColor:
+                                      MaterialStateProperty.resolveWith<Color>(
+                                    (states) => Color(0xffAE4E54),
+                                  ),
+                                  shape: MaterialStateProperty.resolveWith<
+                                      OutlinedBorder>(
+                                    (states) => RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(10),
+                                    ),
+                                  ),
+                                  minimumSize: MaterialStateProperty.all<Size>(
+                                    Size(120, 50),
+                                  ),
+                                ),
+                                child: Text(
+                                  "Delete",
                                   style: TextStyle(
                                     color: Colors.white,
                                     fontWeight: FontWeight.bold,
@@ -563,6 +609,18 @@ class _TaskRequestState extends State<TaskRequest> {
     }
     return 0;
   }
+
+  void acceptTask(){
+    print(widget.name);
+    widget.mybox.put(generateRandomString(), Task(name: widget.name , description: widget.description, date: widget.date, time: widget.time, repetitiveness: widget.repetitiveness, notifications: widget.notifications, importance: widget.importance, location: widget.location, recordingFilePath: widget.recording_file_path, photoFilePath: '', friendName: widget.friend_name, completed: 'false'));
+  }
+
+  void declineTask(){
+    print(widget.shown);
+    widget.shown = false;
+    print(widget.shown);
+  }
+
 }
 
 

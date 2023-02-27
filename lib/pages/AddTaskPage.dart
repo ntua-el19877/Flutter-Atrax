@@ -382,7 +382,7 @@ class _AddTaskPageState extends State<AddTaskPage> {
       //notifications: widget.box.getAt(0).notifications,
       notifications: new_notifications_list,
       importance: importance,
-      location: returnlocation(),
+      location: lat + ',' + long,
       recordingFilePath: audioFile,
       photoFilePath: imageDestination,
       friendName: ['John', 'Jane'],
