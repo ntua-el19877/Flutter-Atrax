@@ -619,17 +619,26 @@ class _TaskMessageState extends State<TaskMessage> {
                                       child: Stack(
                                         alignment: Alignment.center,
                                         children: [
-                                          CustomRectangle(
-                                              // myIconEnabled: true,
-                                              // myIconSize: 30,
-                                              // myIcon: Icons.location_on_outlined,
-                                              // myIconColor: Colors.red,
-                                              Rad: 30,
-                                              width:
-                                                  (widget.screen_width * 3 / 4 -
-                                                      20),
-                                              text: 'Tap to play Audio',
-                                              title: 'Audio Recording'),
+                                          GestureDetector(
+                                            onTap: () async {
+                                              final player = AudioCache();
+                                              player
+                                                  .play('assets/TestAudio.mp3');
+                                              // }
+                                            },
+                                            child: CustomRectangle(
+                                                // myIconEnabled: true,
+                                                // myIconSize: 30,
+                                                // myIcon: Icons.location_on_outlined,
+                                                // myIconColor: Colors.red,
+                                                Rad: 30,
+                                                width: (widget.screen_width *
+                                                        3 /
+                                                        4 -
+                                                    20),
+                                                text: 'Tap to play Audio',
+                                                title: 'Audio Recording'),
+                                          )
                                         ],
                                       ),
                                     ),

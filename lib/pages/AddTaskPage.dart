@@ -87,6 +87,8 @@ class _AddTaskPageState extends State<AddTaskPage> {
   void initState() {
     super.initState();
     initRecorder();
+
+    lenlen = widget.friendbox.length;
   }
 
   String audioFile = '';
@@ -132,7 +134,6 @@ class _AddTaskPageState extends State<AddTaskPage> {
 
   @override
   Widget build(BuildContext context) {
-    lenlen = widget.friendbox.length;
     return Scaffold(
         /*
       appBar: AppBar(
@@ -262,7 +263,7 @@ class _AddTaskPageState extends State<AddTaskPage> {
                             });
                           }),
                       TextButton(
-                        onPressed: openCamera,
+                        onPressed: openCameraP,
                         child: Icon(Icons.photo_camera_outlined,
                             size: IconSize, color: Color(0xff252525)),
                       ),
@@ -373,24 +374,128 @@ class _AddTaskPageState extends State<AddTaskPage> {
     //   jsonNotifications = jsonEncode(new_Notifications_List); //TYPE JSON MAP //
     //   debugPrint(jsonNotifications);
     // });
-    HiveInit.Task task2 = HiveInit.Task(
-      name: _TaskController.text,
-      description: _DescriptionController.text,
-      date: DueDate,
-      time: DueTime,
-      repetitiveness: repetitiveness,
-      //notifications: widget.box.getAt(0).notifications,
-      notifications: new_notifications_list,
-      importance: importance,
-      location: returnlocation(),
-      recordingFilePath: audioFile,
-      photoFilePath: imageDestination,
-      friendName: ['John', 'Jane'],
-      completed: 'false',
-    );
+    HiveInit.Task task2;
+    if (repetitiveness == '') {
+      task2 = HiveInit.Task(
+        name: _TaskController.text,
+        description: _DescriptionController.text,
+        date: DueDate,
+        time: DueTime,
+        repetitiveness: repetitiveness,
+        //notifications: widget.box.getAt(0).notifications,
+        notifications: new_notifications_list,
+        importance: importance,
+        location: returnlocation(),
+        recordingFilePath: audioFile,
+        photoFilePath: imageDestination,
+        friendName: ['John', 'Jane'],
+        completed: 'false',
+      );
+      widget.box.put(generateRandomString(), task2);
+    } else if (repetitiveness == 'every day') {
+      var _duedate = due_date.day;
+      for (int i = 0; i < 10; i++) {
+        task2 = HiveInit.Task(
+          name: _TaskController.text,
+          description: _DescriptionController.text,
+          date: DateTime(due_date.year, due_date.month, _duedate).toString(),
+          time: DueTime,
+          repetitiveness: repetitiveness,
+          //notifications: widget.box.getAt(0).notifications,
+          notifications: new_notifications_list,
+          importance: importance,
+          location: returnlocation(),
+          recordingFilePath: audioFile,
+          photoFilePath: imageDestination,
+          friendName: ['John', 'Jane'],
+          completed: 'false',
+        );
+        widget.box.put(generateRandomString(), task2);
+        _duedate += 1;
+      }
+    } else if (repetitiveness == 'every week') {
+      var _duedate = due_date.day;
+      for (int i = 0; i < 10; i++) {
+        task2 = HiveInit.Task(
+          name: _TaskController.text,
+          description: _DescriptionController.text,
+          date: DateTime(due_date.year, due_date.month, _duedate).toString(),
+          time: DueTime,
+          repetitiveness: repetitiveness,
+          //notifications: widget.box.getAt(0).notifications,
+          notifications: new_notifications_list,
+          importance: importance,
+          location: returnlocation(),
+          recordingFilePath: audioFile,
+          photoFilePath: imageDestination,
+          friendName: ['John', 'Jane'],
+          completed: 'false',
+        );
+        widget.box.put(generateRandomString(), task2);
+        _duedate += 7;
+      }
+    } else if (repetitiveness == 'every month') {
+      var _duedate = due_date.month;
+      for (int i = 0; i < 10; i++) {
+        task2 = HiveInit.Task(
+          name: _TaskController.text,
+          description: _DescriptionController.text,
+          date: DateTime(due_date.year, _duedate, due_date.day).toString(),
+          time: DueTime,
+          repetitiveness: repetitiveness,
+          //notifications: widget.box.getAt(0).notifications,
+          notifications: new_notifications_list,
+          importance: importance,
+          location: returnlocation(),
+          recordingFilePath: audioFile,
+          photoFilePath: imageDestination,
+          friendName: ['John', 'Jane'],
+          completed: 'false',
+        );
+        widget.box.put(generateRandomString(), task2);
+        _duedate += 1;
+      }
+    } else if (repetitiveness == 'every year') {
+      var _duedate = due_date.year;
+      for (int i = 0; i < 10; i++) {
+        task2 = HiveInit.Task(
+          name: _TaskController.text,
+          description: _DescriptionController.text,
+          date: DateTime(_duedate, due_date.month, due_date.day).toString(),
+          time: DueTime,
+          repetitiveness: repetitiveness,
+          //notifications: widget.box.getAt(0).notifications,
+          notifications: new_notifications_list,
+          importance: importance,
+          location: returnlocation(),
+          recordingFilePath: audioFile,
+          photoFilePath: imageDestination,
+          friendName: ['John', 'Jane'],
+          completed: 'false',
+        );
+        widget.box.put(generateRandomString(), task2);
+        _duedate += 1;
+      }
+    } else {
+      task2 = HiveInit.Task(
+        name: _TaskController.text,
+        description: _DescriptionController.text,
+        date: DueDate,
+        time: DueTime,
+        repetitiveness: repetitiveness,
+        //notifications: widget.box.getAt(0).notifications,
+        notifications: new_notifications_list,
+        importance: importance,
+        location: returnlocation(),
+        recordingFilePath: audioFile,
+        photoFilePath: imageDestination,
+        friendName: ['John', 'Jane'],
+        completed: 'false',
+      );
+      widget.box.put(generateRandomString(), task2);
+    }
 
     // final _mytask = _mybox.get('mytask');
-    widget.box.put(generateRandomString(), task2);
 
     final rawData = <String, dynamic>{
       'name': task,
@@ -473,9 +578,10 @@ class _AddTaskPageState extends State<AddTaskPage> {
         due_date = value!;
         //DueDate = "${due_date.day}-${due_date.month}-${due_date.year}";
         //print(due_date.month.runtimeType);
+
         DueDate = "${due_date.year}-${due_date.month}-${due_date.day}";
         DueDate = formatDate(due_date);
-        print(DueDate);
+        // print(DueDate);
       });
     });
   }
@@ -499,6 +605,43 @@ class _AddTaskPageState extends State<AddTaskPage> {
     lenlen,
     (index) => false,
   );
+
+  Future inviteFriend() => showDialog(
+        context: context,
+        builder: (context) {
+          String contentText = "Content of Dialog";
+          return StatefulBuilder(
+            builder: (context, setState) {
+              return AlertDialog(
+                title: Text("Title of Dialog"),
+                content: Container(
+                  width: double.maxFinite,
+                  child: ListView.builder(
+                    shrinkWrap: true,
+                    itemCount: 0,
+                    itemBuilder: (context, index) {
+                      final friend = widget.friendbox.getAt(index);
+
+                      return CheckboxListTile(
+                        title: Text('${friend.name} ${friend.last_name}'),
+                        value: isSelected[index],
+                        checkColor: Colors.white,
+                        activeColor: Colors.green,
+                        onChanged: (value) {
+                          setState(() {
+                            print(index);
+                            isSelected[index] = value!;
+                          });
+                        },
+                      );
+                    },
+                  ),
+                ),
+              );
+            },
+          );
+        },
+      );
   Future _InviteFriend() => showDialog(
         context: context,
         builder: (context) => AlertDialog(
@@ -587,6 +730,20 @@ class _AddTaskPageState extends State<AddTaskPage> {
                       ),
                       onPressed: () => setState(() {
                             repetitiveness = 'every month';
+                            Navigator.of(context).pop();
+                          })),
+                ),
+                SizedBox(height: 20),
+                SizedBox(
+                  width: 200,
+                  height: 30,
+                  child: ElevatedButton(
+                      child: Text("Every Year"),
+                      style: ElevatedButton.styleFrom(
+                        primary: Color(0xff8B8DB9),
+                      ),
+                      onPressed: () => setState(() {
+                            repetitiveness = 'every year';
                             Navigator.of(context).pop();
                           })),
                 ),
@@ -890,14 +1047,29 @@ class _AddTaskPageState extends State<AddTaskPage> {
     } else {
       print('No image selected.');
     }
+    final directory = await getApplicationDocumentsDirectory();
+
+    final imagePath =
+        '${directory.path}/assets/icons/${DateTime.now().millisecondsSinceEpoch}.jpg';
+    // imageDestination = imagePath;
+    final imageFile = await _image.copy(imagePath);
+    setState(() {
+      imageDestination = imagePath;
+      _image;
+    });
+    // getting a directory path for saving
+// final String path = await getApplicationDocumentsDirectory().path;
+// final Directory directory = await getApplicationDocumentsDirectory();
   }
 
   Future<void> saveImage() async {
     final directory = await getApplicationDocumentsDirectory();
+
     final imagePath =
-        '${directory.path}/photos/${DateTime.now().millisecondsSinceEpoch}.jpg';
-    imageDestination = imagePath;
+        '${directory.path}/assets/icons/${DateTime.now().millisecondsSinceEpoch}.jpg';
+    // imageDestination = imagePath;
     final imageFile = await _image.copy(imagePath);
+    imageDestination = imagePath;
     // print('--------------------------Image saved to: ${imageFile.path}');
   }
 
@@ -914,10 +1086,15 @@ class _AddTaskPageState extends State<AddTaskPage> {
   //   });
   // }
 
+  void openCameraP() {
+    openCamera();
+    Navigator.pop(context);
+  }
+
   void openCamera() => showDialog(
         context: context,
         builder: (context) => AlertDialog(
-            title: Text("Take Picture"),
+            title: Text('Take Image'),
             content: Container(
                 child: Column(
               mainAxisSize: MainAxisSize.min,
@@ -928,18 +1105,25 @@ class _AddTaskPageState extends State<AddTaskPage> {
                     width: MediaQuery.of(context).size.width / 2,
                   )
                 else
-                  Text('No Image Selected'),
+                  const Text('No Image Selected'),
                 ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    primary: color_Secondary, // Background color
+                  ),
                   onPressed: () async {
                     await getImage();
                     // print("---------------1");
-                    if (_image != null) {
-                      // print("---------------2");
-                      await saveImage();
-                    }
+                    // if (_image != File('assets/icons/empty.png')) {
+                    //   // print("---------------2");
+                    //   await saveImage();
+                    // }
+                    // print(
+                    //     '$imageDestination---------------------------------------');
                     setState(() {
                       _image;
                     });
+
+                    Navigator.pop(context);
                   },
                   child: const Icon(Icons.camera_alt),
                 )
