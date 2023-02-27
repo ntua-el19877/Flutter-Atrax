@@ -5,6 +5,7 @@ import 'package:atrax/components/IconRow.dart';
 import 'package:atrax/components/plus_Button.dart';
 import 'package:atrax/pages/modifyTaskPage.dart';
 import 'package:atrax/routes/routes.dart';
+import 'package:audioplayers/audioplayers.dart';
 // import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
@@ -95,7 +96,8 @@ class TaskMessage extends StatefulWidget {
 
 class _TaskMessageState extends State<TaskMessage> {
   late List<bool> emptyFields;
-  // final audioPlayer = AudioPlayer();
+  final audioPlayer = AudioPlayer();
+
   bool isPlaying = false;
   Duration duration = Duration.zero;
   Duration position = Duration.zero;
@@ -129,11 +131,12 @@ class _TaskMessageState extends State<TaskMessage> {
     if (widget.friend_name.isEmpty) emptyFields[9] = false;
   }
 
-  // @override
-  // void dispose() {
-  //   audioPlayer.dispose();
-  //   super.dispose();
-  // }
+  @override
+  void dispose() {
+    audioPlayer.dispose();
+    super.dispose();
+  }
+
   late ColorModel colorModel;
   Color _color_TaskMessage = Colors.red;
   @override
@@ -149,21 +152,23 @@ class _TaskMessageState extends State<TaskMessage> {
       checkIcon = Icons.check_box_rounded;
     }
     super.initState();
-    // audioPlayer.onPlayerStateChanged.listen((state) {
-    //   setState(() {
-    //     isPlaying = state == PlayerState.PLAYING;
-    //   });
-    // });
-    // audioPlayer.onDurationChanged.listen((newDuration) {
-    //   setState(() {
-    //     duration = newDuration;
-    //   });
-    // });
+
+    audioPlayer.onPlayerStateChanged.listen((state) {
+      setState(() {
+        isPlaying = state == PlayerState.PLAYING;
+      });
+    });
+    audioPlayer.onDurationChanged.listen((newDuration) {
+      setState(() {
+        duration = newDuration;
+      });
+    });
     // audioPlayer.onAudioPositionChanged.listen((newPosition) {
     //   setState(() {
     //     position = newPosition;
     //   });
     // });
+    // audioPlayer.onAudioPositionChanged.listen((newPosition){s})
   }
 
   @override
@@ -530,6 +535,65 @@ class _TaskMessageState extends State<TaskMessage> {
                           ),
                         ),
                       Padding(
+                          padding: EdgeInsets.only(bottom: 10),
+                          child: Column(
+                            children: [
+                              Slider(
+                                min: 0,
+                                max: duration.inSeconds.toDouble(),
+                                thumbColor: widget.color_Blacks,
+                                inactiveColor: widget.color_Blacks,
+                                onChanged: (value) async {
+                                  final position =
+                                      Duration(seconds: value.toInt());
+                                  await audioPlayer.seek(position);
+                                  await audioPlayer.resume();
+                                },
+                                value: position.inSeconds.toDouble(),
+                              ),
+                              Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 16),
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text(formatTime(position)),
+                                    Text(formatTime(duration - position))
+                                  ],
+                                ),
+                              ),
+                              CircleAvatar(
+                                  radius: 35,
+                                  backgroundColor: widget.color_Secondary,
+                                  child: IconButton(
+                                    icon: Icon(
+                                      color: widget.color_Primary,
+                                      isPlaying
+                                          ? Icons.pause
+                                          : Icons.play_arrow,
+                                    ),
+                                    iconSize: 50,
+                                    onPressed: () async {
+                                      // if (isPlaying) {
+                                      //   await audioPlayer.pause();
+                                      //   // pauseAudio();
+                                      // } else {
+                                      // String url =
+                                      //     'https://www.youtube.com/results?search_query=e+scooby+dooby+doo+where+are+you';
+                                      // 'assets/recordings/Scoobydoo.mp3';
+                                      // await audioPlayer
+                                      //     .play(Uri.parse('asset:///assets/recordings/Scoobydoo.mp3'));
+                                      // .play('assets/recordings/Scoobydoo.mp3');
+                                      // playAudio();
+                                      final player = AudioCache();
+                                      player.play('Scoobydoo.mp3');
+                                      // }
+                                    },
+                                  )),
+                            ],
+                          )),
+                      Padding(
                         padding: EdgeInsets.only(top: 10),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
@@ -625,53 +689,7 @@ class _TaskMessageState extends State<TaskMessage> {
                       //     padding: const EdgeInsets.all(10),
                       //     child: Column(
                       //       children: [
-                      //         Slider(
-                      //           min: 0,
-                      //           max: duration.inSeconds.toDouble(),
-                      //           thumbColor: widget.color_Blacks,
-                      //           inactiveColor: widget.color_Blacks,
-                      //           onChanged: (value) async {
-                      //             final position =
-                      //                 Duration(seconds: value.toInt());
-                      //             await audioPlayer.seek(position);
-                      //             await audioPlayer.resume();
-                      //           },
-                      //           value: position.inSeconds.toDouble(),
-                      //         ),
-                      //         Padding(
-                      //           padding: const EdgeInsets.symmetric(
-                      //               horizontal: 16),
-                      //           child: Row(
-                      //             mainAxisAlignment:
-                      //                 MainAxisAlignment.spaceBetween,
-                      //             children: [
-                      //               Text(formatTime(position)),
-                      //               Text(formatTime(duration - position))
-                      //             ],
-                      //           ),
-                      //         ),
-                      //         CircleAvatar(
-                      //             radius: 35,
-                      //             child: IconButton(
-                      //               icon: Icon(
-                      //                 isPlaying
-                      //                     ? Icons.pause
-                      //                     : Icons.play_arrow,
-                      //               ),
-                      //               iconSize: 50,
-                      //               onPressed: () async {
-                      //                 if (isPlaying) {
-                      //                   // await audioPlayer.pause();
-                      //                   pauseAudio();
-                      //                 } else {
-                      //                   // String url =
-                      //                   // 'https://www.youtube.com/results?search_query=e+scooby+dooby+doo+where+are+you';
-                      //                   // 'assets/recordings/Scoobydoo.mp3';
-                      //                   // await audioPlayer.play(url);
-                      //                   playAudio();
-                      //                 }
-                      //               },
-                      //             )),
+
                       //         // CustomRectangle(
                       //         //     // myIconEnabled: true,
                       //         //     myIconSize: 30,

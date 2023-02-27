@@ -4,6 +4,7 @@ import 'package:atrax/components/CustomRectangle.dart';
 import 'package:atrax/components/IconRow.dart';
 import 'package:atrax/components/plus_Button.dart';
 import 'package:atrax/routes/routes.dart';
+import 'package:audioplayers/audioplayers.dart';
 // import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
@@ -94,7 +95,7 @@ class TaskMessageList extends StatefulWidget {
 
 class _TaskMessageState extends State<TaskMessageList> {
   late List<bool> emptyFields;
-  // final audioPlayer = AudioPlayer();
+  final audioPlayer = AudioPlayer();
   bool isPlaying = false;
   Duration duration = Duration.zero;
   Duration position = Duration.zero;
@@ -127,11 +128,12 @@ class _TaskMessageState extends State<TaskMessageList> {
     if (widget.friend_name.isEmpty) emptyFields[9] = false;
   }
 
-  // @override
-  // void dispose() {
-  //   audioPlayer.dispose();
-  //   super.dispose();
-  // }
+  @override
+  void dispose() {
+    audioPlayer.dispose();
+    super.dispose();
+  }
+
   late ColorModel colorModel;
   Color _color_TaskMessage = Colors.red;
   @override
@@ -144,16 +146,16 @@ class _TaskMessageState extends State<TaskMessageList> {
     colorModel = ColorModel();
     colorModel.setColor(_color_TaskMessage, widget.boxkey);
     super.initState();
-    // audioPlayer.onPlayerStateChanged.listen((state) {
-    //   setState(() {
-    //     isPlaying = state == PlayerState.PLAYING;
-    //   });
-    // });
-    // audioPlayer.onDurationChanged.listen((newDuration) {
-    //   setState(() {
-    //     duration = newDuration;
-    //   });
-    // });
+    audioPlayer.onPlayerStateChanged.listen((state) {
+      setState(() {
+        isPlaying = state == PlayerState.PLAYING;
+      });
+    });
+    audioPlayer.onDurationChanged.listen((newDuration) {
+      setState(() {
+        duration = newDuration;
+      });
+    });
     // audioPlayer.onAudioPositionChanged.listen((newPosition) {
     //   setState(() {
     //     position = newPosition;
@@ -522,6 +524,28 @@ class _TaskMessageState extends State<TaskMessageList> {
                             ),
                           ),
                         ),
+                      CircleAvatar(
+                          radius: 35,
+                          child: IconButton(
+                            icon: Icon(
+                              isPlaying ? Icons.pause : Icons.play_arrow,
+                            ),
+                            iconSize: 50,
+                            onPressed: () async {
+                              // if (isPlaying) {
+                              //   await audioPlayer.pause();
+                              //   // pauseAudio();
+                              // } else {
+                              //   // String url =
+                              //   // 'https://www.youtube.com/results?search_query=e+scooby+dooby+doo+where+are+you';
+                              //   // 'assets/recordings/Scoobydoo.mp3';
+                              //   await audioPlayer.play(
+                              //       Uri.parse('assets/recordings/Scoobydoo.mp3')
+                              //           as Source);
+                              //   // playAudio();
+                              // }
+                            },
+                          )),
                       Padding(
                         padding: EdgeInsets.only(top: 10),
                         child: Row(
@@ -631,28 +655,7 @@ class _TaskMessageState extends State<TaskMessageList> {
                       //             ],
                       //           ),
                       //         ),
-                      //         CircleAvatar(
-                      //             radius: 35,
-                      //             child: IconButton(
-                      //               icon: Icon(
-                      //                 isPlaying
-                      //                     ? Icons.pause
-                      //                     : Icons.play_arrow,
-                      //               ),
-                      //               iconSize: 50,
-                      //               onPressed: () async {
-                      //                 if (isPlaying) {
-                      //                   // await audioPlayer.pause();
-                      //                   pauseAudio();
-                      //                 } else {
-                      //                   // String url =
-                      //                   // 'https://www.youtube.com/results?search_query=e+scooby+dooby+doo+where+are+you';
-                      //                   // 'assets/recordings/Scoobydoo.mp3';
-                      //                   // await audioPlayer.play(url);
-                      //                   playAudio();
-                      //                 }
-                      //               },
-                      //             )),
+
                       //         // CustomRectangle(
                       //         //     // myIconEnabled: true,
                       //         //     myIconSize: 30,
