@@ -240,7 +240,7 @@ class _FriendsPageState extends State<FriendsPage> {
                   )*/
               const SizedBox(height: 25),
               Image.asset(
-                'icons/user_barcode_1.png',
+                'assets/icons/user_barcode_1.png',
                 height: 200,
                 width: 200,
               ),
@@ -263,11 +263,17 @@ class _FriendsPageState extends State<FriendsPage> {
           ),
           //insetPadding: EdgeInsets.symmetric(vertical: 200),
           backgroundColor: Color(0xffE6F4F1),
-          content: Column(mainAxisSize: MainAxisSize.min, children: [
+          content: IntrinsicWidth(
+        child: 
+          Column(mainAxisSize: MainAxisSize.min, crossAxisAlignment: CrossAxisAlignment.stretch, children: [
             Row(mainAxisSize: MainAxisSize.min),
             //FriendRequest(name: 'Nikos', last_name: 'Fiannopoulos', is_active: 'false',),
             FriendRequestsList(friendbox: widget.friendbox),
-          ])));
+          ]
+          )
+          )
+      )
+          );
 
     
 }
