@@ -217,13 +217,14 @@ class _TaskRequestState extends State<TaskRequest> {
                     children: [
                       //Text('Katerina Lioliou\nsent you a friend request'),
                       Text(
-                          ' ' +
+                          '  ' +
                               widget.friendsName +
-                              '\n sent you a task request',
+                              '\n  sent you a task request',
                           style: TextStyle(fontSize: 16)),
                       SizedBox(
                           height: 60,
-                          width: (MediaQuery.of(context).size.width - 40) * 0.5,
+                          width:
+                              (MediaQuery.of(context).size.width - 40) * 0.35,
                           child: ElevatedButton(
                               onPressed: () {
                                 //Navigator.pop(context);

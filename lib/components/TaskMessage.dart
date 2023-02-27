@@ -400,14 +400,18 @@ class _TaskMessageState extends State<TaskMessage> {
             title: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(
-                  widget.name,
-                  style: TextStyle(
-                    color: widget.color_Blacks,
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
+                Flexible(
+                  fit: FlexFit.loose,
+                  child: Text(
+                    widget.name,
+                    style: TextStyle(
+                      color: widget.color_Blacks,
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                 ),
+
                 // RawMaterialButton(
                 //   onPressed: () => Navigator.of(context).pop(),
                 //   elevation: 2.0,
@@ -699,7 +703,7 @@ class _TaskMessageState extends State<TaskMessage> {
                                     ),
                                   ),
                                   minimumSize: MaterialStateProperty.all<Size>(
-                                    Size(120, 50),
+                                    Size(80, 50),
                                   ),
                                 ),
                                 child: Text(
@@ -730,7 +734,7 @@ class _TaskMessageState extends State<TaskMessage> {
                                     ),
                                   ),
                                   minimumSize: MaterialStateProperty.all<Size>(
-                                    Size(120, 50),
+                                    Size(80, 50),
                                   ),
                                 ),
                                 child: Text(
