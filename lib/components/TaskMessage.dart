@@ -559,13 +559,13 @@ class _TaskMessageState extends State<TaskMessage> {
                           padding: EdgeInsets.only(top: 10, bottom: 10),
                           child: Container(
                             height: 100,
-                            child: Text(widget.photo_file_path),
-                            // Image.file(
-                            // File(widget.photo_file_path),
-                            // width: MediaQuery.of(context).size.width / 2,
+                            child: //Text(widget.photo_file_path),
+                                Image.file(
+                              File(widget.photo_file_path),
+                              width: MediaQuery.of(context).size.width / 2,
+                            ),
                           ),
                         ),
-                      // ),
                       Padding(
                           padding: EdgeInsets.only(bottom: 10),
                           child: Column(
@@ -615,34 +615,19 @@ class _TaskMessageState extends State<TaskMessage> {
                                         // .play('assets/recordings/Scoobydoo.mp3');
                                         // playAudio();
                                         final player = AudioCache();
-                                        player.play(widget.recording_file_path);
+                                        player.play('assets/TestAudio.mp3');
                                         // }
                                       },
-                                      child: Stack(
-                                        alignment: Alignment.center,
-                                        children: [
-                                          GestureDetector(
-                                            onTap: () async {
-                                              final player = AudioCache();
-                                              player
-                                                  .play('assets/TestAudio.mp3');
-                                              // }
-                                            },
-                                            child: CustomRectangle(
-                                                // myIconEnabled: true,
-                                                // myIconSize: 30,
-                                                // myIcon: Icons.location_on_outlined,
-                                                // myIconColor: Colors.red,
-                                                Rad: 30,
-                                                width: (widget.screen_width *
-                                                        3 /
-                                                        4 -
-                                                    20),
-                                                text: 'Tap to play Audio',
-                                                title: 'Audio Recording'),
-                                          )
-                                        ],
-                                      ),
+                                      child: CustomRectangle(
+                                          // myIconEnabled: true,
+                                          // myIconSize: 30,
+                                          // myIcon: Icons.location_on_outlined,
+                                          // myIconColor: Colors.red,
+                                          Rad: 30,
+                                          width: (widget.screen_width * 3 / 4 -
+                                              20),
+                                          text: 'Tap to play Audio',
+                                          title: 'Audio Recording'),
                                     ),
                                   ),
                                 ),

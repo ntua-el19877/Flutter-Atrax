@@ -1034,6 +1034,16 @@ class _AddTaskPageState extends State<AddTaskPage> {
   }
 
   Future getImage() async {
+    var status = await Permission.storage.status;
+    if (!status.isGranted) {
+      // If permission has not been granted, request it
+      status = await Permission.storage.request();
+      if (!status.isGranted) {
+        // If permission has been denied, show an error message
+        // or disable the functionality that requires access to local storage
+        return;
+      }
+    }
     final image = await imagePicker.getImage(source: ImageSource.camera);
     if (image != null) {
       setState(() {
