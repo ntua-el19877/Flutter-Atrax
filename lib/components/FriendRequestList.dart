@@ -20,21 +20,54 @@ class FriendRequestsList extends StatefulWidget {
 }
 
 class _FriendRequestsListState extends State<FriendRequestsList> {
+  var friendlist = [];
+  var friendKeys = [];
+  @override
+  void initState() {
+    super.initState();
+    // print(formatted);
+    //var date = widget.box.getAt(1).date;
+
+    friendlist = widget.friendbox.values
+        .where((friend) => friend.is_active == 'false')
+        .toList();
+    friendKeys = widget.friendbox
+        .toMap()
+        .entries
+        .where((friend) => friend.value.is_active == 'false')
+        .map((entry) => entry.key)
+        .toList();
+    // taskKeys = widget.box
+    //     .toMap()
+    //     .entries
+    //     .where((entry) => entry.value.date == formatted)
+    //     .map((entry) => entry.key)
+    //     .toList();
+    // //print("TASKS______________");
+    // // print(taskKeys);
+    // _myBoxListenable = widget.box.listenable();
+  }
+
   @override
   Widget build(BuildContext context) {
     // Color _color_TaskMessage = widget.color_Secondary;
     List<FriendRequest> friendList = List.generate(
-        widget.friendbox.length,
+        friendlist.length,
         (index) => FriendRequest(
             friendbox: widget.friendbox,
-            friendID: widget.friendbox.getAt(index).friendID,
-            is_active: widget.friendbox.getAt(index).is_active,
-            last_name: widget.friendbox.getAt(index).last_name,
-            name: widget.friendbox.getAt(index).name));
+            friendID: friendKeys[index],
+            is_active: friendlist[index].is_active,
+            last_name: friendlist[index].last_name,
+            name: friendlist[index].name));
 // Sort the taskMessages list based on date and time
-     friendList =
-        friendList.where((friend) => friend.is_active == 'false').toList();
-
+    // friendList =
+    //     friendList.where((friend) => friend.is_active == 'false').toList();
+    // friendKeys = widget.friendbox
+    //     .toMap()
+    //     .entries
+    //     .where((friend) => friend.value.is_active == 'false')
+    //     .map((entry) => entry.key)
+    //     .toList();
     friendList.sort((a, b) {
       // Compare the dates first
       int nameComparison = a.name.compareTo(b.name);

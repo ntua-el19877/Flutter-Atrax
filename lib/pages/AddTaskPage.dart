@@ -380,7 +380,7 @@ class _AddTaskPageState extends State<AddTaskPage> {
       'notifications': new_Notifications_List,
       'importance': importance,
       'location': Location(latitude: 1, longitude: 7),
-      'recordingFilePath': 'path1',
+      'recordingFilePath': audioFile,
       'photoFilePath': imageDestination,
       'friendName': ["julie", "jess"]
     };

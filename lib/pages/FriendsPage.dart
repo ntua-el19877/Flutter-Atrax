@@ -39,6 +39,18 @@ class _FriendsPageState extends State<FriendsPage> {
 
   var N_friend_requests = 1;
 
+  @override
+  void didUpdateWidget(FriendsPage oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.friendbox.length != oldWidget.friendbox.length) {
+      setState(() {
+        // updateTasksForSelectedDay();
+        // print("----------------------------------");
+        // print(taskKeys);
+        // getSelectedDayTasks();
+      });
+    }
+  }
 //   Future<void> readFriendsJson() async {
 // //final AssetBundle rootBundle = _initRootBundle();
 // //final String response = await rootBundle.loadString('assets/friends.json');
@@ -275,19 +287,14 @@ class _FriendsPageState extends State<FriendsPage> {
   Future openFriendRequests() => showDialog(
       context: context,
       builder: (context) => AlertDialog(
-          title: Text(
+          title: const Text(
             "Friend Requests",
             textAlign: TextAlign.center,
           ),
           //insetPadding: EdgeInsets.symmetric(vertical: 200),
           backgroundColor: Color(0xffE6F4F1),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-                //FriendRequest(name: 'Nikos', last_name: 'Fiannopoulos', is_active: 'false',),
-                FriendRequestsList(friendbox: widget.friendbox),
-            ]
-          )
-          )
-          );
+          content: Column(mainAxisSize: MainAxisSize.min, children: [
+            //FriendRequest(name: 'Nikos', last_name: 'Fiannopoulos', is_active: 'false',),
+            FriendRequestsList(friendbox: widget.friendbox),
+          ])));
 }

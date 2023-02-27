@@ -41,8 +41,8 @@ class _CalendarPageState extends State<CalendarPage> {
     if (widget.box.length != oldWidget.box.length) {
       setState(() {
         updateTasksForSelectedDay();
-        print("----------------------------------");
-        print(taskKeys);
+        // print("----------------------------------");
+        // print(taskKeys);
         // getSelectedDayTasks();
       });
     }

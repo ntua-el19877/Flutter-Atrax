@@ -95,7 +95,7 @@ class _DevButtonsState extends State<DevButtons> {
                 friendID: f1,
               );
               Friend friend2 = Friend(
-                is_active: 'true',
+                is_active: 'false',
                 last_name: 'Giannopoulos',
                 name: 'Spyros',
                 friendID: f2,

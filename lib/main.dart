@@ -51,8 +51,12 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   if (friendbox.length == 0) {
-    var f1 = '1111';
-    var f2 = '2222';
+    var f1 = '1';
+    var f2 = '2';
+    var f3 = '3';
+    var f4 = '4';
+    var f5 = '5';
+    var f6 = '6';
     Friend friend1 = Friend(
       is_active: 'true',
       last_name: 'Loukas',
@@ -65,8 +69,36 @@ void main() async {
       name: 'Spyros',
       friendID: f2,
     );
+    Friend friend3 = Friend(
+      is_active: 'true',
+      last_name: 'Dimitris',
+      name: 'Koumou',
+      friendID: f1,
+    );
+    Friend friend4 = Friend(
+      is_active: 'false',
+      last_name: 'Aulon',
+      name: 'Markos',
+      friendID: f1,
+    );
+    Friend friend5 = Friend(
+      is_active: 'false',
+      last_name: 'Kalogianni',
+      name: 'Eleu',
+      friendID: f1,
+    );
+    Friend friend6 = Friend(
+      is_active: 'false',
+      last_name: 'Dimopo',
+      name: 'Angelos',
+      friendID: f1,
+    );
     friendbox.put(f1, friend1);
     friendbox.put(f2, friend2);
+    friendbox.put(f3, friend3);
+    friendbox.put(f4, friend4);
+    friendbox.put(f5, friend5);
+    friendbox.put(f6, friend6);
   }
   /*final prefs = await SharedPreferences.getInstance();
   final isFirstLaunch = prefs.getBool('isFirstLaunch') ?? true;
