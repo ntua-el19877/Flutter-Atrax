@@ -70,21 +70,6 @@ class _MainPageState extends State<MainPage> {
         backgroundColor: const Color(0xffe6f4f1),
         body: Stack(
           children: [
-            HomeDownBar(
-              box: _mybox,
-              friendbox: _myfriendsbox,
-              currentIndex: currentIndex,
-              top: screenHeight,
-              circle_front_Radius: 35,
-              circle_back_Radius: 40,
-              preferredSize: bottomNavBarHeight,
-              onTap: (int index) {
-                setState(() {
-                  // readJson();
-                  currentIndex = index;
-                });
-              },
-            ),
             DevButtons(
               friendbox: _myfriendsbox,
               mybox: _mybox,
@@ -108,7 +93,15 @@ class _MainPageState extends State<MainPage> {
                               title: 'Sample title', body: 'Gaaaay');
                         },
                       ),
-
+                      // Positioned(
+                      //     top: 20,
+                      //     child: SizedBox(
+                      //       height: MediaQuery.of(context).size.height -
+                      //           2 * bottomNavBarHeight -
+                      //           20,
+                      //       child: SingleChildScrollView(
+                      //           physics: const BouncingScrollPhysics(),
+                      //           child:
                       ColumnTaskMessages(
                         mybox: _mybox,
                         color_Secondary: color_Secondary,
@@ -117,11 +110,29 @@ class _MainPageState extends State<MainPage> {
                         TaskLeftPadding: TaskLeftPadding,
                         currentIndex: currentIndex,
                         maxHeight: 200,
-                      )
+                      ),
+                      // ),
+                      //     ))
+
                       // ),
                     ],
                   ));
-                })
+                }),
+            HomeDownBar(
+              box: _mybox,
+              friendbox: _myfriendsbox,
+              currentIndex: currentIndex,
+              top: screenHeight,
+              circle_front_Radius: 35,
+              circle_back_Radius: 40,
+              preferredSize: bottomNavBarHeight,
+              onTap: (int index) {
+                setState(() {
+                  // readJson();
+                  currentIndex = index;
+                });
+              },
+            ),
           ],
         ));
     // } else {

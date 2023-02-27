@@ -354,6 +354,11 @@ class _AddTaskPageState extends State<AddTaskPage> {
         .join();
   }
 
+  int generateRandomInt() {
+    Random random = new Random();
+    return random.nextInt(900000) + 100000;
+  }
+
   String returnlocation() {
     if (lat == '')
       return '';
@@ -424,7 +429,7 @@ class _AddTaskPageState extends State<AddTaskPage> {
       //var passed_time = DateTime.parse('$DueDate $DueTime');
       //print("Passed time : " + passed_time.toString());
       NotificationService().scheduleNotification(
-          id: 0,
+          id: generateRandomInt(),
           title: _TaskController.text + " (Now)",
           body: _DescriptionController.text,
           scheduledNotificationDateTime:
@@ -440,7 +445,7 @@ class _AddTaskPageState extends State<AddTaskPage> {
         if (new_notifications_list[i].entries.last.value != '' &&
             new_notifications_list[i].entries.first.value != '') {
           NotificationService().scheduleNotification(
-              id: i + 1,
+              id: generateRandomInt(),
               title: _TaskController.text +
                   " (" +
                   new_notifications_list[i].entries.first.value +

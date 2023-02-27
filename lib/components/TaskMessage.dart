@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:atrax/components/CustomRectangle.dart';
 import 'package:atrax/components/IconRow.dart';
 import 'package:atrax/components/plus_Button.dart';
+import 'package:atrax/pages/HomePage.dart';
 import 'package:atrax/pages/modifyTaskPage.dart';
 import 'package:atrax/routes/routes.dart';
 import 'package:audioplayers/audioplayers.dart';
@@ -102,7 +103,7 @@ class _TaskMessageState extends State<TaskMessage> {
   bool isPlaying = false;
   Duration duration = Duration.zero;
   Duration position = Duration.zero;
-  IconData checkIcon = Icons.check_box_outline_blank;
+  IconData checkIcon = Icons.check_box_rounded;
   @override
   void didUpdateWidget(TaskMessage oldWidget) {
     if ((oldWidget.color_Secondary != widget.color_Secondary) ||
@@ -149,11 +150,13 @@ class _TaskMessageState extends State<TaskMessage> {
     }
     colorModel = ColorModel();
     colorModel.setColor(_color_TaskMessage, widget.boxkey);
-    if (widget.mybox.get(widget.boxkey).completed == 'true') {
-      checkIcon = Icons.check_box_rounded;
-    }
+    // if (widget.mybox.get(widget.boxkey).completed == 'false') {
+    //   checkIcon = Icons.check_box_rounded;
+    // } else {
+    //   checkIcon = Icons.check_box_outline_blank;
+    // }
     super.initState();
-
+    colorModel.setColor(color_Secondary, widget.boxkey);
     audioPlayer.onPlayerStateChanged.listen((state) {
       setState(() {
         isPlaying = state == PlayerState.PLAYING;
@@ -188,9 +191,10 @@ class _TaskMessageState extends State<TaskMessage> {
               setState(() {
                 _color_TaskMessage = widget.color_Green;
                 widget.mybox.getAt(widget.index).completed = 'true';
-                checkIcon = Icons.check_box_rounded;
 
                 colorModel.setColor(_color_TaskMessage, widget.boxkey);
+
+                checkIcon = colorModel.getIcon(widget.boxkey);
                 // print("$_color_TaskMessage");
               });
             }
@@ -199,9 +203,9 @@ class _TaskMessageState extends State<TaskMessage> {
             if (details.delta.dx < -sensitivity) {
               setState(() {
                 _color_TaskMessage = widget.color_Secondary;
-                checkIcon = Icons.check_box_outline_blank;
                 widget.mybox.getAt(widget.index).completed = 'false';
                 colorModel.setColor(_color_TaskMessage, widget.boxkey);
+                checkIcon = colorModel.getIcon(widget.boxkey);
                 // print("$_color_TaskMessage");
               });
             }
@@ -231,7 +235,7 @@ class _TaskMessageState extends State<TaskMessage> {
                           Padding(
                             padding: const EdgeInsets.only(right: 5, top: 0),
                             child: Icon(
-                              checkIcon,
+                              colorModel.getIcon(widget.boxkey),
                               color: widget.color_Blacks,
                               size: 20,
                             ),
@@ -315,7 +319,7 @@ class _TaskMessageState extends State<TaskMessage> {
                 ),
               ),
               Positioned(
-                  top: 0,
+                  top: 5,
                   right: 5,
                   child: Stack(alignment: Alignment.center, children: [
                     if (widget.importance != '')
@@ -323,7 +327,7 @@ class _TaskMessageState extends State<TaskMessage> {
                         width: 54,
                         height: 24,
                         decoration: BoxDecoration(
-                          borderRadius: BorderRadius.horizontal(
+                          borderRadius: const BorderRadius.horizontal(
                             left: Radius.circular(45),
                             right: Radius.circular(45),
                           ),
@@ -333,17 +337,17 @@ class _TaskMessageState extends State<TaskMessage> {
                     if (widget.importance != '')
                       Container(
                         alignment: Alignment.center,
-                        child: Text(widget.importance,
-                            style: TextStyle(color: widget.color_Primary)),
                         width: 50,
                         height: 20,
                         decoration: BoxDecoration(
-                          borderRadius: BorderRadius.horizontal(
+                          borderRadius: const BorderRadius.horizontal(
                             left: Radius.circular(45),
                             right: Radius.circular(45),
                           ),
                           color: _getColor(),
                         ),
+                        child: Text(widget.importance,
+                            style: TextStyle(color: widget.color_Primary)),
                       ),
                   ])),
             ],
@@ -354,9 +358,11 @@ class _TaskMessageState extends State<TaskMessage> {
   }
 
   Color _getColor() {
-    if (widget.importance == 'High')
-      return Color(0xffa32f7d);
-    else if (widget.importance == 'Mid') return Color(0xffa15eaf);
+    if (widget.importance == 'High') {
+      return const Color(0xffa32f7d);
+    } else if (widget.importance == 'Mid') {
+      return const Color(0xffa15eaf);
+    }
     return Color(0xff9787d7);
   }
 
@@ -562,31 +568,74 @@ class _TaskMessageState extends State<TaskMessage> {
                           padding: EdgeInsets.only(bottom: 10),
                           child: Column(
                             children: [
-                              Slider(
-                                min: 0,
-                                max: duration.inSeconds.toDouble(),
-                                thumbColor: widget.color_Blacks,
-                                inactiveColor: widget.color_Blacks,
-                                onChanged: (value) async {
-                                  final position =
-                                      Duration(seconds: value.toInt());
-                                  await audioPlayer.seek(position);
-                                  await audioPlayer.resume();
-                                },
-                                value: position.inSeconds.toDouble(),
-                              ),
-                              Padding(
-                                padding:
-                                    const EdgeInsets.symmetric(horizontal: 16),
-                                child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Text(formatTime(position)),
-                                    Text(formatTime(duration - position))
-                                  ],
+                              // Slider(
+                              //   min: 0,
+                              //   max: duration.inSeconds.toDouble(),
+                              //   thumbColor: widget.color_Blacks,
+                              //   inactiveColor: widget.color_Blacks,
+                              //   onChanged: (value) async {
+                              //     final position =
+                              //         Duration(seconds: value.toInt());
+                              //     await audioPlayer.seek(position);
+                              //     await audioPlayer.resume();
+                              //   },
+                              //   value: position.inSeconds.toDouble(),
+                              // ),
+                              // Padding(
+                              //   padding:
+                              //       const EdgeInsets.symmetric(horizontal: 16),
+                              //   child: Row(
+                              //     mainAxisAlignment:
+                              //         MainAxisAlignment.spaceBetween,
+                              //     children: [
+                              //       Text(formatTime(position)),
+                              //       Text(formatTime(duration - position))
+                              //     ],
+                              //   ),
+                              // ),
+                              if (widget.recording_file_path != '')
+                                Padding(
+                                  padding: EdgeInsets.all(10),
+                                  child: Positioned(
+                                    top: 0,
+                                    right: 5,
+                                    child: GestureDetector(
+                                      onTap: () async {
+                                        // if (isPlaying) {
+                                        //   await audioPlayer.pause();
+                                        //   // pauseAudio();
+                                        // } else {
+                                        // String url =
+                                        //     'https://www.youtube.com/results?search_query=e+scooby+dooby+doo+where+are+you';
+                                        // 'assets/recordings/Scoobydoo.mp3';
+                                        // await audioPlayer
+                                        //     .play(Uri.parse('asset:///assets/recordings/Scoobydoo.mp3'));
+                                        // .play('assets/recordings/Scoobydoo.mp3');
+                                        // playAudio();
+                                        final player = AudioCache();
+                                        player.play(widget.recording_file_path);
+                                        // }
+                                      },
+                                      child: Stack(
+                                        alignment: Alignment.center,
+                                        children: [
+                                          Container(
+                                            width: widget.screen_width * 3 / 4,
+                                            height: 40,
+                                            decoration: BoxDecoration(
+                                              borderRadius:
+                                                  const BorderRadius.horizontal(
+                                                left: Radius.circular(45),
+                                                right: Radius.circular(45),
+                                              ),
+                                              color: widget.color_Secondary,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
                                 ),
-                              ),
                               CircleAvatar(
                                   radius: 35,
                                   backgroundColor: widget.color_Secondary,
@@ -611,7 +660,7 @@ class _TaskMessageState extends State<TaskMessage> {
                                       // .play('assets/recordings/Scoobydoo.mp3');
                                       // playAudio();
                                       final player = AudioCache();
-                                      player.play('Scoobydoo.mp3');
+                                      player.play(widget.recording_file_path);
                                       // }
                                     },
                                   )),

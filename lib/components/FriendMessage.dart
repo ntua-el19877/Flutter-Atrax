@@ -29,7 +29,7 @@ class _FriendMessageState extends State<FriendMessage> {
     double iconRoomHeight = 15;
     return Card(
       key: ValueKey("fname"),
-      margin: const EdgeInsets.all(10),
+      margin: const EdgeInsets.only(top: 5, bottom: 5, right: 10, left: 10),
       child: ListTile(
         tileColor: const Color(0xff929AE7),
         //leading: Text(Friends[index]["icon_symbol"]),

@@ -46,9 +46,9 @@ class _FriendListState extends State<FriendList> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        const SizedBox(height: 20),
+        const SizedBox(height: 0),
         ...friendList.map((friendList) => Padding(
-              padding: const EdgeInsets.all(10),
+              padding: const EdgeInsets.all(2),
               child: friendList,
             )),
       ],
