@@ -130,29 +130,29 @@ class _FriendsPageState extends State<FriendsPage> {
             ],
           ),
           Align(
-              alignment: Alignment.center,
-              child: /*Text(
+            alignment: Alignment.center,
+            child: /*Text(
                 'Task Requests',
                 style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
               )*/
-              TaskRequest(
+                TaskRequest(
               name: 'Task 1',
               description: 'This is my task',
-                  date: '2023-02-22',
-                  time: '10:00 AM',
-                  repetitiveness: 'Daily',
-                  notifications: [
-                    {"date": "2023-03-01", "time": "10:00 AM"},
-                    {"date": "2023-03-03", "time": "3:30 PM"},
-                    {"date": "2023-03-05", "time": "8:15 AM"},
-                  ],
-                  importance: 'High',
-                  location: 'latitude' + '37.7749' + 'longitude' + '-122.4194',
-                  recording_file_path: 'assets/recordings/Scoobydoo.mp3',
-                  //photo_file_path: 'assets/icons/user_barcode_1.png',
-                  friend_name: ['John', 'Jane'],
-                  ),
-              ),
+              date: '2023-02-22',
+              time: '10:00 AM',
+              repetitiveness: 'Daily',
+              notifications: [
+                {"date": "2023-03-01", "time": "10:00 AM"},
+                {"date": "2023-03-03", "time": "3:30 PM"},
+                {"date": "2023-03-05", "time": "8:15 AM"},
+              ],
+              importance: 'High',
+              location: 'latitude' + '37.7749' + 'longitude' + '-122.4194',
+              recording_file_path: 'assets/recordings/Scoobydoo.mp3',
+              //photo_file_path: 'assets/icons/user_barcode_1.png',
+              friend_name: ['John', 'Jane'],
+            ),
+          ),
           //getTaskRequests(),
           SizedBox(height: 50),
           Align(
@@ -167,7 +167,10 @@ class _FriendsPageState extends State<FriendsPage> {
         ),*/
           FriendList(
             friendbox: widget.friendbox,
-          )
+          ),
+          // Row(
+          //   children:[ElevatedButton(onPressed: (){}), child: child)]
+          // )
         ],
       ),
     );
