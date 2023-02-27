@@ -32,7 +32,6 @@ dependencies:
   flutter:
     sdk: flutter
   table_calendar: ^3.0.9
-  flutter_launcher_icons: ^0.12.0
   dio: ^5.0.1
   image_gallery_saver: '^1.7.1'
   cupertino_icons: ^1.0.2
@@ -56,6 +55,7 @@ dev_dependencies:
     sdk: flutter
   hive_generator: ^2.0.0
   build_runner: ^2.1.11
+  flutter_launcher_icons: ^0.12.0
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is
   # activated in the `analysis_options.yaml` file located at the root of your
@@ -63,7 +63,7 @@ dev_dependencies:
   # rules and activating additional ones.
   flutter_lints: ^2.0.0
 flutter_icons:
-  image_path: "assets/icons/logo-no-background.png"
+  image_path: "assets/icons/logo_no_background.png"
   android: true
   ios: true
 # For information on the generic Dart part of this file, see the
@@ -83,6 +83,7 @@ flutter:
     - assets/icons/
     # - assets/tasks.json
     - assets/Scoobydoo.mp3
+    # - assets/icons/logo_no_background.png
     # - assets/friends.json
   #   - images/a_dot_ham.jpeg
 

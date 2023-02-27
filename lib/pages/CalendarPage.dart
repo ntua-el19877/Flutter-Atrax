@@ -83,25 +83,30 @@ class _CalendarPageState extends State<CalendarPage> {
     return Scaffold(
       body: Stack(
         children: [
-          Container(
-            //color: Color(0xff929AE7),
-            child: Align(
-                alignment: AlignmentDirectional.topCenter,
-                child: SizedBox(
-                  height: screenHeight * 0.6,
-                  width: screenWidth * 0.85,
-                  child: TableCalendar(
-                    availableGestures: AvailableGestures.all,
-                    selectedDayPredicate: (day) => isSameDay(day, today),
-                    focusedDay: today,
-                    firstDay: DateTime.utc(2010, 10, 16),
-                    lastDay: DateTime.utc(2030, 3, 14),
-                    headerStyle: const HeaderStyle(
-                        formatButtonVisible: false, titleCentered: true),
-                    onDaySelected: _onDaySelected,
-                  ),
-                )),
-          ),
+          Column(children: [
+            SizedBox(
+              height: 20,
+            ),
+            Container(
+              //color: Color(0xff929AE7),
+              child: Align(
+                  alignment: AlignmentDirectional.topCenter,
+                  child: SizedBox(
+                    height: screenHeight * 0.6,
+                    width: screenWidth * 0.85,
+                    child: TableCalendar(
+                      availableGestures: AvailableGestures.all,
+                      selectedDayPredicate: (day) => isSameDay(day, today),
+                      focusedDay: today,
+                      firstDay: DateTime.utc(2010, 10, 16),
+                      lastDay: DateTime.utc(2030, 3, 14),
+                      headerStyle: const HeaderStyle(
+                          formatButtonVisible: false, titleCentered: true),
+                      onDaySelected: _onDaySelected,
+                    ),
+                  )),
+            ),
+          ]),
           Positioned(
               top: 0.4 * screenHeight,
               child: ValueListenableBuilder(

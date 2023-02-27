@@ -34,7 +34,7 @@ class _FriendMessageState extends State<FriendMessage> {
         tileColor: const Color(0xff929AE7),
         //leading: Text(Friends[index]["icon_symbol"]),
         leading: CircleAvatar(
-          child: Text("S"),
+          child: Text('${widget.name[0]}' + '${widget.last_name[0]}'),
           backgroundColor: Color(0xffE6F4F1),
         ),
         title: Text(widget.name + " " + widget.last_name),
