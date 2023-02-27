@@ -5,6 +5,7 @@ import 'package:hive/hive.dart';
 import 'TaskMessage.dart';
 
 class ColumnTaskMessages extends StatefulWidget {
+  final Box friendbox;
   final double maxHeight;
   final Box mybox;
   final Color color_Secondary;
@@ -20,6 +21,7 @@ class ColumnTaskMessages extends StatefulWidget {
     required this.TaskLeftPadding,
     required this.currentIndex,
     required this.maxHeight,
+    required this.friendbox,
   });
 
   @override
@@ -33,6 +35,7 @@ class _ColumnTaskMessagesState extends State<ColumnTaskMessages> {
     List<TaskMessage> taskMessages = List.generate(
       widget.mybox.length,
       (index) => TaskMessage(
+        friendbox: widget.friendbox,
         boxkey: widget.mybox.keys.toList()[index],
         completed: widget.mybox.getAt(index).completed,
         mybox: widget.mybox,

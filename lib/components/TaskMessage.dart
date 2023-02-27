@@ -33,6 +33,7 @@ class MapUtils {
 
 class TaskMessage extends StatefulWidget {
   final Box mybox;
+  final Box friendbox;
   final String boxkey;
   final int index;
   final double screen_width;
@@ -90,6 +91,7 @@ class TaskMessage extends StatefulWidget {
     // required this.indexListTime,
     required this.onTap,
     Key? key,
+    required this.friendbox,
   }) : super(key: key);
 
   @override
@@ -673,10 +675,11 @@ class _TaskMessageState extends State<TaskMessage> {
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                      builder: (context) => modifyTaskPage(
+                                      builder: (context) => mdPage(
                                         box: widget.mybox,
                                         emptyFields: emptyFields,
                                         boxkey: widget.boxkey,
+                                        friendbox: widget.friendbox,
                                       ),
                                     ),
                                   ).then((value) {

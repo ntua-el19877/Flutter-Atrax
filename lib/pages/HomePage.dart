@@ -99,6 +99,7 @@ class _MainPageState extends State<MainPage> {
                         child: SingleChildScrollView(
                           physics: const BouncingScrollPhysics(),
                           child: ColumnTaskMessages(
+                            friendbox: widget.friendbox,
                             mybox: _mybox,
                             color_Secondary: color_Secondary,
                             color_Green: color_Green,

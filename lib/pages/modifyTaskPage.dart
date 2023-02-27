@@ -3,6 +3,7 @@ import 'dart:math';
 
 import 'package:atrax/entities/AddTaskJSON.dart';
 import 'package:atrax/file_manager.dart';
+import 'package:atrax/pages/CalendarPage.dart';
 import 'package:flutter_sound/flutter_sound.dart';
 import 'package:hive/hive.dart';
 import 'package:image_picker/image_picker.dart';
@@ -69,31 +70,33 @@ class Notification {
       };
 }
 
-//---------------------------------------------------------
-
-class modifyTaskPage extends StatefulWidget {
+class mdPage extends StatefulWidget {
   final Box box;
+  final Box friendbox;
   final List<bool> emptyFields;
   final String boxkey;
 
-  const modifyTaskPage(
+  const mdPage(
       {Key? key,
       required this.box,
+      required this.friendbox,
       required this.emptyFields,
-      required this.boxkey
-      // , required this.friendbox
-      })
+      required this.boxkey})
       : super(key: key);
   @override
-  _modifyTaskPageState createState() => _modifyTaskPageState();
+  _mdPageState createState() => _mdPageState();
 }
 
-class _modifyTaskPageState extends State<modifyTaskPage> {
+var lenlen = 0;
+
+class _mdPageState extends State<mdPage> {
   @override
   void initState() {
     super.initState();
     _insertLastFiles();
     initRecorder();
+
+    lenlen = widget.friendbox.length;
   }
 
   String audioFile = '';
@@ -121,7 +124,6 @@ class _modifyTaskPageState extends State<modifyTaskPage> {
   var long = '';
 
   String imageDestination = '';
-  String mylocation = '';
 
   TimeOfDay notification_time = TimeOfDay(hour: 8, minute: 00);
   DateTime notification_date = DateUtils.dateOnly(DateTime.now());
@@ -134,7 +136,7 @@ class _modifyTaskPageState extends State<modifyTaskPage> {
       List.generate(10, (i) => Notification('', ''), growable: true);
   var jsonNotifications;
   List<Map<String, String>> new_notifications_list = [];
-
+  String mylocation = '';
   String task = ''; /*  user task   */
   String description = ''; /*  user description   */
 
@@ -162,16 +164,29 @@ class _modifyTaskPageState extends State<modifyTaskPage> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   const Text(
-                    'Task name : ',
+                    'Task Name : ',
                     style: TextStyle(fontSize: 21),
                   ),
-                  TextField(
-                      controller: _TaskController,
-                      decoration: const InputDecoration(
-                        border: OutlineInputBorder(),
-                        filled: true,
-                        fillColor: Colors.white,
-                      )),
+                  SizedBox(
+                      width: double.infinity,
+                      height: 50,
+                      child: Align(
+                          alignment: Alignment.center,
+                          child: TextField(
+                              controller: _TaskController,
+                              decoration: const InputDecoration(
+                                border: OutlineInputBorder(
+                                    borderRadius:
+                                        BorderRadius.all(Radius.circular(5)),
+                                    borderSide: BorderSide(width: 2)),
+                                filled: true,
+                                fillColor: Colors.white,
+                                contentPadding: EdgeInsets.all(20),
+                                isDense: true,
+                                hintText: 'Enter a Name',
+                                hintStyle: TextStyle(fontSize: 18),
+                                alignLabelWithHint: true,
+                              )))),
                   const Text(
                     'Description : ',
                     style: TextStyle(fontSize: 21),
@@ -192,7 +207,7 @@ class _modifyTaskPageState extends State<modifyTaskPage> {
                                 fillColor: Colors.white,
                                 contentPadding: EdgeInsets.all(20),
                                 isDense: true,
-                                hintText: 'Enter a description',
+                                hintText: 'Enter a Description',
                                 hintStyle: TextStyle(fontSize: 18),
                                 alignLabelWithHint: true,
                               )))),
@@ -252,7 +267,6 @@ class _modifyTaskPageState extends State<modifyTaskPage> {
                               lat = '${value.latitude}';
                               long = '${value.longitude}';
                               mylocation = lat + ',' + long;
-
                               MapUtils.openMap(lat, long);
                             });
                           }),
@@ -280,6 +294,9 @@ class _modifyTaskPageState extends State<modifyTaskPage> {
               ),
               child: Row(
                 children: <Widget>[
+                  SizedBox(
+                    width: 10,
+                  ),
                   ElevatedButton(
                     style: ElevatedButton.styleFrom(
                       primary: Color(0xff06661B), // Background color
@@ -287,14 +304,23 @@ class _modifyTaskPageState extends State<modifyTaskPage> {
                     child: Text('Confirm'),
                     onPressed: confirmTask,
                   ),
+                  SizedBox(
+                    width: 10,
+                  ),
                   ElevatedButton(
                     style: ElevatedButton.styleFrom(
                       primary: Color(0xffA32F7D), // Background color
                     ),
                     child: Text('Invite a friend'),
-                    onPressed: _SaveTask,
+                    onPressed: _InviteFriend,
+                  ),
+                  SizedBox(
+                    width: 10,
                   ),
                   ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      primary: color_Red, // Background color
+                    ),
                     onPressed: () {
                       Navigator.pop(context);
                     },
@@ -337,11 +363,16 @@ class _modifyTaskPageState extends State<modifyTaskPage> {
         .join();
   }
 
+  int generateRandomInt() {
+    Random random = new Random();
+    return random.nextInt(900000) + 100000;
+  }
+
   String returnlocation() {
     if (lat == '')
       return '';
     else
-      return mylocation;
+      return lat + ',' + long;
   }
 
   void _SaveTask() async {
@@ -351,25 +382,123 @@ class _modifyTaskPageState extends State<modifyTaskPage> {
     //   jsonNotifications = jsonEncode(new_Notifications_List); //TYPE JSON MAP //
     //   debugPrint(jsonNotifications);
     // });
-
-    HiveInit.Task task2 = HiveInit.Task(
-      name: _TaskController.text,
-      description: _DescriptionController.text,
-      date: DueDate,
-      time: DueTime,
-      repetitiveness: repetitiveness,
-      //notifications: widget.box.getAt(0).notifications,
-      notifications: new_notifications_list,
-      importance: importance,
-      location: returnlocation(),
-      recordingFilePath: audioFile,
-      photoFilePath: imageDestination,
-      friendName: ['John', 'Jane'],
-      completed: 'false',
-    );
+    HiveInit.Task task2;
+    if (repetitiveness == '') {
+      task2 = HiveInit.Task(
+        name: _TaskController.text,
+        description: _DescriptionController.text,
+        date: DueDate,
+        time: DueTime,
+        repetitiveness: repetitiveness,
+        //notifications: widget.box.getAt(0).notifications,
+        notifications: new_notifications_list,
+        importance: importance,
+        location: returnlocation(),
+        recordingFilePath: audioFile,
+        photoFilePath: imageDestination,
+        friendName: ['John', 'Jane'],
+        completed: 'false',
+      );
+      widget.box.put(generateRandomString(), task2);
+    } else if (repetitiveness == 'every day') {
+      var _duedate = due_date.day;
+      for (int i = 0; i < 10; i++) {
+        task2 = HiveInit.Task(
+          name: _TaskController.text,
+          description: _DescriptionController.text,
+          date: DateTime(due_date.year, due_date.month, _duedate).toString(),
+          time: DueTime,
+          repetitiveness: repetitiveness,
+          //notifications: widget.box.getAt(0).notifications,
+          notifications: new_notifications_list,
+          importance: importance,
+          location: returnlocation(), recordingFilePath: audioFile,
+          photoFilePath: imageDestination,
+          friendName: ['John', 'Jane'],
+          completed: 'false',
+        );
+        widget.box.put(generateRandomString(), task2);
+        _duedate += 1;
+      }
+    } else if (repetitiveness == 'every week') {
+      var _duedate = due_date.day;
+      for (int i = 0; i < 10; i++) {
+        task2 = HiveInit.Task(
+          name: _TaskController.text,
+          description: _DescriptionController.text,
+          date: DateTime(due_date.year, due_date.month, _duedate).toString(),
+          time: DueTime,
+          repetitiveness: repetitiveness,
+          //notifications: widget.box.getAt(0).notifications,
+          notifications: new_notifications_list,
+          importance: importance,
+          location: returnlocation(), recordingFilePath: audioFile,
+          photoFilePath: imageDestination,
+          friendName: ['John', 'Jane'],
+          completed: 'false',
+        );
+        widget.box.put(generateRandomString(), task2);
+        _duedate += 7;
+      }
+    } else if (repetitiveness == 'every month') {
+      var _duedate = due_date.month;
+      for (int i = 0; i < 10; i++) {
+        task2 = HiveInit.Task(
+          name: _TaskController.text,
+          description: _DescriptionController.text,
+          date: DateTime(due_date.year, _duedate, due_date.day).toString(),
+          time: DueTime,
+          repetitiveness: repetitiveness,
+          //notifications: widget.box.getAt(0).notifications,
+          notifications: new_notifications_list,
+          importance: importance,
+          location: returnlocation(), recordingFilePath: audioFile,
+          photoFilePath: imageDestination,
+          friendName: ['John', 'Jane'],
+          completed: 'false',
+        );
+        widget.box.put(generateRandomString(), task2);
+        _duedate += 1;
+      }
+    } else if (repetitiveness == 'every year') {
+      var _duedate = due_date.year;
+      for (int i = 0; i < 10; i++) {
+        task2 = HiveInit.Task(
+          name: _TaskController.text,
+          description: _DescriptionController.text,
+          date: DateTime(_duedate, due_date.month, due_date.day).toString(),
+          time: DueTime,
+          repetitiveness: repetitiveness,
+          //notifications: widget.box.getAt(0).notifications,
+          notifications: new_notifications_list,
+          importance: importance,
+          location: returnlocation(), recordingFilePath: audioFile,
+          photoFilePath: imageDestination,
+          friendName: ['John', 'Jane'],
+          completed: 'false',
+        );
+        widget.box.put(generateRandomString(), task2);
+        _duedate += 1;
+      }
+    } else {
+      task2 = HiveInit.Task(
+        name: _TaskController.text,
+        description: _DescriptionController.text,
+        date: DueDate,
+        time: DueTime,
+        repetitiveness: repetitiveness,
+        //notifications: widget.box.getAt(0).notifications,
+        notifications: new_notifications_list,
+        importance: importance,
+        location: returnlocation(), recordingFilePath: audioFile,
+        photoFilePath: imageDestination,
+        friendName: ['John', 'Jane'],
+        completed: 'false',
+      );
+      widget.box.put(generateRandomString(), task2);
+    }
 
     // final _mytask = _mybox.get('mytask');
-    widget.box.put(widget.boxkey, task2);
 
     final rawData = <String, dynamic>{
       'name': task,
@@ -380,7 +509,7 @@ class _modifyTaskPageState extends State<modifyTaskPage> {
       'notifications': new_Notifications_List,
       'importance': importance,
       'location': Location(latitude: 1, longitude: 7),
-      'recordingFilePath': 'path1',
+      'recordingFilePath': audioFile,
       'photoFilePath': imageDestination,
       'friendName': ["julie", "jess"]
     };
@@ -408,7 +537,7 @@ class _modifyTaskPageState extends State<modifyTaskPage> {
       //var passed_time = DateTime.parse('$DueDate $DueTime');
       //print("Passed time : " + passed_time.toString());
       NotificationService().scheduleNotification(
-          id: 0,
+          id: generateRandomInt(),
           title: _TaskController.text + " (Now)",
           body: _DescriptionController.text,
           scheduledNotificationDateTime:
@@ -424,7 +553,7 @@ class _modifyTaskPageState extends State<modifyTaskPage> {
         if (new_notifications_list[i].entries.last.value != '' &&
             new_notifications_list[i].entries.first.value != '') {
           NotificationService().scheduleNotification(
-              id: i + 1,
+              id: generateRandomInt(),
               title: _TaskController.text +
                   " (" +
                   new_notifications_list[i].entries.first.value +
@@ -452,9 +581,10 @@ class _modifyTaskPageState extends State<modifyTaskPage> {
         due_date = value!;
         //DueDate = "${due_date.day}-${due_date.month}-${due_date.year}";
         //print(due_date.month.runtimeType);
+
         DueDate = "${due_date.year}-${due_date.month}-${due_date.day}";
         DueDate = formatDate(due_date);
-        print(DueDate);
+        // print(DueDate);
       });
     });
   }
@@ -473,6 +603,76 @@ class _modifyTaskPageState extends State<modifyTaskPage> {
       });
     });
   }
+
+  List<bool> isSelected = List<bool>.generate(
+    lenlen,
+    (index) => false,
+  );
+
+  Future inviteFriend() => showDialog(
+        context: context,
+        builder: (context) {
+          String contentText = "Content of Dialog";
+          return StatefulBuilder(
+            builder: (context, setState) {
+              return AlertDialog(
+                title: Text("Title of Dialog"),
+                content: Container(
+                  width: double.maxFinite,
+                  child: ListView.builder(
+                    shrinkWrap: true,
+                    itemCount: 0,
+                    itemBuilder: (context, index) {
+                      final friend = widget.friendbox.getAt(index);
+
+                      return CheckboxListTile(
+                        title: Text('${friend.name} ${friend.last_name}'),
+                        value: isSelected[index],
+                        checkColor: Colors.white,
+                        activeColor: Colors.green,
+                        onChanged: (value) {
+                          setState(() {
+                            print(index);
+                            isSelected[index] = value!;
+                          });
+                        },
+                      );
+                    },
+                  ),
+                ),
+              );
+            },
+          );
+        },
+      );
+  Future _InviteFriend() => showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: Text("Invite a friend"),
+          content: Container(
+            width: double.maxFinite,
+            child: ListView.builder(
+              shrinkWrap: true,
+              itemCount: widget.friendbox.length,
+              itemBuilder: (context, index) {
+                final friend = widget.friendbox.getAt(index);
+
+                return CheckboxListTile(
+                  title: Text('${friend.name} ${friend.last_name}'),
+                  value: isSelected[index],
+                  checkColor: Colors.white,
+                  activeColor: Colors.green,
+                  onChanged: (value) {
+                    setState(() {
+                      isSelected[index] = value!;
+                    });
+                  },
+                );
+              },
+            ),
+          ),
+        ),
+      );
 
   Future openRepetitiveness() => showDialog(
       context: context,
@@ -536,6 +736,20 @@ class _modifyTaskPageState extends State<modifyTaskPage> {
                             Navigator.of(context).pop();
                           })),
                 ),
+                SizedBox(height: 20),
+                SizedBox(
+                  width: 200,
+                  height: 30,
+                  child: ElevatedButton(
+                      child: Text("Every Year"),
+                      style: ElevatedButton.styleFrom(
+                        primary: Color(0xff8B8DB9),
+                      ),
+                      onPressed: () => setState(() {
+                            repetitiveness = 'every year';
+                            Navigator.of(context).pop();
+                          })),
+                ),
                 //SizedBox(height: 50),
                 /*SizedBox(
                   width: 200,
@@ -562,9 +776,25 @@ class _modifyTaskPageState extends State<modifyTaskPage> {
               Row(
                 children: [
                   ElevatedButton(
-                      child: Text("Select day"),
-                      onPressed: openNotificationDay),
+                    style: ButtonStyle(
+                      foregroundColor:
+                          MaterialStateProperty.all<Color>(color_Primary),
+                      backgroundColor:
+                          MaterialStateProperty.all<Color>(color_Secondary),
+                    ),
+                    child: Text("Select day"),
+                    onPressed: openNotificationDay,
+                  ),
+                  SizedBox(
+                    width: 10,
+                  ),
                   ElevatedButton(
+                      style: ButtonStyle(
+                        foregroundColor:
+                            MaterialStateProperty.all<Color>(color_Primary),
+                        backgroundColor:
+                            MaterialStateProperty.all<Color>(color_Secondary),
+                      ),
                       child: Text("Select time"),
                       onPressed: openNotificationTime),
                 ],
@@ -614,7 +844,7 @@ class _modifyTaskPageState extends State<modifyTaskPage> {
           child: ElevatedButton(
         child: Text("Cancel"),
         style: ElevatedButton.styleFrom(
-          primary: Colors.deepOrangeAccent,
+          primary: color_Red,
           //onPrimary: Colors.black,
         ),
         onPressed: () {
@@ -633,38 +863,48 @@ class _modifyTaskPageState extends State<modifyTaskPage> {
     }
     if (list_counter != 0) {
       list.add(Container(
-          child: Column(children: [
-        ElevatedButton(
-          child: Text(" Save Notifications "),
-          style: ElevatedButton.styleFrom(
-            primary: Color(0xff06661B),
-            //onPrimary: Colors.black,
-          ),
-          onPressed: () {
-            Navigator.pop(context);
-          },
-        ),
-        ElevatedButton(
-          child: Text("Delete Notifications"),
-          style: ElevatedButton.styleFrom(
-            primary: Colors.deepOrangeAccent,
-            //onPrimary: Colors.black,
-          ),
-          onPressed: () {
-            Navigator.pop(context);
-            setState(() {
-              list_counter = 0;
-              Notifications_List =
-                  List.generate(10, (i) => ['', ''], growable: true);
-              new_Notifications_List = List.generate(
-                  10, (i) => Notification('', ''),
-                  growable: true);
-              new_notifications_list = [];
-              debugPrint('${(Notifications_List.toString())}');
-            });
-          },
-        )
-      ])));
+          alignment: Alignment.center,
+          child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                SizedBox(
+                  height: 10,
+                ),
+                ElevatedButton(
+                  child: Text(" Save Notifications "),
+                  style: ElevatedButton.styleFrom(
+                    primary: color_Green,
+                    //onPrimary: Colors.black,
+                  ),
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                ),
+                SizedBox(
+                  height: 10,
+                ),
+                ElevatedButton(
+                  child: Text("Delete Notifications"),
+                  style: ElevatedButton.styleFrom(
+                    primary: color_Red,
+                    //onPrimary: Colors.black,
+                  ),
+                  onPressed: () {
+                    Navigator.pop(context);
+                    setState(() {
+                      list_counter = 0;
+                      Notifications_List =
+                          List.generate(10, (i) => ['', ''], growable: true);
+                      new_Notifications_List = List.generate(
+                          10, (i) => Notification('', ''),
+                          growable: true);
+                      new_notifications_list = [];
+                      debugPrint('${(Notifications_List.toString())}');
+                    });
+                  },
+                )
+              ])));
     }
     return Row(children: list);
   }
@@ -802,6 +1042,16 @@ class _modifyTaskPageState extends State<modifyTaskPage> {
   }
 
   Future getImage() async {
+    var status = await Permission.storage.status;
+    if (!status.isGranted) {
+      // If permission has not been granted, request it
+      status = await Permission.storage.request();
+      if (!status.isGranted) {
+        // If permission has been denied, show an error message
+        // or disable the functionality that requires access to local storage
+        return;
+      }
+    }
     final image = await imagePicker.getImage(source: ImageSource.camera);
     if (image != null) {
       setState(() {
@@ -852,14 +1102,11 @@ class _modifyTaskPageState extends State<modifyTaskPage> {
                 ElevatedButton(
                   onPressed: () async {
                     await getImage();
-                    // print("---------------1");
+                    print("---------------1");
                     if (_image != null) {
-                      // print("---------------2");
+                      print("---------------2");
                       await saveImage();
                     }
-                    setState(() {
-                      _image;
-                    });
                   },
                   child: const Icon(Icons.camera_alt),
                 )

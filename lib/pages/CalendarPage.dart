@@ -15,10 +15,12 @@ import 'package:table_calendar/table_calendar.dart';
 import '../services/notifi_service.dart';
 
 class CalendarPage extends StatefulWidget {
+  final Box friendbox;
   final Box box;
   var tasks = [];
 
-  CalendarPage({Key? key, required this.box}) : super(key: key);
+  CalendarPage({Key? key, required this.box, required this.friendbox})
+      : super(key: key);
 
   @override
   _CalendarPageState createState() => _CalendarPageState();
@@ -120,6 +122,7 @@ class _CalendarPageState extends State<CalendarPage> {
                             child: SingleChildScrollView(
                               physics: const BouncingScrollPhysics(),
                               child: ColumnTaskMessagesFromList(
+                                  friendbox: widget.friendbox,
                                   taskKeys: taskKeys,
                                   mybox: widget.box,
                                   myboxList: tasks,

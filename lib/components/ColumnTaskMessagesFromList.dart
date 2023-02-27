@@ -5,6 +5,7 @@ import 'TaskMessage.dart';
 
 class ColumnTaskMessagesFromList extends StatefulWidget {
   final List<dynamic> taskKeys;
+  final Box friendbox;
   final Box mybox;
   final List myboxList;
   final Color color_Secondary;
@@ -21,6 +22,7 @@ class ColumnTaskMessagesFromList extends StatefulWidget {
     required this.currentIndex,
     required this.mybox,
     required this.taskKeys,
+    required this.friendbox,
   });
 
   @override
@@ -59,6 +61,7 @@ class _ColumnTaskMessagesFromListState
             //   }
             // },
             child: TaskMessage(
+              friendbox: widget.friendbox,
               boxkey: widget.taskKeys[index],
               completed: widget.myboxList[index].completed,
               mybox: widget.mybox,
