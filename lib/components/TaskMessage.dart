@@ -619,51 +619,50 @@ class _TaskMessageState extends State<TaskMessage> {
                                       child: Stack(
                                         alignment: Alignment.center,
                                         children: [
-                                          Container(
-                                            width: widget.screen_width * 3 / 4,
-                                            height: 40,
-                                            decoration: BoxDecoration(
-                                              borderRadius:
-                                                  const BorderRadius.horizontal(
-                                                left: Radius.circular(45),
-                                                right: Radius.circular(45),
-                                              ),
-                                              color: widget.color_Secondary,
-                                            ),
-                                          ),
+                                          CustomRectangle(
+                                              // myIconEnabled: true,
+                                              // myIconSize: 30,
+                                              // myIcon: Icons.location_on_outlined,
+                                              // myIconColor: Colors.red,
+                                              Rad: 30,
+                                              width:
+                                                  (widget.screen_width * 3 / 4 -
+                                                      20),
+                                              text: 'Tap to play Audio',
+                                              title: 'Audio Recording'),
                                         ],
                                       ),
                                     ),
                                   ),
                                 ),
-                              CircleAvatar(
-                                  radius: 35,
-                                  backgroundColor: widget.color_Secondary,
-                                  child: IconButton(
-                                    icon: Icon(
-                                      color: widget.color_Primary,
-                                      isPlaying
-                                          ? Icons.pause
-                                          : Icons.play_arrow,
-                                    ),
-                                    iconSize: 50,
-                                    onPressed: () async {
-                                      // if (isPlaying) {
-                                      //   await audioPlayer.pause();
-                                      //   // pauseAudio();
-                                      // } else {
-                                      // String url =
-                                      //     'https://www.youtube.com/results?search_query=e+scooby+dooby+doo+where+are+you';
-                                      // 'assets/recordings/Scoobydoo.mp3';
-                                      // await audioPlayer
-                                      //     .play(Uri.parse('asset:///assets/recordings/Scoobydoo.mp3'));
-                                      // .play('assets/recordings/Scoobydoo.mp3');
-                                      // playAudio();
-                                      final player = AudioCache();
-                                      player.play(widget.recording_file_path);
-                                      // }
-                                    },
-                                  )),
+                              // CircleAvatar(
+                              //     radius: 35,
+                              //     backgroundColor: widget.color_Secondary,
+                              //     child: IconButton(
+                              //       icon: Icon(
+                              //         color: widget.color_Primary,
+                              //         isPlaying
+                              //             ? Icons.pause
+                              //             : Icons.play_arrow,
+                              //       ),
+                              //       iconSize: 50,
+                              //       onPressed: () async {
+                              //         // if (isPlaying) {
+                              //         //   await audioPlayer.pause();
+                              //         //   // pauseAudio();
+                              //         // } else {
+                              //         // String url =
+                              //         //     'https://www.youtube.com/results?search_query=e+scooby+dooby+doo+where+are+you';
+                              //         // 'assets/recordings/Scoobydoo.mp3';
+                              //         // await audioPlayer
+                              //         //     .play(Uri.parse('asset:///assets/recordings/Scoobydoo.mp3'));
+                              //         // .play('assets/recordings/Scoobydoo.mp3');
+                              //         // playAudio();
+                              //         final player = AudioCache();
+                              //         player.play(widget.recording_file_path);
+                              //         // }
+                              //       },
+                              //     )),
                             ],
                           )),
                       Padding(

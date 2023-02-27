@@ -102,8 +102,9 @@ class _FriendsPageState extends State<FriendsPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: const Color(0xffE6F4F1),
-        body: Column(children: [
+      backgroundColor: const Color(0xffE6F4F1),
+      body: Column(
+        children: [
           Row(
             children: [
               // const BackButton(),
@@ -147,7 +148,9 @@ class _FriendsPageState extends State<FriendsPage> {
           FriendList(
             friendbox: widget.friendbox,
           )
-        ]));
+        ],
+      ),
+    );
   }
 
   // Widget getFriendsList() {

@@ -70,11 +70,6 @@ class _MainPageState extends State<MainPage> {
         backgroundColor: const Color(0xffe6f4f1),
         body: Stack(
           children: [
-            DevButtons(
-              friendbox: _myfriendsbox,
-              mybox: _mybox,
-            ),
-
             // Use ValueListenableBuilder to rebuild the widget tree
             // whenever the data in _mybox changes
             ValueListenableBuilder(
@@ -84,35 +79,37 @@ class _MainPageState extends State<MainPage> {
                       child: Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      const SizedBox(height: 20),
+                      const SizedBox(height: 30),
 
-                      ElevatedButton(
-                        child: const Text('Notification'),
-                        onPressed: () {
-                          NotificationService().showNotification(
-                              title: 'Sample title', body: 'Gaaaay');
-                        },
-                      ),
+                      // ElevatedButton(
+                      //   child: const Text('Notification'),
+                      //   onPressed: () {
+                      //     NotificationService().showNotification(
+                      //         title: 'Sample title', body: 'Gaaaay');
+                      //   },
+                      // ),
+
                       // Positioned(
                       //     top: 20,
-                      //     child: SizedBox(
-                      //       height: MediaQuery.of(context).size.height -
-                      //           2 * bottomNavBarHeight -
-                      //           20,
-                      //       child: SingleChildScrollView(
-                      //           physics: const BouncingScrollPhysics(),
-                      //           child:
-                      ColumnTaskMessages(
-                        mybox: _mybox,
-                        color_Secondary: color_Secondary,
-                        color_Green: color_Green,
-                        screenWidth: screenWidth,
-                        TaskLeftPadding: TaskLeftPadding,
-                        currentIndex: currentIndex,
-                        maxHeight: 200,
-                      ),
-                      // ),
-                      //     ))
+                      // child:
+                      SizedBox(
+                        height: MediaQuery.of(context).size.height -
+                            2 * bottomNavBarHeight -
+                            20,
+                        child: SingleChildScrollView(
+                          physics: const BouncingScrollPhysics(),
+                          child: ColumnTaskMessages(
+                            mybox: _mybox,
+                            color_Secondary: color_Secondary,
+                            color_Green: color_Green,
+                            screenWidth: screenWidth,
+                            TaskLeftPadding: TaskLeftPadding,
+                            currentIndex: currentIndex,
+                            maxHeight: 200,
+                          ),
+                        ),
+                      )
+                      // )
 
                       // ),
                     ],
