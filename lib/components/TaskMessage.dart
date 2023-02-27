@@ -8,6 +8,7 @@ import 'package:atrax/routes/routes.dart';
 import 'package:audioplayers/audioplayers.dart';
 // import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:hive/hive.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -181,30 +182,6 @@ class _TaskMessageState extends State<TaskMessage> {
         return GestureDetector(
           behavior: HitTestBehavior.translucent,
           onPanUpdate: (details) {
-            // double Distance = 0;
-            // int sensitivity = 8;
-            // if (details.delta.dx > sensitivity) {
-            //   Distance += details.delta.dx;
-            // }
-
-            // // Swiping in left direction.
-            // if (details.delta.dx < -sensitivity) {
-            //   Distance += details.delta.dx;
-            // }
-            // if (Distance > 100) {
-            //   setState(() {
-            //     _color_TaskMessage = widget.color_Green;
-            //     // print("$_color_TaskMessage");
-            //   });
-            // }
-            // if (Distance < -100) {
-            //   setState(() {
-            //     _color_TaskMessage = widget.color_Secondary;
-            //     // print("$_color_TaskMessage");
-            //   });
-            // }
-
-            // print(details.delta.dx);
             int sensitivity = 8;
             // Swiping in right direction.
             if (details.delta.dx > sensitivity) {
@@ -233,107 +210,154 @@ class _TaskMessageState extends State<TaskMessage> {
             openTaskWindow();
             // pauseAudio();
           },
-          child: Container(
-            width: MediaQuery.of(context).size.width - widget.RemoveWidth,
-            height: 60,
-            decoration: BoxDecoration(
-              color: colorModel.getColor(widget.boxkey),
-              borderRadius: BorderRadius.circular(10),
-            ),
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.end,
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: <Widget>[
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.only(right: 5, top: 0),
-                        child: Icon(
-                          checkIcon,
-                          color: widget.color_Blacks,
-                          size: 20,
-                        ),
-                      ),
-                      Padding(
-                          padding: const EdgeInsets.only(right: 5),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              const SizedBox(
-                                height: 8,
-                              ),
-                              Text(
-                                widget.name,
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
-                                style: TextStyle(
-                                  color: widget.color_Blacks,
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                              Row(
+          child: Stack(
+            children: [
+              Container(
+                width: MediaQuery.of(context).size.width - widget.RemoveWidth,
+                height: 60,
+                decoration: BoxDecoration(
+                  color: colorModel.getColor(widget.boxkey),
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: <Widget>[
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.only(right: 5, top: 0),
+                            child: Icon(
+                              checkIcon,
+                              color: widget.color_Blacks,
+                              size: 20,
+                            ),
+                          ),
+                          Padding(
+                              padding: const EdgeInsets.only(right: 5),
+                              child: Column(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  SizedBox(
-                                    width:
-                                        MediaQuery.of(context).size.width / 5,
-                                    child: Text(
-                                      "${widget.time} ",
-                                      style: TextStyle(
-                                        color: widget.color_Blacks,
-                                        fontSize: 13,
-                                        fontWeight: FontWeight.bold,
-                                      ),
+                                  const SizedBox(
+                                    height: 8,
+                                  ),
+                                  Text(
+                                    widget.name,
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: TextStyle(
+                                      color: widget.color_Blacks,
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.bold,
                                     ),
                                   ),
-                                  Padding(
-                                    padding: const EdgeInsets.only(right: 0),
-                                    child: Row(
-                                      // mainAxisAlignment: MainAxisAlignment.end,
-                                      // crossAxisAlignment: CrossAxisAlignment.end,
-                                      children: [
-                                        SizedBox(
-                                            height: iconRoomHeight, width: 10),
-                                        SizedBox(
-                                          height: iconRoomHeight,
-                                          width: MediaQuery.of(context)
-                                                  .size
-                                                  .width /
-                                              4,
-                                          child: Text(
-                                            widget.date,
-                                            style: TextStyle(
-                                              color: widget.color_Blacks,
-                                              fontSize: 13,
-                                              fontWeight: FontWeight.bold,
-                                            ),
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      SizedBox(
+                                        width:
+                                            MediaQuery.of(context).size.width /
+                                                5,
+                                        child: Text(
+                                          "${widget.time} ",
+                                          style: TextStyle(
+                                            color: widget.color_Blacks,
+                                            fontSize: 13,
+                                            fontWeight: FontWeight.bold,
                                           ),
                                         ),
-                                        IconRow(
-                                          emptyFields: emptyFields,
+                                      ),
+                                      Padding(
+                                        padding:
+                                            const EdgeInsets.only(right: 0),
+                                        child: Row(
+                                          // mainAxisAlignment: MainAxisAlignment.end,
+                                          // crossAxisAlignment: CrossAxisAlignment.end,
+                                          children: [
+                                            SizedBox(
+                                                height: iconRoomHeight,
+                                                width: 10),
+                                            SizedBox(
+                                              height: iconRoomHeight,
+                                              width: MediaQuery.of(context)
+                                                      .size
+                                                      .width /
+                                                  4,
+                                              child: Text(
+                                                widget.date,
+                                                style: TextStyle(
+                                                  color: widget.color_Blacks,
+                                                  fontSize: 13,
+                                                  fontWeight: FontWeight.bold,
+                                                ),
+                                              ),
+                                            ),
+                                            IconRow(
+                                              emptyFields: emptyFields,
+                                            ),
+                                          ],
                                         ),
-                                      ],
-                                    ),
-                                  ),
+                                      ),
+                                    ],
+                                  )
                                 ],
-                              )
-                            ],
-                          ))
+                              ))
+                        ],
+                      )
                     ],
-                  )
-                ],
+                  ),
+                ),
               ),
-            ),
+              Positioned(
+                  top: 0,
+                  right: 5,
+                  child: Stack(alignment: Alignment.center, children: [
+                    if (widget.importance != '')
+                      Container(
+                        width: 54,
+                        height: 24,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.horizontal(
+                            left: Radius.circular(45),
+                            right: Radius.circular(45),
+                          ),
+                          color: widget.color_Primary,
+                        ),
+                      ),
+                    if (widget.importance != '')
+                      Container(
+                        alignment: Alignment.center,
+                        child: Text(widget.importance,
+                            style: TextStyle(color: widget.color_Primary)),
+                        width: 50,
+                        height: 20,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.horizontal(
+                            left: Radius.circular(45),
+                            right: Radius.circular(45),
+                          ),
+                          color: _getColor(),
+                        ),
+                      ),
+                  ])),
+            ],
           ),
         );
       },
     );
+  }
+
+  Color _getColor() {
+    if (widget.importance == 'High')
+      return Color(0xffa32f7d);
+    else if (widget.importance == 'Mid') return Color(0xffa15eaf);
+    return Color(0xff9787d7);
   }
 
   String formatTime(Duration duration) {

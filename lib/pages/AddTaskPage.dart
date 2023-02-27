@@ -3,6 +3,7 @@ import 'dart:math';
 
 import 'package:atrax/entities/AddTaskJSON.dart';
 import 'package:atrax/file_manager.dart';
+import 'package:atrax/pages/CalendarPage.dart';
 import 'package:flutter_sound/flutter_sound.dart';
 import 'package:hive/hive.dart';
 import 'package:image_picker/image_picker.dart';
@@ -79,6 +80,8 @@ class AddTaskPage extends StatefulWidget {
   _AddTaskPageState createState() => _AddTaskPageState();
 }
 
+var lenlen = 0;
+
 class _AddTaskPageState extends State<AddTaskPage> {
   @override
   void initState() {
@@ -129,6 +132,7 @@ class _AddTaskPageState extends State<AddTaskPage> {
 
   @override
   Widget build(BuildContext context) {
+    lenlen = widget.friendbox.length;
     return Scaffold(
         /*
       appBar: AppBar(
@@ -281,6 +285,9 @@ class _AddTaskPageState extends State<AddTaskPage> {
               ),
               child: Row(
                 children: <Widget>[
+                  SizedBox(
+                    width: 10,
+                  ),
                   ElevatedButton(
                     style: ElevatedButton.styleFrom(
                       primary: Color(0xff06661B), // Background color
@@ -288,18 +295,27 @@ class _AddTaskPageState extends State<AddTaskPage> {
                     child: Text('Confirm'),
                     onPressed: confirmTask,
                   ),
+                  SizedBox(
+                    width: 10,
+                  ),
                   ElevatedButton(
                     style: ElevatedButton.styleFrom(
                       primary: Color(0xffA32F7D), // Background color
                     ),
                     child: Text('Invite a friend'),
-                    onPressed: _SaveTask,
+                    onPressed: _InviteFriend,
+                  ),
+                  SizedBox(
+                    width: 10,
                   ),
                   ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      primary: color_Red, // Background color
+                    ),
                     onPressed: () {
                       Navigator.pop(context);
                     },
-                    child: Text("Close Second Page"),
+                    child: Text("Cancel"),
                   )
                 ],
               ),
@@ -474,6 +490,39 @@ class _AddTaskPageState extends State<AddTaskPage> {
     });
   }
 
+  List<bool> isSelected = List<bool>.generate(
+    lenlen,
+    (index) => false,
+  );
+  Future _InviteFriend() => showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: Text("Invite a friend"),
+          content: Container(
+            width: double.maxFinite,
+            child: ListView.builder(
+              shrinkWrap: true,
+              itemCount: widget.friendbox.length,
+              itemBuilder: (context, index) {
+                final friend = widget.friendbox.getAt(index);
+
+                return CheckboxListTile(
+                  title: Text('${friend.name} ${friend.last_name}'),
+                  value: isSelected[index],
+                  checkColor: Colors.white,
+                  activeColor: Colors.green,
+                  onChanged: (value) {
+                    setState(() {
+                      isSelected[index] = value!;
+                    });
+                  },
+                );
+              },
+            ),
+          ),
+        ),
+      );
+
   Future openRepetitiveness() => showDialog(
       context: context,
       builder: (context) => AlertDialog(
@@ -562,9 +611,25 @@ class _AddTaskPageState extends State<AddTaskPage> {
               Row(
                 children: [
                   ElevatedButton(
-                      child: Text("Select day"),
-                      onPressed: openNotificationDay),
+                    style: ButtonStyle(
+                      foregroundColor:
+                          MaterialStateProperty.all<Color>(color_Primary),
+                      backgroundColor:
+                          MaterialStateProperty.all<Color>(color_Secondary),
+                    ),
+                    child: Text("Select day"),
+                    onPressed: openNotificationDay,
+                  ),
+                  SizedBox(
+                    width: 10,
+                  ),
                   ElevatedButton(
+                      style: ButtonStyle(
+                        foregroundColor:
+                            MaterialStateProperty.all<Color>(color_Primary),
+                        backgroundColor:
+                            MaterialStateProperty.all<Color>(color_Secondary),
+                      ),
                       child: Text("Select time"),
                       onPressed: openNotificationTime),
                 ],
@@ -614,7 +679,7 @@ class _AddTaskPageState extends State<AddTaskPage> {
           child: ElevatedButton(
         child: Text("Cancel"),
         style: ElevatedButton.styleFrom(
-          primary: Colors.deepOrangeAccent,
+          primary: color_Red,
           //onPrimary: Colors.black,
         ),
         onPressed: () {
@@ -633,38 +698,48 @@ class _AddTaskPageState extends State<AddTaskPage> {
     }
     if (list_counter != 0) {
       list.add(Container(
-          child: Column(children: [
-        ElevatedButton(
-          child: Text(" Save Notifications "),
-          style: ElevatedButton.styleFrom(
-            primary: Color(0xff06661B),
-            //onPrimary: Colors.black,
-          ),
-          onPressed: () {
-            Navigator.pop(context);
-          },
-        ),
-        ElevatedButton(
-          child: Text("Delete Notifications"),
-          style: ElevatedButton.styleFrom(
-            primary: Colors.deepOrangeAccent,
-            //onPrimary: Colors.black,
-          ),
-          onPressed: () {
-            Navigator.pop(context);
-            setState(() {
-              list_counter = 0;
-              Notifications_List =
-                  List.generate(10, (i) => ['', ''], growable: true);
-              new_Notifications_List = List.generate(
-                  10, (i) => Notification('', ''),
-                  growable: true);
-              new_notifications_list = [];
-              debugPrint('${(Notifications_List.toString())}');
-            });
-          },
-        )
-      ])));
+          alignment: Alignment.center,
+          child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                SizedBox(
+                  height: 10,
+                ),
+                ElevatedButton(
+                  child: Text(" Save Notifications "),
+                  style: ElevatedButton.styleFrom(
+                    primary: color_Green,
+                    //onPrimary: Colors.black,
+                  ),
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                ),
+                SizedBox(
+                  height: 10,
+                ),
+                ElevatedButton(
+                  child: Text("Delete Notifications"),
+                  style: ElevatedButton.styleFrom(
+                    primary: color_Red,
+                    //onPrimary: Colors.black,
+                  ),
+                  onPressed: () {
+                    Navigator.pop(context);
+                    setState(() {
+                      list_counter = 0;
+                      Notifications_List =
+                          List.generate(10, (i) => ['', ''], growable: true);
+                      new_Notifications_List = List.generate(
+                          10, (i) => Notification('', ''),
+                          growable: true);
+                      new_notifications_list = [];
+                      debugPrint('${(Notifications_List.toString())}');
+                    });
+                  },
+                )
+              ])));
     }
     return Row(children: list);
   }
