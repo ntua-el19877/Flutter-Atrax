@@ -11,6 +11,8 @@ import '../components/FriendsList.dart';
 import '../components/HiveInit.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../components/TaskRequest.dart';
+
 /*Future<void> readJson() async {
 //final AssetBundle rootBundle = _initRootBundle();
 //final String response = await rootBundle.loadString('assets/friends.json');
@@ -127,12 +129,30 @@ class _FriendsPageState extends State<FriendsPage> {
               )
             ],
           ),
-          const Align(
+          Align(
               alignment: Alignment.center,
-              child: Text(
+              child: /*Text(
                 'Task Requests',
                 style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
-              )),
+              )*/
+              TaskRequest(
+              name: 'Task 1',
+              description: 'This is my task',
+                  date: '2023-02-22',
+                  time: '10:00 AM',
+                  repetitiveness: 'Daily',
+                  notifications: [
+                    {"date": "2023-03-01", "time": "10:00 AM"},
+                    {"date": "2023-03-03", "time": "3:30 PM"},
+                    {"date": "2023-03-05", "time": "8:15 AM"},
+                  ],
+                  importance: 'High',
+                  location: 'latitude' + '37.7749' + 'longitude' + '-122.4194',
+                  recording_file_path: 'assets/recordings/Scoobydoo.mp3',
+                  //photo_file_path: 'assets/icons/user_barcode_1.png',
+                  friend_name: ['John', 'Jane'],
+                  ),
+              ),
           //getTaskRequests(),
           SizedBox(height: 50),
           Align(
@@ -152,100 +172,6 @@ class _FriendsPageState extends State<FriendsPage> {
       ),
     );
   }
-
-  // Widget getFriendsList() {
-  //   readFriendsJson();
-  //   // print(Friends);
-  //   return ListView.builder(
-  //     itemCount: Friends.length,
-  //     scrollDirection: Axis.vertical,
-  //     shrinkWrap: true,
-  //     itemBuilder: (context, index) {
-  //       return Card(
-  //         key: ValueKey(Friends[index]["fname"]),
-  //         margin: const EdgeInsets.all(10),
-  //         child: ListTile(
-  //           tileColor: const Color(0xff929AE7),
-  //           //leading: Text(Friends[index]["icon_symbol"]),
-  //           leading: CircleAvatar(
-  //             child: Text(Friends[index]["icon_symbol"]),
-  //             backgroundColor: Color(0xffE6F4F1),
-  //           ),
-  //           title:
-  //               Text(Friends[index]["fname"] + " " + Friends[index]["lname"]),
-  //           //subtitle: Text(Friends[index]["icon_symbol"]),
-  //         ),
-  //       );
-  //     },
-  //   );
-  // }
-
-  // Widget getTaskRequests() {
-  //   return ListView.builder(
-  //       scrollDirection: Axis.vertical,
-  //       shrinkWrap: true,
-  //       itemBuilder: (context, index) {
-  //         return Container(
-  //           height: 60,
-  //           width: 316,
-  //           child: Card(
-  //             color: Color(0xff929AE7),
-  //             shape: RoundedRectangleBorder(
-  //               borderRadius: BorderRadius.only(
-  //                 bottomRight: Radius.circular(10),
-  //                 topRight: Radius.circular(10),
-  //                 topLeft: Radius.circular(10),
-  //                 bottomLeft: Radius.circular(10),
-  //               ),
-  //             ),
-  //             child: Container(
-  //                 child: Row(
-  //                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-  //                     children: [
-  //                   Text('Katerina \nsent you a friend request'),
-  //                   SizedBox(
-  //                       height: 60,
-  //                       child: ElevatedButton(
-  //                         onPressed: Navigator.of(context).pop,
-  //                         child: Text('Accept'),
-  //                         style: ElevatedButton.styleFrom(
-  //                           primary: Color(0xff1F8A87),
-  //                           shape: RoundedRectangleBorder(
-  //                             borderRadius: BorderRadius.only(
-  //                               bottomRight: Radius.circular(0),
-  //                               topRight: Radius.circular(0),
-  //                               topLeft: Radius.circular(10),
-  //                               bottomLeft: Radius.circular(10),
-  //                             ),
-  //                           ),
-  //                         ),
-  //                       )),
-  //                   SizedBox(
-  //                       height: 60,
-  //                       child: ElevatedButton(
-  //                           onPressed: () {
-  //                             setState(() {
-  //                               N_friend_requests = 0;
-  //                               Navigator.pop(context);
-  //                             });
-  //                           },
-  //                           child: Text('Decline'),
-  //                           style: ElevatedButton.styleFrom(
-  //                             primary: Color(0xffA94C52),
-  //                             shape: RoundedRectangleBorder(
-  //                               borderRadius: BorderRadius.only(
-  //                                 bottomRight: Radius.circular(10),
-  //                                 topRight: Radius.circular(10),
-  //                                 topLeft: Radius.circular(0),
-  //                                 bottomLeft: Radius.circular(0),
-  //                               ),
-  //                             ),
-  //                           )))
-  //                 ])),
-  //           ),
-  //         );
-  //       });
-  // }
 
   Future openUserInfo() => showDialog(
       context: context,
@@ -273,7 +199,7 @@ class _FriendsPageState extends State<FriendsPage> {
                   )*/
               const SizedBox(height: 25),
               Image.asset(
-                'assets/icons/user_barcode_1.png',
+                'icons/user_barcode_1.png',
                 height: 200,
                 width: 200,
               ),
