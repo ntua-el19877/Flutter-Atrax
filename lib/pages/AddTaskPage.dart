@@ -364,7 +364,7 @@ class _AddTaskPageState extends State<AddTaskPage> {
     if (lat == '')
       return '';
     else
-      return mylocation;
+      return lat + ',' + long;
   }
 
   void _SaveTask() async {
@@ -385,7 +385,7 @@ class _AddTaskPageState extends State<AddTaskPage> {
         //notifications: widget.box.getAt(0).notifications,
         notifications: new_notifications_list,
         importance: importance,
-        location: lat + ',' + long,
+        location: returnlocation(),
         recordingFilePath: audioFile,
         photoFilePath: imageDestination,
         friendName: ['John', 'Jane'],
@@ -404,8 +404,7 @@ class _AddTaskPageState extends State<AddTaskPage> {
           //notifications: widget.box.getAt(0).notifications,
           notifications: new_notifications_list,
           importance: importance,
-          location: lat + ',' + long,
-          recordingFilePath: audioFile,
+          location: returnlocation(), recordingFilePath: audioFile,
           photoFilePath: imageDestination,
           friendName: ['John', 'Jane'],
           completed: 'false',
@@ -425,8 +424,7 @@ class _AddTaskPageState extends State<AddTaskPage> {
           //notifications: widget.box.getAt(0).notifications,
           notifications: new_notifications_list,
           importance: importance,
-          location: lat + ',' + long,
-          recordingFilePath: audioFile,
+          location: returnlocation(), recordingFilePath: audioFile,
           photoFilePath: imageDestination,
           friendName: ['John', 'Jane'],
           completed: 'false',
@@ -446,8 +444,7 @@ class _AddTaskPageState extends State<AddTaskPage> {
           //notifications: widget.box.getAt(0).notifications,
           notifications: new_notifications_list,
           importance: importance,
-          location: lat + ',' + long,
-          recordingFilePath: audioFile,
+          location: returnlocation(), recordingFilePath: audioFile,
           photoFilePath: imageDestination,
           friendName: ['John', 'Jane'],
           completed: 'false',
@@ -467,8 +464,7 @@ class _AddTaskPageState extends State<AddTaskPage> {
           //notifications: widget.box.getAt(0).notifications,
           notifications: new_notifications_list,
           importance: importance,
-          location: lat + ',' + long,
-          recordingFilePath: audioFile,
+          location: returnlocation(), recordingFilePath: audioFile,
           photoFilePath: imageDestination,
           friendName: ['John', 'Jane'],
           completed: 'false',
@@ -486,8 +482,7 @@ class _AddTaskPageState extends State<AddTaskPage> {
         //notifications: widget.box.getAt(0).notifications,
         notifications: new_notifications_list,
         importance: importance,
-        location: lat + ',' + long,
-        recordingFilePath: audioFile,
+        location: returnlocation(), recordingFilePath: audioFile,
         photoFilePath: imageDestination,
         friendName: ['John', 'Jane'],
         completed: 'false',

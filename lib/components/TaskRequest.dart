@@ -59,7 +59,7 @@ class TaskRequest extends StatefulWidget {
   final String recording_file_path;
   //final String photo_file_path;
   final List<String> friend_name;
-  bool ? shown;
+  bool? shown;
   // final List<dynamic> indexListDate;
   // final List<dynamic> indexListTime;
   //final Function(int) onTap;
@@ -142,7 +142,7 @@ class _TaskRequestState extends State<TaskRequest> {
     if (widget.friend_name.isEmpty) emptyFields[9] = false;
   }
 
- /*@override
+  /*@override
   void dispose() {
     audioPlayer.dispose();
     super.dispose();
@@ -190,65 +190,65 @@ class _TaskRequestState extends State<TaskRequest> {
     return Consumer<ColorModel>(
       builder: (context, colorModel, child) {
         return GestureDetector(
-          behavior: HitTestBehavior.translucent,
-          onPanUpdate: (details) {
-            int sensitivity = 8;
-            // Swiping in right direction.
-            
-          },
-          /*onTap: () {
+            behavior: HitTestBehavior.translucent,
+            onPanUpdate: (details) {
+              int sensitivity = 8;
+              // Swiping in right direction.
+            },
+            /*onTap: () {
             openTaskWindow();
             // pauseAudio();
           },*/
-          child:
-          Container(
-      height: 60,
-      width: MediaQuery.of(context).size.width-40,
-      child: Card(
-        color: const Color(0xff929AE7),
-        shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.only(
-            bottomRight: Radius.circular(10),
-            topRight: Radius.circular(10),
-            topLeft: Radius.circular(10),
-            bottomLeft: Radius.circular(10),
-          ),
-        ),
-        child:
-            Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-          //Text('Katerina Lioliou\nsent you a friend request'),
-          Text(' ' + widget.friendsName +
-              '\n sent you a task request', style: TextStyle(fontSize: 16)),
-          SizedBox(
+            child: Container(
               height: 60,
-              width: (MediaQuery.of(context).size.width-40)*0.5,
-              child: ElevatedButton(
-                  onPressed: () {
-                    //Navigator.pop(context);
-                    openTaskWindow();
-                    /*setState(() {
+              width: MediaQuery.of(context).size.width - 40,
+              child: Card(
+                color: const Color(0xff929AE7),
+                shape: const RoundedRectangleBorder(
+                  borderRadius: BorderRadius.only(
+                    bottomRight: Radius.circular(10),
+                    topRight: Radius.circular(10),
+                    topLeft: Radius.circular(10),
+                    bottomLeft: Radius.circular(10),
+                  ),
+                ),
+                child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      //Text('Katerina Lioliou\nsent you a friend request'),
+                      Text(
+                          ' ' +
+                              widget.friendsName +
+                              '\n sent you a task request',
+                          style: TextStyle(fontSize: 16)),
+                      SizedBox(
+                          height: 60,
+                          width: (MediaQuery.of(context).size.width - 40) * 0.5,
+                          child: ElevatedButton(
+                              onPressed: () {
+                                //Navigator.pop(context);
+                                openTaskWindow();
+                                /*setState(() {
                                   N_friend_requests = 0;
                                   Navigator.pop(context);
                                 });*/
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xff1F8A87),
-                    shape: const RoundedRectangleBorder(
-                      borderRadius: BorderRadius.only(
-                        bottomRight: Radius.circular(10),
-                        topRight: Radius.circular(10),
-                        topLeft: Radius.circular(0),
-                        bottomLeft: Radius.circular(0),
-                      ),
-                    ),
-                  ),
-                  child: const Text('Review Task', style: TextStyle(fontSize: 17))
-                  )
-                  )
-        ]),
-      ),
-    )
-        );
+                              },
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: const Color(0xff1F8A87),
+                                shape: const RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.only(
+                                    bottomRight: Radius.circular(10),
+                                    topRight: Radius.circular(10),
+                                    topLeft: Radius.circular(0),
+                                    bottomLeft: Radius.circular(0),
+                                  ),
+                                ),
+                              ),
+                              child: const Text('Review Task',
+                                  style: TextStyle(fontSize: 17))))
+                    ]),
+              ),
+            ));
       },
     );
   }
@@ -458,65 +458,117 @@ class _TaskRequestState extends State<TaskRequest> {
                             ),
                           ),
                         ),*/
-                      Padding(
-                          padding: EdgeInsets.only(bottom: 10),
-                          child: Column(
-                            children: [
-                              Slider(
-                                min: 0,
-                                max: duration.inSeconds.toDouble(),
-                                thumbColor: widget.color_Blacks,
-                                inactiveColor: widget.color_Blacks,
-                                onChanged: (value) async {
-                                  final position =
-                                      Duration(seconds: value.toInt());
-                                  await audioPlayer.seek(position);
-                                  await audioPlayer.resume();
-                                },
-                                value: position.inSeconds.toDouble(),
-                              ),
-                              Padding(
-                                padding:
-                                    const EdgeInsets.symmetric(horizontal: 16),
-                                child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Text(formatTime(position)),
-                                    Text(formatTime(duration - position))
-                                  ],
-                                ),
-                              ),
-                              CircleAvatar(
-                                  radius: 35,
-                                  backgroundColor: widget.color_Secondary,
-                                  child: IconButton(
-                                    icon: Icon(
-                                      color: widget.color_Primary,
-                                      isPlaying
-                                          ? Icons.pause
-                                          : Icons.play_arrow,
+                        Padding(
+                            padding: EdgeInsets.only(bottom: 10),
+                            child: Column(
+                              children: [
+                                if (widget.recording_file_path != '')
+                                  Padding(
+                                    padding: EdgeInsets.all(10),
+                                    child: Positioned(
+                                      top: 0,
+                                      right: 5,
+                                      child: GestureDetector(
+                                        onTap: () async {
+                                          // if (isPlaying) {
+                                          //   await audioPlayer.pause();
+                                          //   // pauseAudio();
+                                          // } else {
+                                          // String url =
+                                          //     'https://www.youtube.com/results?search_query=e+scooby+dooby+doo+where+are+you';
+                                          // 'assets/recordings/Scoobydoo.mp3';
+                                          // await audioPlayer
+                                          //     .play(Uri.parse('asset:///assets/recordings/Scoobydoo.mp3'));
+                                          // .play('assets/recordings/Scoobydoo.mp3');
+                                          // playAudio();
+                                          final player = AudioCache();
+                                          player
+                                              .play(widget.recording_file_path);
+                                          // }
+                                        },
+                                        child: Stack(
+                                          alignment: Alignment.center,
+                                          children: [
+                                            GestureDetector(
+                                              onTap: () async {
+                                                final player = AudioCache();
+                                                player.play(
+                                                    'assets/TestAudio.mp3');
+                                                // }
+                                              },
+                                              child: CustomRectangle(
+                                                  // myIconEnabled: true,
+                                                  // myIconSize: 30,
+                                                  // myIcon: Icons.location_on_outlined,
+                                                  // myIconColor: Colors.red,
+                                                  Rad: 30,
+                                                  width: (widget.screen_width *
+                                                          3 /
+                                                          4 -
+                                                      20),
+                                                  text: 'Tap to play Audio',
+                                                  title: 'Audio Recording'),
+                                            )
+                                          ],
+                                        ),
+                                      ),
                                     ),
-                                    iconSize: 50,
-                                    onPressed: () async {
-                                      // if (isPlaying) {
-                                      //   await audioPlayer.pause();
-                                      //   // pauseAudio();
-                                      // } else {
-                                      // String url =
-                                      //     'https://www.youtube.com/results?search_query=e+scooby+dooby+doo+where+are+you';
-                                      // 'assets/recordings/Scoobydoo.mp3';
-                                      // await audioPlayer
-                                      //     .play(Uri.parse('asset:///assets/recordings/Scoobydoo.mp3'));
-                                      // .play('assets/recordings/Scoobydoo.mp3');
-                                      // playAudio();
-                                      final player = AudioCache();
-                                      player.play('Scoobydoo.mp3');
-                                      // }
-                                    },
-                                  )),
-                            ],
-                          )),
+                                  ),
+                                // Slider(
+                                //   min: 0,
+                                //   max: duration.inSeconds.toDouble(),
+                                //   thumbColor: widget.color_Blacks,
+                                //   inactiveColor: widget.color_Blacks,
+                                //   onChanged: (value) async {
+                                //     final position =
+                                //         Duration(seconds: value.toInt());
+                                //     await audioPlayer.seek(position);
+                                //     await audioPlayer.resume();
+                                //   },
+                                //   value: position.inSeconds.toDouble(),
+                                // ),
+                                // Padding(
+                                //   padding:
+                                //       const EdgeInsets.symmetric(horizontal: 16),
+                                //   child: Row(
+                                //     mainAxisAlignment:
+                                //         MainAxisAlignment.spaceBetween,
+                                //     children: [
+                                //       Text(formatTime(position)),
+                                //       Text(formatTime(duration - position))
+                                //     ],
+                                //   ),
+                                // ),
+                                // CircleAvatar(
+                                //     radius: 35,
+                                //     backgroundColor: widget.color_Secondary,
+                                //     child: IconButton(
+                                //       icon: Icon(
+                                //         color: widget.color_Primary,
+                                //         isPlaying
+                                //             ? Icons.pause
+                                //             : Icons.play_arrow,
+                                //       ),
+                                //       iconSize: 50,
+                                //       onPressed: () async {
+                                //         // if (isPlaying) {
+                                //         //   await audioPlayer.pause();
+                                //         //   // pauseAudio();
+                                //         // } else {
+                                //         // String url =
+                                //         //     'https://www.youtube.com/results?search_query=e+scooby+dooby+doo+where+are+you';
+                                //         // 'assets/recordings/Scoobydoo.mp3';
+                                //         // await audioPlayer
+                                //         //     .play(Uri.parse('asset:///assets/recordings/Scoobydoo.mp3'));
+                                //         // .play('assets/recordings/Scoobydoo.mp3');
+                                //         // playAudio();
+                                //         final player = AudioCache();
+                                //         player.play('Scoobydoo.mp3');
+                                //         // }
+                                //       },
+                                //     )),
+                              ],
+                            )),
                       Padding(
                         padding: EdgeInsets.only(top: 10),
                         child: Row(
@@ -526,7 +578,6 @@ class _TaskRequestState extends State<TaskRequest> {
                               padding: EdgeInsets.only(right: 10),
                               child: ElevatedButton(
                                 onPressed: () {
-                                  
                                   print(widget.name);
                                   acceptTask();
                                   Navigator.of(context).pop();
@@ -559,7 +610,6 @@ class _TaskRequestState extends State<TaskRequest> {
                               padding: EdgeInsets.only(right: 10),
                               child: ElevatedButton(
                                 onPressed: () {
-                                  
                                   print(widget.name);
                                   declineTask();
                                   Navigator.of(context).pop();
@@ -588,7 +638,6 @@ class _TaskRequestState extends State<TaskRequest> {
                                 ),
                               ),
                             ),
-                           
                           ],
                         ),
                       ),
@@ -610,17 +659,28 @@ class _TaskRequestState extends State<TaskRequest> {
     return 0;
   }
 
-  void acceptTask(){
+  void acceptTask() {
     print(widget.name);
-    widget.mybox.put(generateRandomString(), Task(name: widget.name , description: widget.description, date: widget.date, time: widget.time, repetitiveness: widget.repetitiveness, notifications: widget.notifications, importance: widget.importance, location: widget.location, recordingFilePath: widget.recording_file_path, photoFilePath: '', friendName: widget.friend_name, completed: 'false'));
+    widget.mybox.put(
+        generateRandomString(),
+        Task(
+            name: widget.name,
+            description: widget.description,
+            date: widget.date,
+            time: widget.time,
+            repetitiveness: widget.repetitiveness,
+            notifications: widget.notifications,
+            importance: widget.importance,
+            location: widget.location,
+            recordingFilePath: widget.recording_file_path,
+            photoFilePath: '',
+            friendName: widget.friend_name,
+            completed: 'false'));
   }
 
-  void declineTask(){
+  void declineTask() {
     print(widget.shown);
     widget.shown = false;
     print(widget.shown);
   }
-
 }
-
-
