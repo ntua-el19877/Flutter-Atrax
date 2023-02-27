@@ -91,7 +91,8 @@ class _FriendRequestState extends State<FriendRequest> {
                       ),
                     ),
                   ),
-                  child: const Text('Decline')))
+                  child: const Text('Decline'),)
+                  )
         ]),
       ),
     );

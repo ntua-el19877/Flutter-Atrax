@@ -133,11 +133,11 @@ class _TaskMessageState extends State<TaskMessage> {
     if (widget.friend_name.isEmpty) emptyFields[9] = false;
   }
 
-  @override
+  /*@override
   void dispose() {
     audioPlayer.dispose();
     super.dispose();
-  }
+  }*/
 
   late ColorModel colorModel;
   Color _color_TaskMessage = Colors.red;

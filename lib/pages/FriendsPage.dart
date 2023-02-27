@@ -24,13 +24,16 @@ print("number of friends : ${_items.length}");
 setState(() { _myState = newValue; });Friends = _items;
 } */
 
+
+
 class FriendsPage extends StatefulWidget {
   final Box friendbox;
+  final Box box;
 
   @override
   _FriendsPageState createState() => _FriendsPageState();
 
-  FriendsPage({Key? key, required this.friendbox}) : super(key: key);
+  FriendsPage({Key? key, required this.friendbox, required this.box}) : super(key: key);
 }
 
 class _FriendsPageState extends State<FriendsPage> {
@@ -40,6 +43,9 @@ class _FriendsPageState extends State<FriendsPage> {
   var Username_controller = TextEditingController(text: 'Spyros');
 
   var N_friend_requests = 1;
+
+  bool  task_1=true;
+  bool task_2=true;
 
   @override
   void didUpdateWidget(FriendsPage oldWidget) {
@@ -96,7 +102,7 @@ class _FriendsPageState extends State<FriendsPage> {
 //   }
 
   @override
-  void initState() {
+  void initState()  {
     super.initState();
     Username_controller = new TextEditingController(text: prev_user_name);
   }
@@ -135,9 +141,17 @@ class _FriendsPageState extends State<FriendsPage> {
                 'Task Requests',
                 style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
               )*/
+              Column(children: [
+                Text(
+                'Task Requests',
+                style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),),
+                if(task_1==true)
                 TaskRequest(
-              name: 'Task 1',
-              description: 'This is my task',
+              shown: true,
+              friendsName: 'Katerina Lioliou',
+              mybox: widget.box, 
+              name: 'ΒΡΑΔΕΙΑ ΚΑΡΑΟΚΕ',
+              description: 'ΔΙΑΣΚΕΔΑΣΗ',
               date: '2023-02-22',
               time: '10:00 AM',
               repetitiveness: 'Daily',
@@ -152,7 +166,30 @@ class _FriendsPageState extends State<FriendsPage> {
               //photo_file_path: 'assets/icons/user_barcode_1.png',
               friend_name: ['John', 'Jane'],
             ),
-          ),
+            if(task_2 ==true )
+            TaskRequest(
+              shown: true,
+              friendsName: 'Karagiannis Theodoros',
+              mybox: widget.box, 
+              name: 'BASKET',
+              description: '2v2',
+              date: '2023-02-22',
+              time: '10:00 AM',
+              repetitiveness: 'Daily',
+              notifications: [
+                {"date": "2023-03-01", "time": "10:00 AM"},
+                {"date": "2023-03-03", "time": "3:30 PM"},
+                {"date": "2023-03-05", "time": "8:15 AM"},
+              ],
+              importance: 'High',
+              location: 'latitude' + '37.7749' + 'longitude' + '-122.4194',
+              recording_file_path: 'assets/recordings/Scoobydoo.mp3',
+              //photo_file_path: 'assets/icons/user_barcode_1.png',
+              friend_name: ['John', 'Jane'],
+            ),
+              ],)
+                )
+          ,
           //getTaskRequests(),
           SizedBox(height: 50),
           Align(
@@ -185,6 +222,7 @@ class _FriendsPageState extends State<FriendsPage> {
           ),
           backgroundColor: Color(0xffE6F4F1),
           content: Column(
+            mainAxisSize: MainAxisSize.min,
             children: [
               Text("Username :"),
               TextFormField(
@@ -226,7 +264,10 @@ class _FriendsPageState extends State<FriendsPage> {
           //insetPadding: EdgeInsets.symmetric(vertical: 200),
           backgroundColor: Color(0xffE6F4F1),
           content: Column(mainAxisSize: MainAxisSize.min, children: [
+            Row(mainAxisSize: MainAxisSize.min),
             //FriendRequest(name: 'Nikos', last_name: 'Fiannopoulos', is_active: 'false',),
             FriendRequestsList(friendbox: widget.friendbox),
           ])));
+
+    
 }
