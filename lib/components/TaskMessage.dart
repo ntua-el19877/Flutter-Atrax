@@ -559,12 +559,13 @@ class _TaskMessageState extends State<TaskMessage> {
                           padding: EdgeInsets.only(top: 10, bottom: 10),
                           child: Container(
                             height: 100,
-                            child: Image.file(
-                              File(widget.photo_file_path),
-                              width: MediaQuery.of(context).size.width / 2,
-                            ),
+                            child: Text(widget.photo_file_path),
+                            // Image.file(
+                            // File(widget.photo_file_path),
+                            // width: MediaQuery.of(context).size.width / 2,
                           ),
                         ),
+                      // ),
                       Padding(
                           padding: EdgeInsets.only(bottom: 10),
                           child: Column(
