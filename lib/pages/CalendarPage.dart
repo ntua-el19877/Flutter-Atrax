@@ -1,14 +1,18 @@
 import 'package:atrax/components/CalendarDownBar.dart';
 import 'package:atrax/components/ColumnTaskMessagesFromList.dart';
 import 'package:atrax/components/TaskMessage.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
+import 'package:hive_flutter/adapters.dart';
 import 'package:intl/intl.dart';
 
 import '../routes/routes.dart';
 import '../MyWidgets.dart';
 import '../TableCalendar.dart';
 import 'package:table_calendar/table_calendar.dart';
+
+import '../services/notifi_service.dart';
 
 class CalendarPage extends StatefulWidget {
   final Box box;
@@ -32,12 +36,27 @@ class _CalendarPageState extends State<CalendarPage> {
   var tasks = [];
   var taskKeys = [];
   @override
+  void didUpdateWidget(CalendarPage oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.box.length != oldWidget.box.length) {
+      setState(() {
+        updateTasksForSelectedDay();
+        print("----------------------------------");
+        print(taskKeys);
+        // getSelectedDayTasks();
+      });
+    }
+  }
+
+  late final ValueListenable<Box> _myBoxListenable;
+  @override
   void initState() {
+    super.initState();
     DateTime today = DateTime.now();
-    print(today.toString());
+    // print(today.toString());
     final DateFormat formatter = DateFormat('yyyy-MM-dd');
     final String formatted = formatter.format(today);
-    print(formatted);
+    // print(formatted);
     //var date = widget.box.getAt(1).date;
 
     tasks = widget.box.values.where((task) => task.date == formatted).toList();
@@ -48,7 +67,8 @@ class _CalendarPageState extends State<CalendarPage> {
         .map((entry) => entry.key)
         .toList();
     //print("TASKS______________");
-    print(taskKeys);
+    // print(taskKeys);
+    _myBoxListenable = widget.box.listenable();
   }
 
   @override
@@ -80,7 +100,31 @@ class _CalendarPageState extends State<CalendarPage> {
                   ),
                 )),
           ),
-          Positioned(child: getSelectedDayTasks(), top: 0.5 * screenHeight),
+          Positioned(
+              top: 0.5 * screenHeight,
+              child: ValueListenableBuilder(
+                  valueListenable: _myBoxListenable,
+                  builder: (context, box, child) {
+                    updateTasksForSelectedDay();
+                    return Center(
+                        child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        const SizedBox(height: 20),
+
+                        ColumnTaskMessagesFromList(
+                            taskKeys: taskKeys,
+                            mybox: widget.box,
+                            myboxList: tasks,
+                            color_Secondary: color_Secondary,
+                            color_Green: color_Green,
+                            screenWidth: MediaQuery.of(context).size.width,
+                            TaskLeftPadding: TaskLeftPadding,
+                            currentIndex: 0),
+                        // ),
+                      ],
+                    ));
+                  })),
           CalendarDownBar(
             box: widget.box,
             currentIndex: currentIndex,
@@ -102,36 +146,26 @@ class _CalendarPageState extends State<CalendarPage> {
   }
 
   DateTime today = DateTime.now();
+  void updateTasksForSelectedDay() {
+    final DateFormat formatter = DateFormat('yyyy-MM-dd');
+    final String formatted = formatter.format(today);
+    tasks = widget.box.values.where((task) => task.date == formatted).toList();
+    taskKeys = widget.box
+        .toMap()
+        .entries
+        .where((entry) => entry.value.date == formatted)
+        .map((entry) => entry.key)
+        .toList();
+  }
+
   void _onDaySelected(DateTime day, DateTime focusedDay) {
     setState(() {
       today = day;
-      // print("You selected the day");
-      // print(today.toString());
-      final DateFormat formatter = DateFormat('yyyy-MM-dd');
-      final String formatted = formatter.format(today);
-      // print(formatted);
-      //var date = widget.box.getAt(1).date;
-      //print(date);
-      tasks =
-          widget.box.values.where((task) => task.date == formatted).toList();
-      taskKeys = widget.box
-          .toMap()
-          .entries
-          .where((entry) => entry.value.date == formatted)
-          .map((entry) => entry.key)
-          .toList();
+      updateTasksForSelectedDay();
     });
   }
 
-  Widget getSelectedDayTasks() {
-    return ColumnTaskMessagesFromList(
-        taskKeys: taskKeys,
-        mybox: widget.box,
-        myboxList: tasks,
-        color_Secondary: color_Secondary,
-        color_Green: color_Green,
-        screenWidth: MediaQuery.of(context).size.width,
-        TaskLeftPadding: TaskLeftPadding,
-        currentIndex: 0);
-  }
+//   Widget getSelectedDayTasks() {
+//     return ;
+//   }
 }

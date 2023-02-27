@@ -580,7 +580,7 @@ class _TaskMessageState extends State<TaskMessage> {
                               padding: EdgeInsets.only(left: 10),
                               child: ElevatedButton(
                                 onPressed: () {
-                                  widget.mybox.deleteAt(widget.index);
+                                  widget.mybox.delete(widget.boxkey);
                                   Navigator.of(context).pop();
                                 },
                                 style: ButtonStyle(
