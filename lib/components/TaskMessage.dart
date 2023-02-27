@@ -558,6 +558,7 @@ class _TaskMessageState extends State<TaskMessage> {
                         Padding(
                           padding: EdgeInsets.only(top: 10, bottom: 10),
                           child: Container(
+                            height: 100,
                             child: Image.file(
                               File(widget.photo_file_path),
                               width: MediaQuery.of(context).size.width / 2,

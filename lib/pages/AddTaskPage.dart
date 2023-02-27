@@ -263,7 +263,7 @@ class _AddTaskPageState extends State<AddTaskPage> {
                             });
                           }),
                       TextButton(
-                        onPressed: openCameraP,
+                        onPressed: openCamera,
                         child: Icon(Icons.photo_camera_outlined,
                             size: IconSize, color: Color(0xff252525)),
                       ),
@@ -1042,29 +1042,14 @@ class _AddTaskPageState extends State<AddTaskPage> {
     } else {
       print('No image selected.');
     }
-    final directory = await getApplicationDocumentsDirectory();
-
-    final imagePath =
-        '${directory.path}/assets/icons/${DateTime.now().millisecondsSinceEpoch}.jpg';
-    // imageDestination = imagePath;
-    final imageFile = await _image.copy(imagePath);
-    setState(() {
-      imageDestination = imagePath;
-      _image;
-    });
-    // getting a directory path for saving
-// final String path = await getApplicationDocumentsDirectory().path;
-// final Directory directory = await getApplicationDocumentsDirectory();
   }
 
   Future<void> saveImage() async {
     final directory = await getApplicationDocumentsDirectory();
-
     final imagePath =
-        '${directory.path}/assets/icons/${DateTime.now().millisecondsSinceEpoch}.jpg';
-    // imageDestination = imagePath;
-    final imageFile = await _image.copy(imagePath);
+        '${directory.path}/photos/${DateTime.now().millisecondsSinceEpoch}.jpg';
     imageDestination = imagePath;
+    final imageFile = await _image.copy(imagePath);
     // print('--------------------------Image saved to: ${imageFile.path}');
   }
 
@@ -1081,15 +1066,10 @@ class _AddTaskPageState extends State<AddTaskPage> {
   //   });
   // }
 
-  void openCameraP() {
-    openCamera();
-    Navigator.pop(context);
-  }
-
   void openCamera() => showDialog(
         context: context,
         builder: (context) => AlertDialog(
-            title: Text('Take Image'),
+            title: Text("Take Picture"),
             content: Container(
                 child: Column(
               mainAxisSize: MainAxisSize.min,
@@ -1100,25 +1080,15 @@ class _AddTaskPageState extends State<AddTaskPage> {
                     width: MediaQuery.of(context).size.width / 2,
                   )
                 else
-                  const Text('No Image Selected'),
+                  Text('No Image Selected'),
                 ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    primary: color_Secondary, // Background color
-                  ),
                   onPressed: () async {
                     await getImage();
-                    // print("---------------1");
-                    // if (_image != File('assets/icons/empty.png')) {
-                    //   // print("---------------2");
-                    //   await saveImage();
-                    // }
-                    // print(
-                    //     '$imageDestination---------------------------------------');
-                    setState(() {
-                      _image;
-                    });
-
-                    Navigator.pop(context);
+                    print("---------------1");
+                    if (_image != null) {
+                      print("---------------2");
+                      await saveImage();
+                    }
                   },
                   child: const Icon(Icons.camera_alt),
                 )
