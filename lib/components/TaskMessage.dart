@@ -108,8 +108,8 @@ class _TaskMessageState extends State<TaskMessage> {
       // print("i want to update");
       setState(() {});
     }
-    print('old key: ${oldWidget.key}');
-    print('new key: ${widget.key}');
+    // print('old key: ${oldWidget.key}');
+    // print('new key: ${widget.key}');
     // print("i want to update a little");
     super.didUpdateWidget(oldWidget);
   }

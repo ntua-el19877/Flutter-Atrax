@@ -19,4 +19,11 @@ class ColorModel extends ChangeNotifier {
     _colors[index] = color;
     notifyListeners();
   }
+
+  IconData getIcon(String index) {
+    if (_colors[index] == Color(0xff929ae7)) {
+      return Icons.check_box_outline_blank;
+    }
+    return Icons.check_box_rounded;
+  }
 }

@@ -101,29 +101,37 @@ class _CalendarPageState extends State<CalendarPage> {
                 )),
           ),
           Positioned(
-              top: 0.5 * screenHeight,
+              top: 0.4 * screenHeight,
               child: ValueListenableBuilder(
                   valueListenable: _myBoxListenable,
                   builder: (context, box, child) {
                     updateTasksForSelectedDay();
                     return Center(
+                        // widthFactor: 1,
                         child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        const SizedBox(height: 20),
-
-                        ColumnTaskMessagesFromList(
-                            taskKeys: taskKeys,
-                            mybox: widget.box,
-                            myboxList: tasks,
-                            color_Secondary: color_Secondary,
-                            color_Green: color_Green,
-                            screenWidth: MediaQuery.of(context).size.width,
-                            TaskLeftPadding: TaskLeftPadding,
-                            currentIndex: 0),
-                        // ),
-                      ],
-                    ));
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                          const SizedBox(height: 20),
+                          Container(
+                              color: color_Secondary,
+                              child: SizedBox(height: 5)),
+                          SizedBox(
+                            height: 400,
+                            child: SingleChildScrollView(
+                              physics: const BouncingScrollPhysics(),
+                              child: ColumnTaskMessagesFromList(
+                                  taskKeys: taskKeys,
+                                  mybox: widget.box,
+                                  myboxList: tasks,
+                                  color_Secondary: color_Secondary,
+                                  color_Green: color_Green,
+                                  screenWidth:
+                                      MediaQuery.of(context).size.width,
+                                  TaskLeftPadding: TaskLeftPadding,
+                                  currentIndex: 0),
+                            ),
+                          ),
+                        ]));
                   })),
           CalendarDownBar(
             box: widget.box,
